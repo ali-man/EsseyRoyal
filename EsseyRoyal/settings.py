@@ -31,6 +31,11 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
 
+    'appprofile',
+    'appdashboard',
+    'apporders',
+    'appwork',
+    'appblog'
 ]
 
 REST_FRAMEWORK = {

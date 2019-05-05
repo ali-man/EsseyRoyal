@@ -12,11 +12,6 @@ if LOCAL:
 
 
 INSTALLED_APPS = [
-    'admin_tools',
-    'admin_tools.theming',
-    'admin_tools.menu',
-    'admin_tools.dashboard',
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.sites',
@@ -30,11 +25,12 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
 
+    'appusers',
     'appprofile',
     'appdashboard',
     'apporders',
-    'appwork',
-    'appblog'
+    # 'appwork',
+    # 'appblog'
 ]
 
 REST_FRAMEWORK = {
@@ -60,7 +56,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates')]
         ,
-        'APP_DIRS': False,
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -68,11 +64,11 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            'loaders': [
-                'admin_tools.template_loaders.Loader',
-                'django.template.loaders.filesystem.Loader',
-                'django.template.loaders.app_directories.Loader',
-            ],
+            # 'loaders': [
+            #     'admin_tools.template_loaders.Loader',
+            #     'django.template.loaders.filesystem.Loader',
+            #     'django.template.loaders.app_directories.Loader',
+            # ],
         },
     },
 ]
@@ -123,7 +119,7 @@ USE_TZ = True
 
 SITE_ID = 1
 
-AUTH_USER_MODEL = 'auth.User'
+AUTH_USER_MODEL = 'appusers.User'
 
 # -------------------- ckeditor -----------------------
 CKEDITOR_UPLOAD_PATH = 'uploads/'

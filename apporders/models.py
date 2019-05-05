@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.db import models
 
-from appprofile.models import Client, Manager, Writer
+from appprofile.models import Client
 
 
 class FormatOrder(models.Model):
@@ -52,15 +52,25 @@ class DeadLine(models.Model):
 
 
 class Order(models.Model):
+    IN_REVIEW = 0
+    IN_PROGRESS = 1
+    COMPLETED = 2
+
+    STATUS = (
+        (IN_REVIEW, 'In review'),
+        (IN_PROGRESS, 'In progress'),
+        (COMPLETED, 'Completed'),
+    )
+
+    client = models.ForeignKey(Client, verbose_name='Client', on_delete=models.CASCADE)
     title = models.CharField(verbose_name='Title of order', max_length=100)
     type_order = models.CharField(verbose_name='Type of order', max_length=100)
     format_order = models.ForeignKey(FormatOrder, verbose_name='Format of order', on_delete=models.CASCADE)
-    client = models.ForeignKey(Client, verbose_name='Client', on_delete=models.CASCADE)
-    manager = models.ForeignKey(Manager, verbose_name='Responsible manager', on_delete=models.CASCADE, null=True)
-    writer = models.ForeignKey(Writer, verbose_name='Responsible writer', on_delete=models.CASCADE, null=True)
     deadline = models.ForeignKey(DeadLine, verbose_name='Deadline', on_delete=models.CASCADE)
     deadline_writer = models.DateTimeField(verbose_name='Deadline by writer')
     feedback = models.TextField(verbose_name='Feedback')
+    status = models.IntegerField(verbose_name='Status order', choices=STATUS, default=IN_REVIEW)
+    created_datetime = models.DateTimeField(verbose_name='Created datetime', auto_now_add=True)
 
     class Meta:
         verbose_name = 'Order'

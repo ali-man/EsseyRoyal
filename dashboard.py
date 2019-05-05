@@ -73,7 +73,7 @@ class CustomIndexDashboard(Dashboard):
                 children=[
                     {
                         'title': 'Title link',
-                        'url': '/url/',
+                        'url': '/dashboard/customer',
                         'external': False,
                         'attrs': {'target': '_blank'},
                     },

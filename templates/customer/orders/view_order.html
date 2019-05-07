@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block title %}
+    View Order
+{% endblock %}
+
+{% block content %}
+
+    <table class="table">
+        <tr>
+            <th></th>
+            <td>{{ order.client }}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>{{ order.title }}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>{{ order.type_order }}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>{{ order.format_order }}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>{{ order.deadline }}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>{{ order.deadline_writer }}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>{% autoescape off %}{{ order.feedback }}{% endautoescape %}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>{{ order.status }}</td>
+        </tr>
+        <tr>
+            <th>Files</th>
+            <td>
+                {% for file in order.filesorder_set.all %}
+                    <a href="{{ file.file }}">{{ file.file }}</a>
+                {% endfor %}
+
+            </td>
+        </tr>
+
+    </table>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';</script>
+{% endblock %}

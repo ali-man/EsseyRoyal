@@ -1,7 +1,15 @@
+import os
+
+from ckeditor.fields import RichTextField
+from django.conf import settings
 from django.contrib import admin
 from django.db import models
 
 from appprofile.models import Client
+
+
+def upload_files(instance, filename):
+    return os.path.join(settings.MEDIA_ROOT + '/customer/%s/orders/%s/attached_files/' % (instance.order.client.id, instance.order.id), filename)
 
 
 class FormatOrder(models.Model):
@@ -61,14 +69,14 @@ class Order(models.Model):
         (IN_PROGRESS, 'In progress'),
         (COMPLETED, 'Completed'),
     )
-
+    # TODO: Загрузка файлов не более 10, и форматов .xls .doc .docx .pdf .jpg .png .excel
     client = models.ForeignKey(Client, verbose_name='Client', on_delete=models.CASCADE)
     title = models.CharField(verbose_name='Title of order', max_length=100)
     type_order = models.CharField(verbose_name='Type of order', max_length=100)
     format_order = models.ForeignKey(FormatOrder, verbose_name='Format of order', on_delete=models.CASCADE)
     deadline = models.ForeignKey(DeadLine, verbose_name='Deadline', on_delete=models.CASCADE)
-    deadline_writer = models.DateTimeField(verbose_name='Deadline by writer')
-    feedback = models.TextField(verbose_name='Feedback')
+    deadline_writer = models.DateTimeField(verbose_name='Date of the deadline by writer', auto_now=False)
+    feedback = RichTextField(verbose_name='Feedback')
     status = models.IntegerField(verbose_name='Status order', choices=STATUS, default=IN_REVIEW)
     created_datetime = models.DateTimeField(verbose_name='Created datetime', auto_now_add=True)
 
@@ -80,7 +88,9 @@ class Order(models.Model):
         return self.title
 
 
-admin.site.register(FormatOrder)
-admin.site.register(Earning)
-admin.site.register(DeadLine)
-admin.site.register(Order)
+class FilesOrder(models.Model):
+    order = models.ForeignKey(Order, verbose_name='ID Order', on_delete=models.CASCADE)
+    file = models.FileField(verbose_name='Attached files', upload_to=upload_files, null=True, blank=True)
+
+    def __str__(self):
+        return '%s' % self.id

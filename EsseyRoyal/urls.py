@@ -4,6 +4,8 @@ from django.contrib import admin
 from django.urls import path, include
 
 from EsseyRoyal.views import HomePageViews
+from appdashboard.views import CustomerDashboardViews, AdminDashboardViews
+from apporders.views import ViewOrderViews, AddOrderViews
 from appusers.views import SignUpViews, SignInViews, logout_user
 
 admin.site.site_header = 'Панель управления'
@@ -12,9 +14,16 @@ urlpatterns = [
     path('sign-up/', SignUpViews.as_view(), name='signup'),
     path('sign-in/', SignInViews.as_view(), name='signin'),
     path('logout/', logout_user, name='logout'),
-    path('dashboard/', include('appdashboard.urls', namespace='appdashboard')),
-    path('orders/', include('apporders.urls', namespace='apporders')),
-    path('admin/', admin.site.urls),
+    path('customer/', CustomerDashboardViews.as_view(), name='customer'),
+    path('customer/order/view/<int:pk>', ViewOrderViews.as_view(), name='customer_view_order'),
+    path('customer/order/add', AddOrderViews.as_view(), name='customer_add_order'),
+    path('admin/', AdminDashboardViews.as_view(), name='admin'),
+    # path('customer/profile/', ''),
+    # path('customer/balance/', ''),
+    # path('customer/new-order/', ''),
+    # path('dashboard/', include('appdashboard.urls', namespace='appdashboard')),
+    # path('orders/', include('apporders.urls', namespace='apporders')),
+    # path('admin/', admin.site.urls),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('api_auth/', include('rest_framework.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -15,7 +15,7 @@
         <div class="col-12">
             <div class="dashboard">
                 <div class="dashboard__head">
-                    {% include 'dashboard/tabs.html' %}
+                    {% include 'customer/dashboard/tabs.html' %}
                     <h5 class="d-flex justify-content-center"><b class="text-dark">Balance: </b><span
                             class="text-black-50">$0</span></h5>
                     <img src="{% static 'img/ava.png' %}" alt="" class="img-thumbnail dashboard-avatar" width="120">
@@ -49,5 +49,11 @@
 {% endblock %}
 
 {% block scripts %}
-
+    <script>
+    $('table td').css({'cursor': 'pointer'});
+    $('table td').click(function () {
+        let id = $(this).parent().attr('data-order-id');
+        window.open(`/customer/order/view/${id}`, '_blank');
+    })
+    </script>
 {% endblock %}

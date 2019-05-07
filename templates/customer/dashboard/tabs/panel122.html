@@ -68,11 +68,11 @@
                 </thead>
                 <tbody>
                 {% for order in orders %}
-                    <tr>
+                    <tr data-order-id="{{ order.id }}">
                         <td>{{ order.title }}</td>
                         <td>{{ order.type_order }}</td>
                         <td>{{ order.format_order }}</td>
-                        <td>{{ order.deadline }}</td>
+                        <td>{{ order.deadline }} <br> {{ order.deadline_writer_date }} {{ order.deadline_writer_time }}</td>
                         <td>{{ order.status|status_order }}</td>
                     </tr>
                 {% endfor %}

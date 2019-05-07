@@ -18,12 +18,6 @@ urlpatterns = [
     path('customer/order/view/<int:pk>', ViewOrderViews.as_view(), name='customer_view_order'),
     path('customer/order/add', AddOrderViews.as_view(), name='customer_add_order'),
     path('admin/', AdminDashboardViews.as_view(), name='admin'),
-    # path('customer/profile/', ''),
-    # path('customer/balance/', ''),
-    # path('customer/new-order/', ''),
-    # path('dashboard/', include('appdashboard.urls', namespace='appdashboard')),
-    # path('orders/', include('apporders.urls', namespace='apporders')),
-    # path('admin/', admin.site.urls),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('api_auth/', include('rest_framework.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

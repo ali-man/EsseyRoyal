@@ -5,6 +5,7 @@
 __pycache__/
 */migrations/
 appusers/migrations/
+apporders/migrations/
 local_settings.py
 media
 db.sqlite3

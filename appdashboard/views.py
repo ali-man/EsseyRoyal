@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
 
-from apporders.models import Order
+from apporders.models import Order, TypeOrder, FormatOrder
 from appusers.models import User
 
 
@@ -37,10 +37,52 @@ class CustomerDashboardViews(View):
 class AdminDashboardViews(View):
     @staticmethod
     def get(request):
+        types_order = TypeOrder.objects.all()
+        formats_order = FormatOrder.objects.all()
         if not request.user.is_superuser:
             return redirect('/')
 
         return render(request, 'admin/admin-dashboard.html', locals())
+
+    @staticmethod
+    def post(request):
+        print(
+            request.POST
+        )
+        if 'type_order' in request.POST:
+            type_order = TypeOrder(
+                title=request.POST['type_order']
+            )
+            type_order.save()
+
+        if 'type_order_remove' in request.POST:
+            id = request.POST['type_order_remove']
+            type_order = TypeOrder.objects.get(id=int(id))
+            type_order.delete()
+
+        if 'format_order' in request.POST:
+            format_order = FormatOrder(
+                title=request.POST['format_order']
+            )
+            format_order.save()
+
+        if 'format_order_remove' in request.POST:
+            id = request.POST['format_order_remove']
+            format_order = FormatOrder.objects.get(id=int(id))
+            format_order.delete()
+
+        # if 'academic_level' in request.POST:
+        #     academic_level = AcademicLevel(
+        #         title=request.POST['academic_level']
+        #     )
+        #     academic_level.save()
+        #
+        # if 'academic_level_remove' in request.POST:
+        #     id = request.POST['academic_level_remove']
+        #     academic_level = AcademicLevel.objects.get(id=int(id))
+        #     academic_level.delete()
+
+        return redirect('/admin')
 
 
 class WritersAdminDashboardViews(View):

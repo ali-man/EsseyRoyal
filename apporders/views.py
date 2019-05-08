@@ -1,16 +1,15 @@
 import datetime
 
 from django.contrib import messages
-from django.http import HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import DetailView, FormView
+from django.shortcuts import render, redirect
+from django.views.generic import DetailView
 from django.views.generic.base import View
 
 from apporders.forms import OrderAddForm
-from apporders.models import Order, FormatOrder, DeadLine, FilesOrder
+from apporders.models import Order, FilesOrder
 
 
-def to_deadline_writer(d, t):
+def to_deadline(d, t):
     return datetime.datetime(d.year, d.month, d.day, t.hour, t.minute)
 
 
@@ -26,17 +25,16 @@ class AddOrderViews(View):
         form = OrderAddForm(request.POST)
         attached_files = request.FILES.getlist('attached-files')
         if form.is_valid():
-            date = form.cleaned_data['date_deadline_writer']
-            time = form.cleaned_data['time_deadline_writer']
-            deadline_writer = to_deadline_writer(date, time)
+            date = form.cleaned_data['date_deadline']
+            time = form.cleaned_data['time_deadline']
+            deadline = to_deadline(date, time)
             order = Order()
             order.client = request.user.client
             order.title = form.cleaned_data['title']
             order.type_order = form.cleaned_data['type_order']
             order.format_order = form.cleaned_data['format_order']
-            order.deadline = form.cleaned_data['deadline']
-            order.deadline_writer = deadline_writer
-            order.feedback = form.cleaned_data['feedback']
+            order.deadline = deadline
+            order.description = form.cleaned_data['description']
             order.save()
             if len(attached_files) != 0:
                 for f in attached_files:

@@ -2,14 +2,112 @@
 {% load static %}
 
 {% block css %}
+    <style>
+        .blockquote p {
+            padding: 0;
+        }
 
+        table.table td {
+            vertical-align: middle;
+            padding: 0 0 0 10px;
+        }
+    </style>
 {% endblock %}
 
 {% block title %}
-Dashboard
+    Dashboard
 {% endblock %}
 
 {% block content %}
+
+    <div class="row">
+        <div class="col-12 col-md-4">
+            <blockquote class="blockquote bq-success">
+                <p class="bq-title">Type of order</p>
+            </blockquote>
+            <table class="table table table-striped" style="border: 1px solid #ccc;">
+                <form action="{% url 'admin' %}" method="post">{% csrf_token %}
+                    <tr>
+                        <th>Title</th>
+                        <td><input type="text" name="type_order"></td>
+                        <td>
+                            <button class="btn btn-primary btn-sm">Add</button>
+                        </td>
+                    </tr>
+                </form>
+                {% for type_order in types_order %}
+                    <tr>
+                        <th>ID: {{ type_order.id }}</th>
+                        <td>{{ type_order }}</td>
+                        <td>
+                            <form action="{% url 'admin' %}" method="post">{% csrf_token %}
+                                <button class="btn btn-danger btn-sm" name="type_order_remove"
+                                        value="{{ type_order.id }}">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col-12 col-md-4">
+            <blockquote class="blockquote bq-success">
+                <p class="bq-title">Format of order</p>
+            </blockquote>
+            <table class="table table table-striped" style="border: 1px solid #ccc;">
+                <form action="{% url 'admin' %}" method="post">{% csrf_token %}
+                    <tr>
+                        <td><input type="text" name="format_order"></td>
+                        <td>
+                            <button class="btn btn-primary btn-sm">Add</button>
+                        </td>
+                    </tr>
+                </form>
+                {% for format_order in formats_order %}
+                    <tr>
+                        <td>{{ format_order }}</td>
+                        <td>
+                            <form action="{% url 'admin' %}" method="post">{% csrf_token %}
+                                <button class="btn btn-danger btn-sm" name="format_order_remove"
+                                        value="{{ format_order.id }}">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col-12 col-md-4">
+            <blockquote class="blockquote bq-success">
+                <p class="bq-title">Academic level</p>
+            </blockquote>
+            <table class="table table table-striped" style="border: 1px solid #ccc;">
+                <form action="{% url 'admin' %}" method="post">{% csrf_token %}
+                    <tr>
+                        <td><input type="text" name="academic_level"></td>
+                        <td>
+                            <button class="btn btn-primary btn-sm">Add</button>
+                        </td>
+                    </tr>
+                </form>
+                {% for academic_level in academic_levels %}
+                    <tr>
+                        <td>{{ academic_level }}</td>
+                        <td>
+                            <form action="{% url 'admin' %}" method="post">{% csrf_token %}
+                                <button class="btn btn-danger btn-sm" name="academic_level_remove"
+                                        value="{{ academic_level.id }}">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
 
 {% endblock %}
 

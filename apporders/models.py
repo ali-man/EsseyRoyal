@@ -12,6 +12,13 @@ def upload_files(instance, filename):
     return os.path.join(settings.MEDIA_ROOT + '/customer/%s/orders/%s/attached_files/' % (instance.order.client.id, instance.order.id), filename)
 
 
+class TypeOrder(models.Model):
+    title = models.CharField(verbose_name='Type of order', max_length=50)
+
+    def __str__(self):
+        return self.title
+
+
 class FormatOrder(models.Model):
     title = models.CharField(verbose_name='Format of order', max_length=50)
 
@@ -48,17 +55,6 @@ class Earning(models.Model):
         return '%s' % self.status
 
 
-class DeadLine(models.Model):
-    date_deadline = models.CharField(verbose_name='DeadLine', max_length=100)
-
-    class Meta:
-        verbose_name = 'Deadline'
-        verbose_name_plural = 'Deadlines'
-
-    def __str__(self):
-        return self.date_deadline
-
-
 class Order(models.Model):
     IN_REVIEW = 0
     IN_PROGRESS = 1
@@ -69,14 +65,12 @@ class Order(models.Model):
         (IN_PROGRESS, 'In progress'),
         (COMPLETED, 'Completed'),
     )
-    # TODO: Загрузка файлов не более 10, и форматов .xls .doc .docx .pdf .jpg .png .excel
     client = models.ForeignKey(Client, verbose_name='Client', on_delete=models.CASCADE)
     title = models.CharField(verbose_name='Title of order', max_length=100)
-    type_order = models.CharField(verbose_name='Type of order', max_length=100)
+    type_order = models.ForeignKey(TypeOrder, verbose_name='Type of order', on_delete=models.CASCADE, null=True)
     format_order = models.ForeignKey(FormatOrder, verbose_name='Format of order', on_delete=models.CASCADE)
-    deadline = models.ForeignKey(DeadLine, verbose_name='Deadline', on_delete=models.CASCADE)
-    deadline_writer = models.DateTimeField(verbose_name='Date of the deadline by writer', auto_now=False)
-    feedback = RichTextField(verbose_name='Feedback')
+    deadline = models.DateTimeField(verbose_name='Deadline', auto_now=False)
+    description = RichTextField(verbose_name='Description')
     status = models.IntegerField(verbose_name='Status order', choices=STATUS, default=IN_REVIEW)
     created_datetime = models.DateTimeField(verbose_name='Created datetime', auto_now_add=True)
 
@@ -89,6 +83,7 @@ class Order(models.Model):
 
 
 class FilesOrder(models.Model):
+    # TODO: Загрузка файлов не более 10, и форматов .xls .doc .docx .pdf .jpg .png .excel
     order = models.ForeignKey(Order, verbose_name='ID Order', on_delete=models.CASCADE)
     file = models.FileField(verbose_name='Attached files', upload_to=upload_files, null=True, blank=True)
 

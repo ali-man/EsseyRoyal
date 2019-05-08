@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
 
+from appprofile.models import Client
 from appusers.models import User
 
 
@@ -27,7 +28,11 @@ class SignUpViews(View):
             create_user = User.objects.create_user(email=email, password=password2)
             create_user.first_name = first_name if first_name is not None else ''
             create_user.last_name = last_name if last_name is not None else ''
+            create_user.is_client = True
             create_user.save()
+            client = Client()
+            client.user = create_user
+            client.save()
             user = authenticate(email=email, password=password2)
             login(request, user)
             messages.success(request, 'Вы успешно зарегистрированы (перевести)')

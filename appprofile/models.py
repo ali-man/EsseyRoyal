@@ -8,15 +8,15 @@ from django.dispatch import receiver
 class Client(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name='User', on_delete=models.CASCADE)
     academic_institution = models.CharField(verbose_name='Academic Institution', max_length=100, blank=True)
-    phone = models.CharField(verbose_name='Phone number', max_length=50)
+    phone = models.CharField(verbose_name='Phone number', max_length=50, blank=True)
 
     class Meta:
         verbose_name = 'Client'
         verbose_name_plural = 'Clients'
 
-    @receiver(post_save, sender=settings.AUTH_USER_MODEL)
-    def create_or_update_user_profile(sender, instance, created, **kwargs):
-        Client.objects.get_or_create(user=instance)
+    # @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+    # def create_or_update_user_profile(sender, instance, created, **kwargs):
+    #     Client.objects.get_or_create(user=instance)
 
     def __str__(self):
         return '%s' % self.user.get_full_name()

@@ -16,6 +16,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(verbose_name='registered', auto_now_add=True)
     # is_staff = models.BooleanField(verbose_name='is_staff', default=)
     is_active = models.BooleanField(verbose_name='is_active', default=True)
+    is_manager = models.BooleanField(verbose_name='is_manager', default=False)
+    is_client = models.BooleanField(verbose_name='is_client', default=False)
+    is_writer = models.BooleanField(verbose_name='is_writer', default=False)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
 
     objects = UserManager()

@@ -7,6 +7,7 @@ from django.views.generic.base import View
 
 from apporders.forms import OrderAddForm
 from apporders.models import Order, FilesOrder
+from apporders.validators import validate_file_extension, validate_file_views
 
 
 def to_deadline(d, t):
@@ -38,6 +39,9 @@ class AddOrderViews(View):
             order.save()
             if len(attached_files) != 0:
                 for f in attached_files:
+                    if validate_file_views(f) == 'error':
+                        messages.error(request, 'Загружен не допустимый формат (перевести)')
+                        return render(request, 'customer/orders/add_order.html', {'form': form})
                     files_order = FilesOrder()
                     files_order.order = order
                     files_order.file = f

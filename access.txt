@@ -1,5 +1,7 @@
 admin = admin@ad.min 050989
 client = customer1@es.com qweqweas
 client = customer2@es.com qweqweas
+writer = writer1@es.com qweqweas
+writer = writer2@es.com qweqweas
 manager = manager1@es.com qweqweas
 manager = manager2@es.com qweqweas

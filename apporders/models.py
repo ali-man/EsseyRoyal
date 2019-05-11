@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.db import models
 
+from apporders.validators import validate_file_extension
 from appprofile.models import Client
 
 
@@ -85,7 +86,7 @@ class Order(models.Model):
 class FilesOrder(models.Model):
     # TODO: Загрузка файлов не более 10, и форматов .xls .doc .docx .pdf .jpg .png .excel
     order = models.ForeignKey(Order, verbose_name='ID Order', on_delete=models.CASCADE)
-    file = models.FileField(verbose_name='Attached files', upload_to=upload_files, null=True, blank=True)
+    file = models.FileField(verbose_name='Attached files', upload_to=upload_files, validators=[validate_file_extension], null=True, blank=True)
 
     def __str__(self):
         return '%s' % self.id

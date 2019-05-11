@@ -29,7 +29,10 @@
                     {% endfor %}
                     <tr>
                         <td><label for="id_attached-files">Attached files</label></td>
-                        <td><input type="file" name="attached-files" id="id_attached-files" multiple></td>
+                        <td>
+                            <input type="file" name="attached-files" id="id_attached-files" multiple>
+                            <small>.xls .doc .docx .pdf .jpg .png .excel</small>
+                        </td>
                     </tr>
                 </table>
                 <button type="submit" class="btn btn-primary">Send</button>
@@ -41,12 +44,12 @@
 
 {% block scripts %}
     <script>
-        $('#date_deadline_writer').datetimepicker({
+        $('#date_deadline').datetimepicker({
             format: 'd-m-Y',
             value: new Date(),
             timepicker: false
         });
-        $('#time_deadline_writer').datetimepicker({
+        $('#time_deadline').datetimepicker({
             format: "H:i",
             value: "00:00",
             datepicker: false

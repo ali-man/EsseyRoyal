@@ -13,35 +13,31 @@
 
     <table class="table">
         <tr>
-            <th></th>
+            <th>Customer</th>
             <td>{{ order.client }}</td>
         </tr>
         <tr>
-            <th></th>
+            <th>Title</th>
             <td>{{ order.title }}</td>
         </tr>
         <tr>
-            <th></th>
+            <th>Type of order</th>
             <td>{{ order.type_order }}</td>
         </tr>
         <tr>
-            <th></th>
+            <th>Format of order</th>
             <td>{{ order.format_order }}</td>
         </tr>
         <tr>
-            <th></th>
+            <th>Deadline</th>
             <td>{{ order.deadline }}</td>
         </tr>
         <tr>
-            <th></th>
-            <td>{{ order.deadline_writer }}</td>
+            <th>Description</th>
+            <td>{% autoescape off %}{{ order.description }}{% endautoescape %}</td>
         </tr>
         <tr>
-            <th></th>
-            <td>{% autoescape off %}{{ order.feedback }}{% endautoescape %}</td>
-        </tr>
-        <tr>
-            <th></th>
+            <th>Status order</th>
             <td>{{ order.status }}</td>
         </tr>
         <tr>

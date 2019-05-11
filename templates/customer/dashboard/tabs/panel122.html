@@ -1,84 +1,35 @@
 {% load apporders_filter %}
 
-<div class="card card-cascade narrower">
-    <div class="view view-cascade gradient-card-header primary-color narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+<div class="table-responsive text-nowrap">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Format</th>
+            <th>Deadline</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr>
+                <th scope="row">{{ order.title }}</th>
+                <td>{{ order.type_order }}</td>
+                <td>{{ order.format_order }}</td>
+                <td>{{ order.deadline }}</td>
+                <td>{{ order.status|status_order }}</td>
+                <td>
+{#                    customer_edit_order#}
+                    <a href="#"><i class="fas fa-pen"></i></a>
+                    <a href=""><i class="fas fa-trash"></i></a>
+                    <a href="{% url 'customer_view_order' order.id %}"><i class="fas fa-eye"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
 
-        <div>
-            <button type="button"
-                    class="btn btn-outline-white btn-rounded btn-sm px-2">
-                <i class="fas fa-th-large mt-0"></i>
-            </button>
-            <button type="button"
-                    class="btn btn-outline-white btn-rounded btn-sm px-2">
-                <i class="fas fa-columns mt-0"></i>
-            </button>
-        </div>
+        </tbody>
 
-        <a href="" class="white-text mx-3">My orders</a>
-
-        <div>
-            <button type="button"
-                    class="btn btn-outline-white btn-rounded btn-sm px-2">
-                <i class="fas fa-pencil-alt mt-0"></i>
-            </button>
-            <button type="button"
-                    class="btn btn-outline-white btn-rounded btn-sm px-2">
-                <i class="far fa-trash-alt mt-0"></i>
-            </button>
-            <button type="button"
-                    class="btn btn-outline-white btn-rounded btn-sm px-2">
-                <i class="fas fa-info-circle mt-0"></i>
-            </button>
-        </div>
-
-    </div>
-    <!--/Card image-->
-
-    <div class="px-4">
-        <div class="table-wrapper">
-            <table class="table table-hover mb-0">
-                <thead>
-                <tr>
-                    <th class="th-lg">
-                        <a>Title of order
-                            <i class="fas fa-sort ml-1"></i>
-                        </a>
-                    </th>
-                    <th class="th-lg">
-                        <a href="">Type of order
-                            <i class="fas fa-sort ml-1"></i>
-                        </a>
-                    </th>
-                    <th class="th-lg">
-                        <a href="">Format of order
-                            <i class="fas fa-sort ml-1"></i>
-                        </a>
-                    </th>
-                    <th class="th-lg">
-                        <a href="">Deadline
-                            <i class="fas fa-sort ml-1"></i>
-                        </a>
-                    </th>
-                    <th class="th-lg">
-                        <a href="">Status
-                            <i class="fas fa-sort ml-1"></i>
-                        </a>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for order in orders %}
-                    <tr data-order-id="{{ order.id }}">
-                        <td>{{ order.title }}</td>
-                        <td>{{ order.type_order }}</td>
-                        <td>{{ order.format_order }}</td>
-                        <td>{{ order.deadline }} <br> {{ order.deadline_writer_date }} {{ order.deadline_writer_time }}</td>
-                        <td>{{ order.status|status_order }}</td>
-                    </tr>
-                {% endfor %}
-
-                </tbody>
-            </table>
-        </div>
-    </div>
+    </table>
 </div>

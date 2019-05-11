@@ -50,10 +50,10 @@
 
 {% block scripts %}
     <script>
-    $('table td').css({'cursor': 'pointer'});
-    $('table td').click(function () {
-        let id = $(this).parent().attr('data-order-id');
-        window.open(`/customer/order/view/${id}`, '_blank');
-    })
+    {#$('table td').css({'cursor': 'pointer'});#}
+    {#$('table td').click(function () {#}
+    {#    let id = $(this).parent().attr('data-order-id');#}
+    {#    window.open(`/customer/order/view/${id}`, '_blank');#}
+    {#})#}
     </script>
 {% endblock %}

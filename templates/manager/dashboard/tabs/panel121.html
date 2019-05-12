@@ -1,0 +1,26 @@
+<table class="table">
+    <tbody>
+    <tr>
+        <th scope="row">First name</th>
+        <td>{{ profile.first_name }}</td>
+    </tr>
+    <tr>
+        <th scope="row">Last name</th>
+        <td>{{ profile.last_name }}</td>
+    </tr>
+    <tr>
+        <th scope="row">Phone number</th>
+        <td>
+            {% if profile.manager.phone %}
+                {{ profile.manager.phone }}
+            {% else %}
+                Unspecified
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th scope="row">Email address</th>
+        <td>{{ profile.email }}</td>
+    </tr>
+    </tbody>
+</table>

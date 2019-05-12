@@ -8,7 +8,7 @@ from django.dispatch import receiver
 
 
 def upload_files(instance, filename):
-    return os.path.join(settings.MEDIA_ROOT + '/avatars/writer/%s/' % instance.id, filename)
+    return os.path.join(settings.MEDIA_ROOT + '/avatars/%s/%s/' % (instance.__class__.__name__.lower(), instance.id), filename)
 
 
 class Client(models.Model):
@@ -28,18 +28,18 @@ class Client(models.Model):
         return '%s' % self.user.get_full_name()
 
 
-# class Manager(models.Model):
-#     user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name='User', on_delete=models.CASCADE)
-#     phone_number = models.CharField(verbose_name='Телефон номер', max_length=30)
-#     corporate_email = models.EmailField(verbose_name='Корпоративный email адрес', blank=True)
-#     photo = models.ImageField(verbose_name='Фото', upload_to='profile/photo/managers/', blank=True)
-#
-#     class Meta:
-#         verbose_name = 'Manager'
-#         verbose_name_plural = 'Managers'
-#
-#     def __str__(self):
-#         return "%s %s" % (self.user.first_name, self.user.last_name)
+class Manager(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name='User', on_delete=models.CASCADE)
+    phone_number = models.CharField(verbose_name='Телефон номер', max_length=30)
+    corporate_email = models.EmailField(verbose_name='Корпоративный email адрес', blank=True)
+    photo = models.ImageField(verbose_name='Фото', upload_to=upload_files, blank=True)
+
+    class Meta:
+        verbose_name = 'Manager'
+        verbose_name_plural = 'Managers'
+
+    def __str__(self):
+        return "%s %s" % (self.user.first_name, self.user.last_name)
 
 
 class Writer(models.Model):

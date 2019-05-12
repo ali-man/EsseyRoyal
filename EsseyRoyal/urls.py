@@ -10,7 +10,8 @@ from appdashboard.views import \
     OrderAdminDashboardViews, \
     WritersAdminDashboardViews, \
     AdminDashboardViews, \
-    dashboard_redirect, EditWriterAdminDashboardViews, ClientsAdminDashboardViews
+    dashboard_redirect, EditWriterAdminDashboardViews, ClientsAdminDashboardViews, ManagersAdminDashboardViews, \
+    EditManagerAdminDashboardViews, ManagerDashboardViews
 from apporders.views import ViewOrderViews, AddOrderViews
 from appusers.views import SignUpViews, SignInViews, logout_user
 
@@ -24,6 +25,9 @@ urlpatterns = [
     path('customer/order/view/<int:pk>/', ViewOrderViews.as_view(), name='customer_view_order'),
     path('customer/order/add/', AddOrderViews.as_view(), name='customer_add_order'),
     path('customer/', CustomerDashboardViews.as_view(), name='customer'),
+    path('manager/', ManagerDashboardViews.as_view(), name='manager'),
+    path('admin/manager/edit/<int:pk>/', EditManagerAdminDashboardViews.as_view(), name='admin-manager_edit'),
+    path('admin/managers/', ManagersAdminDashboardViews.as_view(), name='admin-managers'),
     path('admin/writer/edit/<int:pk>/', EditWriterAdminDashboardViews.as_view(), name='admin-writer_edit'),
     path('admin/writers/', WritersAdminDashboardViews.as_view(), name='admin-writers'),
     path('admin/clients/', ClientsAdminDashboardViews.as_view(), name='admin-clients'),

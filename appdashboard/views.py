@@ -3,9 +3,10 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
 
+from appdashboard.mixins import DashBoardMixin, EditProfileMixin
 from apporders.models import Order, TypeOrder, FormatOrder
-from appprofile.forms import WriterForm
-from appprofile.models import Writer, Client
+from appprofile.forms import WriterForm, ManagerForm
+from appprofile.models import Writer, Client, Manager
 from appusers.models import User
 
 
@@ -23,19 +24,27 @@ def dashboard_redirect(request):
         return redirect('/')
 
 
-class CustomerDashboardViews(View):
-    @staticmethod
-    def get(request):
-        if request.user.is_anonymous:
-            return redirect('/')
-        user = User.objects.get(id=request.user.id)
-        client = user.client
-        orders = client.order_set.all()
-        works_ordered = len(orders)
-        work_progress = len(orders.filter(status=1))
-        complete_work = len(orders.filter(status=2))
+class CustomerDashboardViews(DashBoardMixin, View):
+    model = Client
+    template = 'customer/customer-dashboard.html'
 
-        return render(request, 'customer/customer-dashboard.html', locals())
+    # @staticmethod
+    # def get(request):
+    #     if request.user.is_anonymous:
+    #         return redirect('/')
+    #     user = User.objects.get(id=request.user.id)
+    #     client = user.client
+    #     orders = client.order_set.all()
+    #     works_ordered = len(orders)
+    #     work_progress = len(orders.filter(status=1))
+    #     complete_work = len(orders.filter(status=2))
+    #
+    #     return render(request, 'customer/customer-dashboard.html', locals())
+
+
+class ManagerDashboardViews(DashBoardMixin, View):
+    model = Manager
+    template = 'manager/manager-dashboard.html'
 
 
 class AdminDashboardViews(View):
@@ -124,26 +133,50 @@ class WritersAdminDashboardViews(View):
             return redirect('/admin/writers/')
 
 
-class EditWriterAdminDashboardViews(View):
+class ManagersAdminDashboardViews(View):
     @staticmethod
-    def get(request, pk):
-        writer = Writer.objects.get(id=pk)
-        form = WriterForm(instance=writer)
-        return render(request, 'admin/writer-edit-admin-dashboard.html', context={'form': form, 'writer': writer})
+    def get(request):
+        managers = Manager.objects.all()
+        return render(request, 'admin/managers-admin-dashboard.html', locals())
 
     @staticmethod
-    def post(request, pk):
-        writer = Writer.objects.get(id=pk)
-        form = WriterForm(request.POST, request.FILES, instance=writer)
-        print(request.FILES)
-        if form.is_valid():
-            if 'photo' in request.FILES:
-                form.photo = request.FILES['photo']
-            form.save()
-            messages.success(request, 'Врайтер успешно изменён (перевести)')
-            return redirect('/admin/writers/')
-        else:
-            return render(request, 'admin/writer-edit-admin-dashboard.html', context={'form': form, 'writer': writer})
+    def post(request):
+        if 'create_manager' in request.POST:
+            r = request.POST
+            first_name = r['firstname']
+            last_name = r['lastname']
+            email = r['email']
+            corporate_email = r['corporate-email']
+            phone = r['phone']
+            password1 = r['password1']
+            password2 = r['password2']
+            if password1 == password2:
+                create_user = User.objects.create_user(email=email, password=password2)
+                create_user.first_name = first_name
+                create_user.last_name = last_name
+                create_user.is_manager = True
+                create_user.save()
+                manager = Manager()
+                manager.phone_number = phone
+                manager.corporate_email = corporate_email
+                manager.user = create_user
+                manager.save()
+            else:
+                messages.error(request, 'Пароли не совпадают (перевести)')
+
+            return redirect('/admin/managers/')
+
+
+class EditWriterAdminDashboardViews(EditProfileMixin, View):
+    model = Writer
+    form = WriterForm
+    template = 'admin/writer-edit-admin-dashboard.html'
+
+
+class EditManagerAdminDashboardViews(EditProfileMixin, View):
+    model = Manager
+    form = ManagerForm
+    template = 'admin/manager-edit-admin-dashboard.html'
 
 
 class ClientsAdminDashboardViews(View):

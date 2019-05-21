@@ -1,16 +1,14 @@
 import datetime
 
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect
-from django.views.generic.base import View, TemplateView
+from django.views.generic.base import TemplateView
 
-from appdashboard.mixins import DashBoardMixin, EditProfileMixin
 from apporders.forms import OrderAddForm, TypeOrderForm, FormatOrderForm, PriceDeadlineForm
-from apporders.models import Order, TypeOrder, FormatOrder, PriceDeadline, FilesOrder
-from apporders.validators import validate_file_views
+from apporders.models import Order, TypeOrder, FormatOrder, PriceDeadline
+
 from appusers.forms import UserForm, CreateUserForm
 from appusers.models import User
 
@@ -27,172 +25,6 @@ def dashboard_redirect(request):
         return redirect('/writer')
     else:
         return redirect('/')
-
-
-class CustomerDashboardViews(View):
-
-    @staticmethod
-    def get(request):
-        if request.user.is_anonymous:
-            return redirect('/')
-        user = User.objects.get(id=request.user.id)
-        client = user.client
-        orders = client.order_set.all()
-        works_ordered = len(orders)
-        work_progress = len(orders.filter(status=1))
-        complete_work = len(orders.filter(status=2))
-
-        return render(request, 'customer/customer-dashboard.html', locals())
-
-
-class ManagerDashboardViews(View):
-
-    @staticmethod
-    def get(request):
-        if request.user.is_anonymous:
-            return redirect('/')
-        user = User.objects.get(id=request.user.id)
-        orders = Order.objects.all()
-        order_moderation = orders.filter(send_writer=False)
-
-        return render(request, 'manager/manager-dashboard.html', context={
-            'user': user,
-            'orders_moderation': order_moderation,
-            'orders': orders
-        })
-
-
-class AdminDashboardViews(View):
-    @staticmethod
-    def get(request):
-        types_order = TypeOrder.objects.all()
-        formats_order = FormatOrder.objects.all()
-        price_deadline = PriceDeadline.objects.all()
-        if not request.user.is_superuser:
-            return redirect('/')
-
-        return render(request, 'admin/admin-dashboard.html', locals())
-
-    @staticmethod
-    def post(request):
-        print(
-            request.POST
-        )
-        if 'type_order' in request.POST:
-            type_order = TypeOrder(
-                title=request.POST['title'],
-                price_writer=request.POST['price_for_writer'],
-                price_client=request.POST['price_for_client']
-            )
-            type_order.save()
-
-        if 'type_order_remove' in request.POST:
-            id = request.POST['type_order_remove']
-            type_order = TypeOrder.objects.get(id=int(id))
-            type_order.delete()
-
-        if 'format_order' in request.POST:
-            format_order = FormatOrder(
-                title=request.POST['title']
-            )
-            format_order.save()
-
-        if 'format_order_remove' in request.POST:
-            id = request.POST['format_order_remove']
-            format_order = FormatOrder.objects.get(id=int(id))
-            format_order.delete()
-
-        if 'price_deadline' in request.POST:
-            price_deadline = PriceDeadline(
-                start_day=request.POST['start_day'],
-                end_day=request.POST['end_day'],
-                price=request.POST['price']
-            )
-            price_deadline.save()
-
-        if 'price_deadline_remove' in request.POST:
-            id = request.POST['price_deadline_remove']
-            price_deadline = PriceDeadline.objects.get(id=int(id))
-            price_deadline.delete()
-
-        return redirect('/admin')
-
-
-class WritersAdminDashboardViews(View):
-    @staticmethod
-    def get(request):
-        # writers = Writer.objects.all()
-
-        return render(request, 'admin/writers-admin-dashboard.html', locals())
-
-    @staticmethod
-    def post(request):
-        if 'create_writer' in request.POST:
-            r = request.POST
-            first_name = r['firstname']
-            last_name = r['lastname']
-            email = r['email']
-            corporate_email = r['corporate-email']
-            phone = r['phone']
-            password1 = r['password1']
-            password2 = r['password2']
-            if password1 == password2:
-                create_user = User.objects.create_user(email=email, password=password2)
-                create_user.first_name = first_name
-                create_user.last_name = last_name
-                create_user.phone = phone
-                create_user.corporate_email = corporate_email
-                create_user
-                create_user.save()
-            else:
-                messages.error(request, 'Пароли не совпадают (перевести)')
-
-            return redirect('/admin/writers/')
-
-
-class ManagersAdminDashboardViews(View):
-    @staticmethod
-    def get(request):
-        # managers = Manager.objects.all()
-        return render(request, 'admin/managers-admin-dashboard.html', locals())
-
-    @staticmethod
-    def post(request):
-        if 'create_manager' in request.POST:
-            r = request.POST
-            first_name = r['firstname']
-            last_name = r['lastname']
-            email = r['email']
-            corporate_email = r['corporate-email']
-            phone = r['phone']
-            password1 = r['password1']
-            password2 = r['password2']
-            if password1 == password2:
-                create_user = User.objects.create_user(email=email, password=password2)
-                create_user.first_name = first_name
-                create_user.last_name = last_name
-                create_user.is_manager = True
-                create_user.phone = phone
-                create_user.corporate_email = corporate_email
-                create_user.save()
-            else:
-                messages.error(request, 'Пароли не совпадают (перевести)')
-
-            return redirect('/admin/managers/')
-
-
-class OrderReviewAdminDashboardViews(View):
-    @staticmethod
-    def get(request):
-        orders = Order.objects.all()
-        return render(request, 'admin/order_review-admin-dashboard.html', context={'orders': orders})
-
-
-class OrderAdminDashboardViews(View):
-    @staticmethod
-    def get(request):
-        orders = Order.objects.all()
-        return render(request, 'admin/orders-admin-dashboard.html', context={'orders': orders})
 
 
 def to_deadline(d, t):

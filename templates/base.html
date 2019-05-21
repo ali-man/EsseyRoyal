@@ -4,50 +4,162 @@
 <html lang="en">
 <head>
     {% include 'head.html' %}
-    {% block css %}{% endblock %}
     <style>
-        a.collapsible-header i {
-            width: 10px;
+        body {
+            background-color: rgb(241, 241, 241);
+        }
+
+        html,
+        body,
+        header {
+            height: 65px;
+        }
+
+        .navbar:not(.top-nav-collapse) {
+            background: -moz-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+            background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, rgba(8, 27, 73, 0.97)), color-stop(100%, rgba(30, 101, 178, 0.97)));
+            background: -webkit-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+            background: -o-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+            background: -ms-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+            background: linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+        }
+
+        .contact {
+            background: -moz-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+            background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, rgba(8, 27, 73, 0.97)), color-stop(100%, rgba(30, 101, 178, 0.97)));
+            background: -webkit-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+            background: -o-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+            background: -ms-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+            background: linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+        }
+
+        .top-nav-collapse {
+            background-color: #39448c !important;
+        }
+
+        @media (max-width: 991px) {
+            .navbar:not(.top-nav-collapse) {
+                background: #39448c !important;
+            }
+        }
+
+        h6 {
+            line-height: 1.7;
+        }
+
+        .bg-block {
+            background: -moz-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+            background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, rgba(8, 27, 73, 0.97)), color-stop(100%, rgba(30, 101, 178, 0.97)));
+            background: -webkit-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+            background: -o-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+            background: -ms-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+            background: linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+        }
+
+        .bg-btn {
+            background: -moz-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);
+            background: -webkit-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);
+            background: -o-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);
+            background: -ms-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);
+            background: linear-gradient(to right, #FDA10E 0%, #FF6C0D 100%);
+        }
+
+        .pills-primary .nav-link.active {
+            background: -moz-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);
+            background: -webkit-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);
+            background: -o-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);
+            background: -ms-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);
+            background: linear-gradient(to right, #FDA10E 0%, #FF6C0D 100%);
+        }
+
+        .menu-login {
+            display: inline-flex;
+        }
+
+        .menu-login a.nav-link:hover {
+            color: rgba(255, 255, 255, .75);
+        }
+
+        .menu-login a.nav-link {
+            color: #fff;
+        }
+        .list-unstyled li {
+            font-size: 14px;
+        }
+        .list-unstyled li strong {
+            font-weight: 500;
         }
     </style>
+    {% block css %}
+    {% endblock %}
+
     <title>{% block title %}{% endblock %}</title>
 </head>
 
-<body class="fixed-sn white-skin">
+<body>
 
-{% include 'navigation.html' %}
 
+<!-- Main navigation -->
+<header>
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <strong>Essay Royal</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-7"
+                    aria-controls="navbarSupportedContent-7" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent-7">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'home' %}">Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                </ul>
+
+                <div class="menu-login">
+                    {% if user.is_authenticated %}
+                        <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                        <a class="nav-link" href="{% url 'logout' %}">Sign out</a>
+                    {% else %}
+                        <a class="nav-link" href="{% url 'login' %}">Sign in</a>
+                    {% endif %}
+                </div>
+                {#                <form class="form-inline">#}
+                {#                    <div class="md-form my-0">#}
+                {#                        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">#}
+                {#                    </div>#}
+                {#                </form>#}
+            </div>
+        </div>
+    </nav>
+    <!-- Navbar -->
+    {% block home %}
+
+    {% endblock %}
+</header>
+<!-- Main navigation -->
+<!--Main Layout-->
 <main>
-    <div class="container-fluid">
+    {% block content %}
 
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-
-        {% block content %}{% endblock %}
-
-    </div>
+    {% endblock %}
 </main>
+<!--Main Layout-->
+
 
 {% include 'footer.html' %}
 
 {% include 'scripts.html' %}
-<script>
-    $(".button-collapse").sideNav();
-
-    let container = document.querySelector('.custom-scrollbar');
-    Ps.initialize(container, {
-        wheelSpeed: 2,
-        wheelPropagation: true,
-        minScrollbarLength: 20
-    });
-
-</script>
-
 {% block scripts %}
 {% endblock %}
 </body>

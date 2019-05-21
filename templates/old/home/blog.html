@@ -1,0 +1,110 @@
+<!-- Section: Blog v.2 -->
+<section class="text-center my-5">
+
+    <!-- Section heading -->
+    <h2 class="h1-responsive font-weight-bold my-5">Recent posts</h2>
+    <!-- Section description -->
+    <p class="dark-grey-text w-responsive mx-auto mb-5">Duis aute irure dolor in reprehenderit in voluptate velit
+        esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa
+        qui officia deserunt mollit anim id est laborum.</p>
+
+    <!-- Grid row -->
+    <div class="row">
+
+        {% for article in articles %}
+            {% if forloop.first %}
+                <div class="col-lg-4 col-md-12 mb-lg-0 mb-4">
+
+            <!-- Featured image -->
+            <div class="overlay rounded z-depth-2 mb-4">
+                <img class="img-fluid" src="{{ article.poster.url }}" alt="{{ article.title }}">
+                <a>
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+
+            <!-- Category -->
+            <a href="#!" class="pink-text">
+                <h6 class="font-weight-bold mb-3"><i class="fas fa-map pr-2"></i>Adventure</h6>
+            </a>
+            <!-- Post title -->
+            <h4 class="font-weight-bold mb-3"><strong>{{ article.title }}</strong></h4>
+            <!-- Post data -->
+            <p>by <a class="font-weight-bold">Admin</a>, {{ article.created_datetime }}</p>
+            <!-- Excerpt -->
+            <p class="dark-grey-text">
+                {% autoescape off %}{{ article.description }}{% endautoescape %}
+            </p>
+            <!-- Read more button -->
+            {% for tag in article.tags.all %}
+                <a class="btn btn-pink btn-rounded btn-sm">{{ tag }}</a>
+            {% endfor %}
+
+
+        </div>
+            {% elif forloop.last %}
+                <div class="col-lg-4 col-md-6 mb-0">
+
+            <!-- Featured image -->
+            <div class="overlay rounded z-depth-2 mb-4">
+                <img class="img-fluid" src="{{ article.poster.url }}" alt="{{ article.title }}">
+                <a>
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+
+            <!-- Category -->
+            <a href="#!" class="blue-text">
+                <h6 class="font-weight-bold mb-3"><i class="fas fa-fire pr-2"></i>Culture</h6>
+            </a>
+            <!-- Post title -->
+            <h4 class="font-weight-bold mb-3"><strong>{{ article.title }}</strong></h4>
+            <!-- Post data -->
+            <p>by <a class="font-weight-bold">Admin</a>, {{ article.created_datetime }}</p>
+            <!-- Excerpt -->
+            <p class="dark-grey-text">
+                {% autoescape off %}{{ article.description }}{% endautoescape %}
+            </p>
+            <!-- Read more button -->
+            {% for tag in article.tags.all %}
+                <a class="btn btn-pink btn-rounded btn-sm">{{ tag }}</a>
+            {% endfor %}
+
+        </div>
+            {% else %}
+                <div class="col-lg-4 col-md-6 mb-md-0 mb-4">
+
+            <!-- Featured image -->
+            <div class="overlay rounded z-depth-2 mb-4">
+                <img class="img-fluid" src="{{ article.poster.url }}" alt="{{ article.title }}">
+                <a>
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+
+            <!-- Category -->
+            <a href="#!" class="deep-orange-text">
+                <h6 class="font-weight-bold mb-3"><i class="fas fa-graduation-cap pr-2"></i>Education</h6>
+            </a>
+            <!-- Post title -->
+            <h4 class="font-weight-bold mb-3"><strong>{{ article.title }}</strong></h4>
+            <!-- Post data -->
+            <p>by <a class="font-weight-bold">Admin</a>, {{ article.created_datetime }}</p>
+            <!-- Excerpt -->
+            <p class="dark-grey-text">
+                {% autoescape off %}{{ article.description }}{% endautoescape %}
+            </p>
+            <!-- Read more button -->
+            {% for tag in article.tags.all %}
+                <a class="btn btn-pink btn-rounded btn-sm">{{ tag }}</a>
+            {% endfor %}
+
+        </div>
+            {% endif %}
+        {% endfor %}
+
+    </div>
+    <!-- Grid row -->
+
+</section>
+<!-- Section: Blog v.2 -->

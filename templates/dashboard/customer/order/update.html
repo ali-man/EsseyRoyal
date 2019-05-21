@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-8 offset-md-2">
+                <form method="post" enctype="multipart/form-data" style="background-color: #fff; margin-top: 25px;">{% csrf_token %}
+                    <table class="table">
+                        {% for field in form %}
+                            <tr>
+                                <td width="120">{{ field.label }}</td>
+                                <td>{{ field }}</td>
+                            </tr>
+                            {% if field.errors %}
+                                <tr>
+                                    <td></td>
+                                    <td>{{ field.errors }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        <tr>
+                            <td><label for="id_attached-files">Attached files</label></td>
+                            <td>
+                                <input type="file" name="attached-files" id="id_attached-files" multiple>
+                                <small>.xls .doc .docx .pdf .jpg .png .excel</small>
+                            </td>
+                        </tr>
+                    </table>
+                    <button type="submit" class="btn bg-btn">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

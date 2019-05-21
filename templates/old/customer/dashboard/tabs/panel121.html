@@ -1,0 +1,36 @@
+<table class="table">
+    <tbody>
+    <tr>
+        <th scope="row">First name</th>
+        <td>{{ user.first_name }}</td>
+    </tr>
+    <tr>
+        <th scope="row">Last name</th>
+        <td>{{ user.last_name }}</td>
+    </tr>
+    <tr>
+        <th scope="row">Academic Institution</th>
+        <td>
+            {% if user.academic_institution %}
+                {{ user.academic_institution }}
+            {% else %}
+                Unspecified
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th scope="row">Phone number</th>
+        <td>
+            {% if user.phone %}
+                {{ user.phone }}
+            {% else %}
+                Unspecified
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th scope="row">Email address</th>
+        <td>{{ user.email }}</td>
+    </tr>
+    </tbody>
+</table>

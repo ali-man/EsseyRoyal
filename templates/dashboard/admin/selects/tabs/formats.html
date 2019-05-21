@@ -1,0 +1,27 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Title</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for format in formats %}
+        <tr>
+            <th scope="row">{{ format.id }}</th>
+            <td>{{ format.title }}</td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <form action="{% url 'admin-selects' %}" method="post">
+            {% csrf_token %}
+            <td style="vertical-align: middle;">
+                <button type="submit" name="_add_format" class="btn bg-btn">Add</button>
+            </td>
+            <td style="vertical-align: middle;">
+                {{ format_form.title }}
+            </td>
+        </form>
+    </tr>
+    </tbody>
+</table>

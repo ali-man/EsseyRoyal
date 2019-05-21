@@ -10,7 +10,6 @@ if LOCAL:
     DEBUG = True
     ALLOWED_HOSTS = []
 
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -26,11 +25,10 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
 
     'appusers',
-    'appprofile',
     'appdashboard',
     'apporders',
     # 'appwork',
-    # 'appblog'
+    'appblog'
 ]
 
 REST_FRAMEWORK = {
@@ -64,19 +62,11 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            # 'loaders': [
-            #     'admin_tools.template_loaders.Loader',
-            #     'django.template.loaders.filesystem.Loader',
-            #     'django.template.loaders.app_directories.Loader',
-            # ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'EsseyRoyal.wsgi.application'
-
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 if LOCAL:
     DATABASES = {
@@ -85,9 +75,6 @@ if LOCAL:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
-
-# Password validation
-# https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -104,9 +91,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/2.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -120,6 +104,21 @@ USE_TZ = True
 SITE_ID = 1
 
 AUTH_USER_MODEL = 'appusers.User'
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/'
+PASSWORD_RESET_TIMEOUT_DAYS = 1
+
+PASSWORD_HASHERS = (
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+    'django.contrib.auth.hashers.BCryptPasswordHasher',
+    'django.contrib.auth.hashers.SHA1PasswordHasher',
+    'django.contrib.auth.hashers.MD5PasswordHasher',
+    'django.contrib.auth.hashers.CryptPasswordHasher',
+)
 
 # -------------------- ckeditor -----------------------
 CKEDITOR_UPLOAD_PATH = 'uploads/'
@@ -148,6 +147,3 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
-
-ADMIN_TOOLS_INDEX_DASHBOARD = 'dashboard.CustomIndexDashboard'
-# ADMIN_TOOLS_THEMING_CSS = 'css/theming.css'

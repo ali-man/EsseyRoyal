@@ -1,0 +1,31 @@
+<div class="tab-pane fade active show" id="panel83" role="tabpanel">
+    <div class="table-responsive">
+        <table class="table">
+            <thead class="th-center">
+            <tr>
+                <th>Customer</th>
+                <th align="middle">Title</th>
+                <th>Type of order</th>
+                <th class="text-center">Deadline</th>
+                <th class="text-center">Price</th>
+                <th>Writer</th>
+            </tr>
+            </thead>
+            <tbody class="td-center">
+            {% for order in orders_completed %}
+                <tr>
+                    <td>{{ order.customer.first_name }}</td>
+                    <td>{{ order.title }}</td>
+                    <td>{{ order.type_order }}</td>
+                    <td class="text-center">
+                        {{ order.deadline }}
+                    </td>
+                    <td class="text-center">{{ order.total_cost }}</td>
+                    <td>{{ order.writer.first_name }}</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>

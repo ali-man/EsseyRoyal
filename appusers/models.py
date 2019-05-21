@@ -14,12 +14,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(verbose_name='Name', max_length=30, blank=True)
     last_name = models.CharField(verbose_name='surname', max_length=30, blank=True)
     date_joined = models.DateTimeField(verbose_name='registered', auto_now_add=True)
-    # is_staff = models.BooleanField(verbose_name='is_staff', default=)
+    is_staff = models.BooleanField(verbose_name='is_staff', default=False)
     is_active = models.BooleanField(verbose_name='is_active', default=True)
-    is_manager = models.BooleanField(verbose_name='is_manager', default=False)
-    is_client = models.BooleanField(verbose_name='is_client', default=False)
-    is_writer = models.BooleanField(verbose_name='is_writer', default=False)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+
+    phone = models.CharField(verbose_name='Phone number', max_length=50, blank=True)
+    academic_institution = models.CharField(verbose_name='Academic Institution', max_length=100, blank=True)
+    corporate_email = models.EmailField(verbose_name='Corporate email', blank=True)
+    degree = models.CharField(verbose_name='Degree', max_length=100, blank=True)
+
+    balance = models.DecimalField(verbose_name='Balance', max_digits=10, decimal_places=2, default=0)
 
     objects = UserManager()
 

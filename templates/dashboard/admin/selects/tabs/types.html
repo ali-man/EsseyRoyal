@@ -1,0 +1,36 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Title</th>
+        <th scope="col">Price for customers</th>
+        <th scope="col">Price for writers</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for type in types %}
+        <tr>
+            <th scope="row">{{ type.id }}</th>
+            <td>{{ type.title }}</td>
+            <td>{{ type.price_client }}</td>
+            <td>{{ type.price_writer }}</td>
+        </tr>
+    {% endfor %}
+    <form action="{% url 'admin-selects' %}" method="post">{% csrf_token %}
+        <tr>
+            <td style="vertical-align: middle;">
+                <button type="submit" name="_add_type" class="btn bg-btn">Add</button>
+            </td>
+            <td style="vertical-align: middle;">
+                {{ type_form.title }}
+            </td>
+            <td style="vertical-align: middle;">
+                {{ type_form.price_client }}
+            </td>
+            <td style="vertical-align: middle;">
+                {{ type_form.price_writer }}
+            </td>
+        </tr>
+        </form>
+    </tbody>
+</table>

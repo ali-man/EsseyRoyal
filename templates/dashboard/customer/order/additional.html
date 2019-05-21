@@ -1,0 +1,5 @@
+<ul class="additionally-order-files">
+    {% for additional in order.additionallyorder.filesadditionallyorder_set.all %}
+        <li><a href="{{ additional.file.url }}">{{ additional.created_datetime }}</a></li>
+    {% endfor %}
+</ul>

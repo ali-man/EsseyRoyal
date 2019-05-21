@@ -1,0 +1,19 @@
+<ul class="additionally-order-files">
+    {% for additional in order.additionallyorder.filesadditionallyorder_set.all %}
+        <li><a href="{{ additional.file.url }}">{{ additional.created_datetime }}</a></li>
+    {% endfor %}
+</ul>
+
+<form action="{% url 'writer-order_detail' order.id %}" method="post" enctype="multipart/form-data" class="md-form">
+    {% csrf_token %}
+    <div class="file-field">
+        <div class="btn btn-primary btn-sm float-left">
+            <span>Choose file</span>
+            <input type="file" name="files" multiple>
+        </div>
+        <div class="file-path-wrapper">
+            <input class="file-path validate" type="text" placeholder="Upload your file">
+        </div>
+    </div>
+    <button type="submit" class="btn bg-btn" style="float:right;">Upload</button>
+</form>

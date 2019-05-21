@@ -1,0 +1,55 @@
+<div class="tab-pane fade active show" id="panel83" role="tabpanel">
+    <div class="table-responsive">
+        <table class="table">
+            <thead class="th-center">
+            <tr>
+                <th class="text-center">Status</th>
+                <th align="middle">Title</th>
+                <th>Type of order</th>
+                <th>Per page</th>
+                <th>Pages</th>
+                <th class="text-center">Total cost</th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="td-center">
+            {% for order in orders %}
+                <tr>
+                    <td class="text-center">
+                        {% if order.status == 0 %}
+                            <i class="fas fa-search" title="ORDER IN REVIEW"></i>
+                        {% elif order.status == 1 %}
+                            <i class="fas fa-spinner" title="ORDER IN PROGRESS"></i>
+                        {% elif order.status == 2 %}
+                            <i class="fas fa-check" title="COMPLETED"></i>
+                        {% endif %}
+                    </td>
+                    <td>{{ order.title }}</td>
+                    <td>{{ order.type_order }}</td>
+                    <td>${{ order.per_page }}</td>
+                    <td>{{ order.number_page }}</td>
+                    <td class="text-center">${{ order.total_cost }}</td>
+                    <td class="text-center">
+                        {% if order.status == 0 %}
+                            <a href="{% url 'view_order' order.id %}" class="blue-text" data-toggle="tooltip"
+                               data-placement="top" title=""
+                               data-original-title="See results"><i class="far fa-eye"></i></a>
+                            <a href="{% url 'update_order' order.id %}" class="teal-text" data-toggle="tooltip"
+                               data-placement="top" title=""
+                               data-original-title="Edit"><i
+                                    class="fas fa-pencil-alt"></i></a>
+                            <a class="red-text" data-toggle="tooltip" data-placement="top" title=""
+                               data-original-title="Remove"><i class="fas fa-times"></i></a>
+                        {% else %}
+                            <a href="{% url 'customer-progress_order' order.id %}" class="blue-text" data-toggle="tooltip"
+                               data-placement="top" title=""
+                               data-original-title="See results"><i class="far fa-eye"></i></a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>

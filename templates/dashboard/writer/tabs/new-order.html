@@ -1,0 +1,24 @@
+<form action="{% url 'add_order' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <table class="table">
+        {% for field in new_order %}
+            <tr>
+                <td width="120">{{ field.label }}</td>
+                <td>{{ field }}</td>
+            </tr>
+            {% if field.errors %}
+                <tr>
+                    <td></td>
+                    <td>{{ field.errors }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        <tr>
+            <td><label for="id_attached-files">Attached files</label></td>
+            <td>
+                <input type="file" name="attached-files" id="id_attached-files" multiple>
+                <small>.xls .doc .docx .pdf .jpg .png .excel</small>
+            </td>
+        </tr>
+    </table>
+    <button type="submit" class="btn bg-btn">Send</button>
+</form>

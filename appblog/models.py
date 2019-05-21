@@ -32,10 +32,11 @@ class Article(models.Model):
     class Meta:
         verbose_name = 'Article'
         verbose_name_plural = 'Articles'
+        ordering = ['-id']
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title, allow_unicode=True)
-        super(Article, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

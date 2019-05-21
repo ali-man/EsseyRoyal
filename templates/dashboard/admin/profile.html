@@ -14,9 +14,12 @@
         <!-- Name -->
         <div class="text-center">
             <h3 class="mb-3 font-weight-bold"><strong>{{ user.get_full_name }}</strong></h3>
-            <h6 class="font-weight-bold blue-text mb-4">
-                Balance: ${{ user.balance }}
-            </h6>
+            {% if user.is_superuser %}
+            {% else %}
+                <h6 class="font-weight-bold blue-text mb-4">
+                    Balance: ${{ user.balance }}
+                </h6>
+            {% endif %}
         </div>
 
         <ul class="striped list-unstyled">

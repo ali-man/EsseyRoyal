@@ -188,14 +188,26 @@ def admin_settings(request):
         return redirect('/accounts/login/')
     user = User.objects.get(email=request.user)
     change_password = PasswordChangeForm(user=user)
+    profile_form = UserForm(instance=request.user)
     if request.method == 'POST':
-        change_password = PasswordChangeForm(user, request.POST)
-        if change_password.is_valid():
-            change_password.save()
-            messages.success(request, 'Ваш пароль успешно изменён (перевести)')
-            return redirect('/dashboard/settings/')
-        else:
-            messages.error(request, 'Неверно заполнены поля (перевести)')
-            return redirect('/dashboard/settings/')
+        if '_change_profile' in request.POST:
+            profile_form = UserForm(request.user, request.POST)
+            if profile_form.is_valid():
+                profile_form.save()
+                messages.success(request, 'Ваш профиль успешно изменён (перевести)')
+                return redirect('/dashboard/settings/')
+            else:
+                messages.error(request, 'Неверно заполнены поля (перевести)')
+                return redirect('/dashboard/settings/')
+
+        if '_change_password' in request.POST:
+            change_password = PasswordChangeForm(user, request.POST)
+            if change_password.is_valid():
+                change_password.save()
+                messages.success(request, 'Ваш пароль успешно изменён (перевести)')
+                return redirect('/dashboard/settings/')
+            else:
+                messages.error(request, 'Неверно заполнены поля (перевести)')
+                return redirect('/dashboard/settings/')
 
     return render(request, 'dashboard/admin/settings/index.html', locals())

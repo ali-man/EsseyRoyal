@@ -153,7 +153,7 @@ def writer_order_detail(request, pk):
             chat.order = order
             chat.user = user
             chat.message = request.POST['message']
-            chat.status = True
+            chat.status = False
             chat.save()
 
             messages.success(request, 'Ваше сообщение отправлено (перевести)')
@@ -179,7 +179,7 @@ def customer_order_in_progress(request, pk):
             chat.order = order
             chat.user = user
             chat.message = request.POST['message']
-            chat.status = True
+            chat.status = False
             chat.save()
 
             messages.success(request, 'Ваше сообщение отправлено (перевести)')
@@ -215,3 +215,20 @@ def writer_order_review(request, pk):
         else:
             messages.error(request, 'Неверно отправлен запрос на принятие (Перевести)')
         return redirect('/dashboard/')
+
+
+def manager_order(request, pk):
+    if request.method == 'GET':
+        order = get_object_or_404(Order, id=pk)
+
+        return render(request, 'dashboard/manager/orders/order/detail.html', locals())
+
+    if request.method == 'POST':
+        # TODO: Написать смену статуса сообщений чата на AJAX
+        if '_chat_accept' in request.POST:
+            print(request.POST.getlist('_chat_accept'))
+            # message_id = int(request.POST['_chat_accept'])
+            # message = Chat.objects.get(id=message_id)
+            # message.status = True
+            # message.save()
+            return redirect(F'/dashboard/m/order/{pk}/')

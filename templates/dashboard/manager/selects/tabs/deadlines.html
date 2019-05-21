@@ -1,0 +1,37 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Days</th>
+        <th scope="col">Hours</th>
+        <th scope="col">Prices</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for deadline in deadlines %}
+        <tr>
+            <th scope="row">{{ deadline.id }}</th>
+            <td>{{ deadline.days }}</td>
+            <td>{{ deadline.hours }}</td>
+            <td>${{ deadline.price|floatformat }}</td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <form action="{% url 'admin-selects' %}" method="post">
+            {% csrf_token %}
+            <td style="vertical-align: middle;">
+                <button type="submit" name="_add_deadline" class="btn bg-btn">Add</button>
+            </td>
+            <td style="vertical-align: middle;">
+                {{ deadline_form.days }}
+            </td>
+            <td style="vertical-align: middle;">
+                {{ deadline_form.hours }}
+            </td>
+            <td style="vertical-align: middle;">
+                {{ deadline_form.price }}
+            </td>
+        </form>
+    </tr>
+    </tbody>
+</table>

@@ -5,9 +5,10 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path, include
 
 from EsseyRoyal.views import HomePageViews
-from appdashboard.views import DashboardViews, admin_users, admin_selects, admin_settings
+from appdashboard.views import DashboardViews, admin_users, admin_selects, admin_settings, manager_selects, \
+    manager_settings
 from apporders.views import ViewOrderViews, add_order_views, UpdateOrderViews, writer_order_detail, writer_order_review, \
-    customer_order_in_progress
+    customer_order_in_progress, manager_order
 from appusers.views import change_profile
 
 admin.site.site_header = 'Панель управления'
@@ -39,6 +40,11 @@ urlpatterns = [
     path('dashboard/selects/', admin_selects, name='admin-selects'),
     path('dashboard/settings/', admin_settings, name='admin-settings'),
     path('dashboard/billing/', DashboardViews.as_view(), name='admin-billing'),
+
+    # Manager
+    path('dashboard/m/selects/', manager_selects, name='manager-selects'),
+    path('dashboard/m/settings/', manager_settings, name='manager-settings'),
+    path('dashboard/m/order/<int:pk>/', manager_order, name='manager-order'),
 
     path('dashboard/', DashboardViews.as_view(), name='dashboard'),
 

@@ -113,6 +113,11 @@ class Order(models.Model):
     class Meta:
         verbose_name = 'Order'
         verbose_name_plural = 'Orders'
+        ordering = ['-id']
+
+    def total_cost_writer(self):
+        result = self.type_order.price_writer * self.number_page
+        return result
 
     def save(self, *args, **kwargs):
         if self.created_datetime:

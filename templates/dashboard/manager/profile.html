@@ -1,0 +1,47 @@
+{% load static %}
+
+<!-- Card -->
+<div class="card profile-card">
+
+    <!-- Avatar -->
+    <div class="avatar z-depth-1-half mb-4">
+        <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'img/noimage.png' %}{% endif %}"
+             class="rounded-circle"
+             alt="First sample avatar image">
+    </div>
+
+    <div class="card-body pt-0 mt-0">
+        <!-- Name -->
+        <div class="text-center">
+            <h3 class="mb-3 font-weight-bold"><strong>{{ user.get_full_name }}</strong></h3>
+            {% if user.is_superuser %}
+            {% else %}
+                <h6 class="font-weight-bold blue-text mb-4">
+                    Balance: ${{ user.balance }}
+                </h6>
+            {% endif %}
+        </div>
+
+        <ul class="striped list-unstyled">
+
+            <li><strong>E-mail address:</strong> {{ user.email }}</li>
+
+            <li><strong>Date joined:</strong> {{ user.date_joined }}</li>
+        </ul>
+
+        <ul class="menu-admin">
+            <li>
+                <a href="{% url 'dashboard' %}">Orders</a>
+            </li>
+            <li>
+                <a href="{% url 'manager-selects' %}">Select management</a>
+            </li>
+            <li>
+                <a href="{% url 'manager-settings' %}">Settings</a>
+            </li>
+        </ul>
+
+    </div>
+
+</div>
+<!-- Card -->

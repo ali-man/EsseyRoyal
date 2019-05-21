@@ -109,7 +109,6 @@ def admin_users(request):
     managers = User.objects.filter(groups__name='Manager')
     new_manager = CreateUserForm()
 
-
     if request.method == 'POST':
         if '_create_writer' in request.POST:
             form_writer = CreateUserForm(request.POST, request.FILES)
@@ -159,6 +158,8 @@ def admin_users(request):
 
 
 def admin_selects(request):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login/')
     types = TypeOrder.objects.all()
     formats = FormatOrder.objects.all()
     deadlines = PriceDeadline.objects.all()
@@ -211,3 +212,60 @@ def admin_settings(request):
                 return redirect('/dashboard/settings/')
 
     return render(request, 'dashboard/admin/settings/index.html', locals())
+
+
+def manager_selects(request):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login/')
+    types = TypeOrder.objects.all()
+    formats = FormatOrder.objects.all()
+    deadlines = PriceDeadline.objects.all()
+
+    type_form = TypeOrderForm()
+    format_form = FormatOrderForm()
+    deadline_form = PriceDeadlineForm()
+
+    if '_add_type' in request.POST:
+        form = TypeOrderForm(request.POST)
+        if form.is_valid():
+            form.save()
+    if '_add_format' in request.POST:
+        form = FormatOrderForm(request.POST)
+        if form.is_valid():
+            form.save()
+    if '_add_deadline' in request.POST:
+        form = PriceDeadlineForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+    return render(request, 'dashboard/manager/selects/index.html', locals())
+
+
+def manager_settings(request):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login/')
+    user = User.objects.get(email=request.user)
+    change_password = PasswordChangeForm(user=user)
+    profile_form = UserForm(instance=request.user)
+    if request.method == 'POST':
+        if '_change_profile' in request.POST:
+            profile_form = UserForm(request.user, request.POST)
+            if profile_form.is_valid():
+                profile_form.save()
+                messages.success(request, 'Ваш профиль успешно изменён (перевести)')
+                return redirect('/dashboard/settings/')
+            else:
+                messages.error(request, 'Неверно заполнены поля (перевести)')
+                return redirect('/dashboard/settings/')
+
+        if '_change_password' in request.POST:
+            change_password = PasswordChangeForm(user, request.POST)
+            if change_password.is_valid():
+                change_password.save()
+                messages.success(request, 'Ваш пароль успешно изменён (перевести)')
+                return redirect('/dashboard/settings/')
+            else:
+                messages.error(request, 'Неверно заполнены поля (перевести)')
+                return redirect('/dashboard/settings/')
+
+    return render(request, 'dashboard/manager/settings/index.html', locals())

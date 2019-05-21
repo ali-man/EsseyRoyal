@@ -1,0 +1,7 @@
+<form action="{% url 'admin-settings' %}" method="post">
+    {% csrf_token %}
+    <table class="table">
+        {{ profile_form }}
+    </table>
+    <button type="submit" class="btn bg-btn" name="_change_profile">Save</button>
+</form>

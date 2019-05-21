@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/writer-view-order.css' %}">
+    <link rel="stylesheet" href="{% static 'css/libs/chat.min.css' %}">
+{% endblock %}
+
+{% block title %}
+    View Order
+{% endblock %}
+
+{% block content %}
+
+    <div class="container mt-5 pb-4" style="background-color: #fff;">
+
+        <div class="row">
+            <div class="col-12">
+                <h5 class="text-center mt-4 mb-4" style="color: #757575;">
+                    {{ order.title.upper }}
+                    <span class="status ml-2">
+                        {% if order.status == 0 %}
+                            <i class="fas fa-search" title="ORDER IN REVIEW"></i>
+                        {% elif order.status == 1 %}
+                            <i class="fas fa-spinner" title="ORDER IN PROGRESS"></i>
+                        {% elif order.status == 2 %}
+                            <i class="fas fa-check" title="COMPLETED"></i>
+                        {% endif %}
+                    </span>
+                </h5>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="view-order">
+
+                    <div class="own-d-grid">
+                        <table class="own-table">
+                            <tr>
+                                <th>Type of order:</th>
+                                <td>{{ order.type_order }}</td>
+                            </tr>
+                            <tr>
+                                <th>Format of order:</th>
+                                <td>{{ order.format_order }}</td>
+                            </tr>
+                            <tr>
+                                <th>Deadline:</th>
+                                <td>{{ order.deadline }}</td>
+                            </tr>
+                        </table>
+
+                        <table class="own-table">
+                            <tr>
+                                <th>Per page:</th>
+                                <td>${{ order.type_order.price_writer|floatformat }}</td>
+                            </tr>
+                            <tr>
+                                <th>Number pages:</th>
+                                <td>{{ order.number_page }}</td>
+                            </tr>
+                            <tr>
+                                <th>Total cost:</th>
+                                <td>${{ order.total_cost_writer|floatformat }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="description">
+                        {% autoescape off %}{{ order.description }}{% endautoescape %}
+                    </div>
+
+                    <ul class="files">
+                        {% for file in order.filesorder_set.all %}
+                            <li>
+                                <a href="{{ file.file }}">{{ file }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <ul class="additionally-order-files">
+                    {% for additional in order.additionallyorder.filesadditionallyorder_set.all %}
+                        <li><a href="{{ additional.file.url }}">{{ additional.created_datetime }}</a></li>
+                    {% endfor %}
+                </ul>
+
+                <form action="{% url 'writer-order_detail' order.id %}" method="post" enctype="multipart/form-data"
+                      class="md-form">
+                    {% csrf_token %}
+                    <div class="file-field">
+                        <div class="btn btn-primary btn-sm float-left">
+                            <span>Choose file</span>
+                            <input type="file" name="files" multiple>
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text" placeholder="Upload your file">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn bg-btn" style="float:right;">Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-12">
+                <div class="card chat-room">
+                    <div class="card-body">
+
+                        <!-- Grid row -->
+                        <div class="row px-lg-2 px-2">
+
+                            <!-- Grid column -->
+                            <div class="col-12 pl-md-3 px-lg-auto px-0">
+
+                                <div class="chat-message">
+
+                                    <ul class="list-unstyled chat-1 scrollbar-light-blue">
+                                        {% for message in order.chat_set.all %}
+                                            {% if message.user == order.writer %}
+                                                <li class="d-flex justify-content-between mb-4">
+                                                    <img src="{{ message.user.avatar.url }}" alt="avatar"
+                                                         class="avatar rounded-circle mr-2 ml-lg-3 ml-0 z-depth-1">
+                                                    <div class="chat-body white p-3 ml-2 z-depth-1">
+                                                        <div class="header">
+                                                            <strong class="primary-font">{{ message.user.get_full_name }}</strong>
+                                                            <small class="pull-right text-muted">
+                                                                <i class="far fa-clock"></i> {{ message.created_datetime }}
+                                                            </small>
+                                                            {% if message.status == False %}
+                                                                <small style="float:right">
+                                                                    <form action="{% url 'manager-order' order.id %}" method="post">
+                                                                        {% csrf_token %}
+                                                                        <button type="submit" name="_chat_accept" class="btn bg-btn btn-sm">Accept</button>
+                                                                    </form>
+                                                                </small>
+                                                            {% endif %}
+                                                        </div>
+                                                        <hr class="w-100">
+                                                        <p class="mb-0">
+                                                            {{ message }}
+                                                        </p>
+                                                    </div>
+                                                </li>
+                                            {% else %}
+                                                <li class="d-flex justify-content-between mb-4">
+                                                    <div class="chat-body white p-3 z-depth-1">
+                                                        <div class="header">
+                                                            <strong class="primary-font">{{ message.user.get_full_name }}</strong>
+                                                            <small class="pull-right text-muted">
+                                                                <i class="far fa-clock"></i> {{ message.created_datetime }}
+                                                            </small>
+                                                            {% if message.status == False %}
+                                                                <small style="float:right">
+                                                                    <form action="{% url 'manager-order' order.id %}" method="post">
+                                                                        {% csrf_token %}
+                                                                        <button type="submit"
+                                                                                name="_chat_accept"
+                                                                                value="{{ message.id }}"
+                                                                                class="btn bg-btn btn-sm">
+                                                                            Accept
+                                                                        </button>
+                                                                    </form>
+                                                                </small>
+                                                            {% endif %}
+                                                        </div>
+                                                        <hr class="w-100">
+                                                        <p class="mb-0">
+                                                            {{ message }}
+                                                        </p>
+                                                    </div>
+                                                    <img src="{{ message.user.avatar.url }}" alt="avatar"
+                                                         class="avatar rounded-circle mr-0 ml-3 z-depth-1">
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+
+                                    <form action="{% url 'writer-order_detail' order.id %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="white">
+                                            <div class="form-group basic-textarea">
+                            <textarea name="message" class="form-control pl-2 my-0" id="exampleFormControlTextarea2"
+                                      rows="3"
+                                      placeholder="Type your message here..."></textarea>
+                                            </div>
+                                        </div>
+                                        <button type="submit"
+                                                class="btn btn-outline-pink btn-rounded btn-sm waves-effect waves-dark float-right">
+                                            Send
+                                        </button>
+                                    </form>
+
+                                </div>
+
+                            </div>
+                            <!-- Grid column -->
+
+                        </div>
+                        <!-- Grid row -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';</script>
+{% endblock %}

@@ -8,6 +8,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if LOCAL:
     SECRET_KEY = 'a$1b6*=523zcilhb^l_vu5(==9@$ll9p+=s!vb$rmn^y$dcskq'
     DEBUG = True
+    # ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
     ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
@@ -19,6 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.flatpages',
+    'django.contrib.humanize',
 
     'rest_framework',
     'ckeditor',

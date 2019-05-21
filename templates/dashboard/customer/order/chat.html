@@ -29,22 +29,24 @@
                                     </div>
                                 </li>
                             {% else %}
-                                <li class="d-flex justify-content-between mb-4">
-                                    <div class="chat-body white p-3 z-depth-1">
-                                        <div class="header">
-                                            <strong class="primary-font">{{ message.user.get_full_name }}</strong>
-                                            <small class="pull-right text-muted">
-                                                <i class="far fa-clock"></i> {{ message.created_datetime }}
-                                            </small>
+                                {% if message.status %}
+                                    <li class="d-flex justify-content-between mb-4">
+                                        <div class="chat-body white p-3 z-depth-1">
+                                            <div class="header">
+                                                <strong class="primary-font">{{ message.user.get_full_name }}</strong>
+                                                <small class="pull-right text-muted">
+                                                    <i class="far fa-clock"></i> {{ message.created_datetime }}
+                                                </small>
+                                            </div>
+                                            <hr class="w-100">
+                                            <p class="mb-0">
+                                                {{ message }}
+                                            </p>
                                         </div>
-                                        <hr class="w-100">
-                                        <p class="mb-0">
-                                            {{ message }}
-                                        </p>
-                                    </div>
-                                    <img src="{{ message.user.avatar.url }}" alt="avatar"
-                                         class="avatar rounded-circle mr-0 ml-3 z-depth-1">
-                                </li>
+                                        <img src="{{ message.user.avatar.url }}" alt="avatar"
+                                             class="avatar rounded-circle mr-0 ml-3 z-depth-1">
+                                    </li>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                     </ul>
@@ -53,7 +55,8 @@
                         {% csrf_token %}
                         <div class="white">
                             <div class="form-group basic-textarea">
-                            <textarea name="message" class="form-control pl-2 my-0" id="exampleFormControlTextarea2" rows="3"
+                            <textarea name="message" class="form-control pl-2 my-0" id="exampleFormControlTextarea2"
+                                      rows="3"
                                       placeholder="Type your message here..."></textarea>
                             </div>
                         </div>

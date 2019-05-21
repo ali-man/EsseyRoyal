@@ -359,9 +359,11 @@ def admin_settings(request):
     if request.method == 'POST':
         change_password = PasswordChangeForm(user, request.POST)
         if change_password.is_valid():
-            print('1')
             change_password.save()
-            print('2')
+            messages.success(request, 'Ваш пароль успешно изменён (перевести)')
+            return redirect('/dashboard/settings/')
+        else:
+            messages.error(request, 'Неверно заполнены поля (перевести)')
             return redirect('/dashboard/settings/')
 
     return render(request, 'dashboard/admin/settings/index.html', locals())

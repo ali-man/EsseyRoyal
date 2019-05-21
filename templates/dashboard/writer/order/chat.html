@@ -1,0 +1,74 @@
+<div class="card chat-room">
+    <div class="card-body">
+
+        <!-- Grid row -->
+        <div class="row px-lg-2 px-2">
+
+            <!-- Grid column -->
+            <div class="col-12 pl-md-3 px-lg-auto px-0">
+
+                <div class="chat-message">
+
+                    <ul class="list-unstyled chat-1 scrollbar-light-blue">
+                        {% for message in order.chat_set.all %}
+                            {% if message.user == order.writer %}
+                                <li class="d-flex justify-content-between mb-4">
+                                    <img src="{{ message.user.avatar.url }}" alt="avatar"
+                                         class="avatar rounded-circle mr-2 ml-lg-3 ml-0 z-depth-1">
+                                    <div class="chat-body white p-3 ml-2 z-depth-1">
+                                        <div class="header">
+                                            <strong class="primary-font">{{ message.user.get_full_name }}</strong>
+                                            <small class="pull-right text-muted">
+                                                <i class="far fa-clock"></i> {{ message.created_datetime }}
+                                            </small>
+                                        </div>
+                                        <hr class="w-100">
+                                        <p class="mb-0">
+                                            {{ message }}
+                                        </p>
+                                    </div>
+                                </li>
+                            {% else %}
+                                <li class="d-flex justify-content-between mb-4">
+                                    <div class="chat-body white p-3 z-depth-1">
+                                        <div class="header">
+                                            <strong class="primary-font">{{ message.user.get_full_name }}</strong>
+                                            <small class="pull-right text-muted">
+                                                <i class="far fa-clock"></i> {{ message.created_datetime }}
+                                            </small>
+                                        </div>
+                                        <hr class="w-100">
+                                        <p class="mb-0">
+                                            {{ message }}
+                                        </p>
+                                    </div>
+                                    <img src="{{ message.user.avatar.url }}" alt="avatar"
+                                         class="avatar rounded-circle mr-0 ml-3 z-depth-1">
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+
+                    <form action="{% url 'writer-order_detail' order.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="white">
+                            <div class="form-group basic-textarea">
+                            <textarea name="message" class="form-control pl-2 my-0" id="exampleFormControlTextarea2" rows="3"
+                                      placeholder="Type your message here..."></textarea>
+                            </div>
+                        </div>
+                        <button type="submit"
+                                class="btn btn-outline-pink btn-rounded btn-sm waves-effect waves-dark float-right">Send
+                        </button>
+                    </form>
+
+                </div>
+
+            </div>
+            <!-- Grid column -->
+
+        </div>
+        <!-- Grid row -->
+
+    </div>
+</div>

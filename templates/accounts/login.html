@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block title %}
+    Sign In
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Sign in</h2>
+                {% if user.is_authenticated %}
+                    <p>Вы уже выполнили вход. (Перевести)</p>
+                {% else %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <table>
+                            {{ form }}
+                        </table>
+                        <input type="hidden" name="next" value="{{ next }}">
+                        <input type="submit" value="Sign in">
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

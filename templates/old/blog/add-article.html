@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block title %}
+    ADD ARTICLE
+{% endblock %}
+
+{% block content %}
+
+    <form action="{% url 'blog-add_article' %}" method="post" multiple enctype="multipart/form-data">
+        {% csrf_token %}
+        <table class="table">
+            {{ form.as_table }}
+        </table>
+        <button class="btn btn-success btn-sm">Send</button>
+    </form>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+            $('.js-example-basic-multiple').select2({
+                tags: true,
+                tokenSeparators: [',', ',']
+            });
+        })
+    </script>
+{% endblock %}

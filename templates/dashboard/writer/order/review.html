@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/writer-view-order.css' %}">
+{% endblock %}
+
+{% block title %}
+    View Order
+{% endblock %}
+
+{% block content %}
+
+    <div class="container mt-5" style="background-color: #fff;">
+
+        <div class="row">
+            <div class="col-12">
+                <h5 class="text-center mt-4 mb-4" style="color: #757575;">
+                    {{ order.title.upper }}
+                    <span class="status ml-2">
+                        {% if order.status == 0 %}
+                            <i class="fas fa-search" title="ORDER IN REVIEW"></i>
+                        {% elif order.status == 1 %}
+                            <i class="fas fa-spinner" title="ORDER IN PROGRESS"></i>
+                        {% elif order.status == 2 %}
+                            <i class="fas fa-check" title="COMPLETED"></i>
+                        {% endif %}
+                    </span>
+                </h5>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="view-order">
+
+                    <div class="own-d-grid">
+                        <table class="own-table">
+                            <tr>
+                                <th>Type of order:</th>
+                                <td>{{ order.type_order }}</td>
+                            </tr>
+                            <tr>
+                                <th>Format of order:</th>
+                                <td>{{ order.format_order }}</td>
+                            </tr>
+                            <tr>
+                                <th>Deadline:</th>
+                                <td>{{ order.deadline }}</td>
+                            </tr>
+                        </table>
+
+                        <table class="own-table">
+                            <tr>
+                                <th>Per page:</th>
+                                <td>{{ order.per_page }}</td>
+                            </tr>
+                            <tr>
+                                <th>Number pages:</th>
+                                <td>{{ order.number_page }}</td>
+                            </tr>
+                            <tr>
+                                <th>Total cost:</th>
+                                <td>{{ order.total_cost }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="description">
+                        {% autoescape off %}{{ order.description }}{% endautoescape %}
+                    </div>
+
+                    <ul class="files">
+                        {% for file in order.filesorder_set.all %}
+                            <li>
+                                <a href="{{ file.file }}">{{ file }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <form action="{% url 'writer-order_review' order.id %}" method="post">
+                        {% csrf_token %}
+                        <button class="btn bg-btn" name="take" value="accept">Take</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';</script>
+{% endblock %}

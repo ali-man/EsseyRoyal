@@ -1,0 +1,44 @@
+<div class="row">
+    <div class="col-md-3">
+        <ul class="nav md-pills pills-primary flex-column" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#panel31" role="tab">
+                    In work
+                    <i class="fas fa-download ml-2"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#panel32" role="tab">
+                    All
+                    <i class="fas fa-file-alt ml-2"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#panel33" role="tab">
+                    New
+                    <i class="fas fa-address-card ml-2"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-9">
+        <!-- Tab panels -->
+        <div class="tab-content vertical">
+            <!-- Panel 1 -->
+            <div class="tab-pane fade in show active" id="panel31" role="tabpanel">
+                {% include 'dashboard/admin/users/tabs/managers/progress.html' %}
+            </div>
+            <!-- Panel 1 -->
+            <!-- Panel 2 -->
+            <div class="tab-pane fade" id="panel32" role="tabpanel">
+                {% include 'dashboard/admin/users/tabs/managers/all-managers.html' %}
+            </div>
+            <!-- Panel 2 -->
+            <!-- Panel 3 -->
+            <div class="tab-pane fade" id="panel33" role="tabpanel">
+                {% include 'dashboard/admin/users/tabs/managers/create-manager.html' %}
+            </div>
+            <!-- Panel 3 -->
+        </div>
+    </div>
+</div>

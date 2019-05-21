@@ -1,0 +1,36 @@
+
+.view-order {
+  .own-d-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    table.own-table {
+      width: 100%;
+      border-right: 1px solid #ccc;
+      tr {
+        border-bottom: 1px solid #ccc;
+      }
+      tr th {
+        text-transform: uppercase;
+        width: 150px;
+        font-size: 13px;
+        padding: 5px;
+        color: #696969;
+      }
+      tr td {
+        font-size: 14px;
+        padding: 5px;
+        color: #404040;
+      }
+    }
+  }
+  .description {
+    display: flex;
+    justify-content: center;
+    padding: 15px 0;
+  }
+  ul.files {
+    margin: 0;
+    padding: 0 0 0 15px;
+    display: inline-block;
+  }
+}

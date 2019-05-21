@@ -3,7 +3,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
 
-from appprofile.models import Client
 from appusers.models import User
 
 
@@ -28,11 +27,7 @@ class SignUpViews(View):
             create_user = User.objects.create_user(email=email, password=password2)
             create_user.first_name = first_name if first_name is not None else ''
             create_user.last_name = last_name if last_name is not None else ''
-            create_user.is_client = True
             create_user.save()
-            client = Client()
-            client.user = create_user
-            client.save()
             user = authenticate(email=email, password=password2)
             login(request, user)
             messages.success(request, 'Вы успешно зарегистрированы (перевести)')
@@ -75,3 +70,22 @@ def logout_user(request):
     logout(request)
     messages.success(request, 'Вы успешно разлогинились (перевести)')
     return redirect('/')
+
+
+def change_profile(request):
+    if request.method == 'POST':
+        r = request.POST
+        user = User.objects.get(email=request.user)
+        user.first_name = r['first_name']
+        user.last_name = r['last_name']
+        user.academic_institution = r['academic_institution']
+        user.degree = r['degree']
+        user.phone = r['phone']
+        user.corporate_email = r['corporate_email']
+        user.avatar = request.FILES['avatar']
+        user.save()
+        messages.success(request, 'Профиль успешно изменён (перевести)')
+        return redirect('/dashboard/')
+    else:
+        messages.error(request, 'Неверный метод запроса (перевести)')
+        return redirect('/dashboard/')

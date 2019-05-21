@@ -1,0 +1,7 @@
+<form action="change-profile" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table class="table">
+        {{ user_form }}
+    </table>
+    <button class="btn bg-btn">Save</button>
+</form>

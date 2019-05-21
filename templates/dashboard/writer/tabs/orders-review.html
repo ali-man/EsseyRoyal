@@ -1,0 +1,36 @@
+<div class="tab-pane fade active show" id="panel83" role="tabpanel">
+    <div class="table-responsive">
+        <table class="table">
+            <thead class="th-center">
+            <tr>
+                <th align="middle">Title</th>
+                <th>Type of order</th>
+                <th>Format of order</th>
+                <th class="text-center">Deadline</th>
+                <th class="text-center">Price</th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="td-center">
+            {% for order in orders_in_review %}
+                <tr>
+                    <td>{{ order.title }}</td>
+                    <td>{{ order.type_order }}</td>
+                    <td>{{ order.format_order }}</td>
+                    <td class="text-center">
+                        {{ order.deadline }}
+                    </td>
+                    <td class="text-center">${{ order.type_order.price_writer }} * {{ order.number_page }}</td>
+                    <td class="text-center">
+                        <a href="{% url 'writer-order_review' order.id %}" class="blue-text" data-toggle="tooltip" data-placement="top" title=""
+                           data-original-title="See results"><i class="far fa-eye"></i></a>
+                        <a href="#" class="teal-text" data-toggle="tooltip" data-placement="top" title=""
+                           data-original-title="Edit"><i class="fas fa-check"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>

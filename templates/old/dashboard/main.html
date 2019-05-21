@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block title %}
+    Dashboard
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="dashboard">
+                <div class="dashboard__head">
+                    {% include 'dashboard/tabs.html' %}
+                    <h5 class="d-flex justify-content-center"><b class="text-dark">Balance: </b><span
+                            class="text-black-50">$0</span></h5>
+                    <img src="{% static 'img/ava.png' %}" alt="" class="img-thumbnail dashboard-avatar" width="120">
+                </div>
+                <div class="dashboard__body">
+                    <h1 class="text-dark">{{ user.get_full_name }}</h1>
+                    <h3 class="text-black-50">Academic Institution</h3>
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-success btn-large">Message</button>
+                        <button class="btn btn-danger btn-large">Message</button>
+                    </div>
+                    <ul class="dashboard__body__quantity-orders">
+                        <li>
+                            <b>{{ works_ordered }}</b><br>
+                            <span class="text-black-50">Works ordered</span>
+                        </li>
+                        <li>
+                            <b>{{ work_progress }}</b><br>
+                            <span class="text-black-50">Work in progress</span>
+                        </li>
+                        <li>
+                            <b>{{ complete_work }}</b><br>
+                            <span class="text-black-50">Completed the works</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% load static %}
+
+<!-- Card -->
+<div class="card profile-card">
+
+    <!-- Avatar -->
+    <div class="avatar z-depth-1-half mb-4">
+        <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'img/noimage.png' %}{% endif %}"
+             class="rounded-circle"
+             alt="First sample avatar image">
+    </div>
+
+    <div class="card-body pt-0 mt-0">
+        <!-- Name -->
+        <div class="text-center">
+            <h3 class="mb-3 font-weight-bold"><strong>{{ user.get_full_name }}</strong></h3>
+            <h6 class="font-weight-bold blue-text mb-4">
+                Balance: ${{ user.balance }}
+            </h6>
+        </div>
+
+        <ul class="striped list-unstyled">
+            <li><strong>Group:</strong>
+                {% for group in user.groups.all %}
+                    {{ group }}
+                {% endfor %}
+            </li>
+
+            <li><strong>E-mail address:</strong> {{ user.email }}</li>
+
+            <li><strong>Phone number:</strong> {{ user.phone }}</li>
+
+            <li><strong>Academic institution:</strong> {{ user.academic_institution }}</li>
+
+            <li><strong>Degree:</strong> {{ user.degree }}</li>
+
+            <li><strong>Date joined:</strong> {{ user.date_joined }}</li>
+        </ul>
+
+    </div>
+
+</div>
+<!-- Card -->

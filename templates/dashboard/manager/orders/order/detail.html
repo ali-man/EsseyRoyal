@@ -37,7 +37,7 @@
                 <div class="view-order">
 
                     <div class="own-d-grid">
-                        <table class="own-table">
+                        <table class="own-table" id="order_id" data-order-id="{{ order.id }}">
                             <tr>
                                 <th>Type of order:</th>
                                 <td>{{ order.type_order }}</td>
@@ -135,10 +135,10 @@
                                                             </small>
                                                             {% if message.status == False %}
                                                                 <small style="float:right">
-                                                                    <form action="{% url 'manager-order' order.id %}" method="post">
-                                                                        {% csrf_token %}
-                                                                        <button type="submit" name="_chat_accept" class="btn bg-btn btn-sm">Accept</button>
-                                                                    </form>
+                                                                    <button type="submit" data-message-id="{{ message.id }}"
+                                                                            class="btn bg-btn btn-sm message_btn">
+                                                                        Accept
+                                                                    </button>
                                                                 </small>
                                                             {% endif %}
                                                         </div>
@@ -158,15 +158,10 @@
                                                             </small>
                                                             {% if message.status == False %}
                                                                 <small style="float:right">
-                                                                    <form action="{% url 'manager-order' order.id %}" method="post">
-                                                                        {% csrf_token %}
-                                                                        <button type="submit"
-                                                                                name="_chat_accept"
-                                                                                value="{{ message.id }}"
-                                                                                class="btn bg-btn btn-sm">
-                                                                            Accept
-                                                                        </button>
-                                                                    </form>
+                                                                    <button type="submit" data-message-id="{{ message.id }}"
+                                                                            class="btn bg-btn btn-sm message_btn">
+                                                                        Accept
+                                                                    </button>
                                                                 </small>
                                                             {% endif %}
                                                         </div>
@@ -214,5 +209,21 @@
 {% endblock %}
 
 {% block scripts %}
-    <script>window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';</script>
+    <script>
+        window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';
+        $(document).ready(function () {
+            let classMessageBtn = $('.message_btn');
+            classMessageBtn.click(function () {
+                let dataMessageID = $(this).attr('data-message-id');
+                ajaxQyery('chat-message-accept', {messageID: dataMessageID}, answerSuccess);
+            });
+
+            function answerSuccess(data) {
+                let orderID = $('#order_id').attr('data-order-id');
+                if (data.ok) {
+                    window.location.href = `/dashboard/m/order/${orderID}/`;
+                }
+            }
+        })
+    </script>
 {% endblock %}

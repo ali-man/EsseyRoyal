@@ -7,6 +7,7 @@ from django.urls import path, include
 from EsseyRoyal.views import HomePageViews
 from appdashboard.views import DashboardViews, admin_users, admin_selects, admin_settings, manager_selects, \
     manager_settings
+from apporders.ajax import chat_message_accept
 from apporders.views import ViewOrderViews, add_order_views, UpdateOrderViews, writer_order_detail, writer_order_review, \
     customer_order_in_progress, manager_order
 from appusers.views import change_profile
@@ -47,6 +48,8 @@ urlpatterns = [
     path('dashboard/m/order/<int:pk>/', manager_order, name='manager-order'),
 
     path('dashboard/', DashboardViews.as_view(), name='dashboard'),
+
+    path('ajax/chat-message-accept/', chat_message_accept),
 
     # path('sign-up/', SignUpViews.as_view(), name='signup'),
     # path('sign-in/', SignInViews.as_view(), name='signin'),

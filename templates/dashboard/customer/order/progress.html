@@ -4,6 +4,37 @@
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/writer-view-order.css' %}">
     <link rel="stylesheet" href="{% static 'css/libs/chat.min.css' %}">
+    <style>
+        .amber-lighter-hover {
+            color: #ffa000;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .white-darker-hover {
+            color: #fff;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .white-darker-hover:hover {
+            -webkit-transition: .4s;
+            transition: .4s;
+            color: #d9d9d9;
+        }
+
+        table.table tr th, table.table tr td {
+            color: #fff;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .cyan-lighter-hover {
+            color: #00bcd4;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+    </style>
 {% endblock %}
 
 {% block title %}
@@ -16,7 +47,7 @@
 
         <div class="row">
             <div class="col-12">
-                <h5 class="text-center mt-4 mb-4" style="color: #757575;">
+                <h5 class="text-center text-primary mt-4 mb-4" style="color: #757575;">
                     {{ order.title.upper }}
                     <span class="status ml-2">
                         {% if order.status == 0 %}
@@ -33,10 +64,10 @@
 
         <div class="row">
             <div class="col-12 col-md-6">
-                <div class="view-order">
-
-                    <div class="own-d-grid">
-                        <table class="own-table">
+                <div class="card indigo">
+                    <div class="card-body">
+                        <h4 class="font-weight-bold amber-lighter-hover mb-3">Detail info</h4>
+                        <table class="table" style="margin-bottom: 0;">
                             <tr>
                                 <th>Type of order:</th>
                                 <td>{{ order.type_order }}</td>
@@ -49,12 +80,9 @@
                                 <th>Deadline:</th>
                                 <td>{{ order.deadline }}</td>
                             </tr>
-                        </table>
-
-                        <table class="own-table">
                             <tr>
                                 <th>Per page:</th>
-                                <td>{{ order.per_page }}</td>
+                                <td>${{ order.per_page }}</td>
                             </tr>
                             <tr>
                                 <th>Number pages:</th>
@@ -62,32 +90,47 @@
                             </tr>
                             <tr>
                                 <th>Total cost:</th>
-                                <td>{{ order.total_cost }}</td>
+                                <td>${{ order.total_cost }}</td>
                             </tr>
                         </table>
+
+                        {% if order.description %}
+                            <h4 class="font-weight-bold amber-lighter-hover mb-3">Description: </h4>
+                            <div class="description">
+                                <div class="description-text">
+                                    {% autoescape off %}{{ order.description }}{% endautoescape %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if order.filesorder_set.all %}
+                            <h4 class="font-weight-bold amber-lighter-hover mb-3">Files: </h4>
+                            <ul class="files">
+                                {% for file in order.filesorder_set.all %}
+                                    <li>
+                                        <a href="{{ file.file }}" style="color: #fff;">{{ file }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <hr>
+                        {% endif %}
                     </div>
-
-                    <div class="description">
-                        {% autoescape off %}{{ order.description }}{% endautoescape %}
-                    </div>
-
-                    <ul class="files">
-                        {% for file in order.filesorder_set.all %}
-                            <li>
-                                <a href="{{ file.file }}">{{ file }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-
                 </div>
             </div>
             <div class="col-12 col-md-6">
-                {% include 'dashboard/customer/order/additional.html' %}
-            </div>
+            {% include 'dashboard/customer/order/additional.html' %}
+        </div>
         </div>
     </div>
 
-    <div class="container mt-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="w-responsive text-center mx-auto p-3 mt-2" style="background-color: #eee;">
+                    <h3 class="text-monospace">Chat</h3>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-12">
                 {% include 'dashboard/customer/order/chat.html' %}
@@ -98,5 +141,8 @@
 {% endblock %}
 
 {% block scripts %}
-    <script>window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';</script>
+    <script>
+        window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';
+        $('p').addClass('white-darker-hover');
+    </script>
 {% endblock %}

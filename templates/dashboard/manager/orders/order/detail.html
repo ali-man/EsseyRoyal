@@ -5,6 +5,39 @@
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/writer-view-order.css' %}">
     <link rel="stylesheet" href="{% static 'css/libs/chat.min.css' %}">
+    <style>
+        .amber-lighter-hover {
+            color: #ffa000;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .white-darker-hover {
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .white-darker-hover:hover {
+            -webkit-transition: .4s;
+            transition: .4s;
+            color: #d9d9d9;
+        }
+
+        table.table tr th, table.table tr td {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .description {
+            display: inline-block;
+            width: 100%;
+        }
+
+        .description-text {
+            margin-left: 10px;
+            padding: 5px 10px;
+        }
+    </style>
 {% endblock %}
 
 {% block title %}
@@ -13,31 +46,38 @@
 
 {% block content %}
 
-    <div class="container mt-5 pb-4" style="background-color: #fff;">
+    <div class="container mt-5 pb-2">
 
         <div class="row">
             <div class="col-12">
-                <h5 class="text-center mt-4 mb-4" style="color: #757575;">
-                    {{ order.title.upper }}
-                    <span class="status ml-2">
-                        {% if order.status == 0 %}
-                            <i class="fas fa-search" title="ORDER IN REVIEW"></i>
-                        {% elif order.status == 1 %}
-                            <i class="fas fa-spinner" title="ORDER IN PROGRESS"></i>
-                        {% elif order.status == 2 %}
-                            <i class="fas fa-check" title="COMPLETED"></i>
-                        {% endif %}
-                    </span>
-                </h5>
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="w-responsive text-center mx-auto">
+                            <h4 class="text-center text-primary" style="color: #757575;">{{ order.title.upper }}
+                                <span class="badge badge-pill bg-btn">
+                                    {% if order.status == 0 %}
+                                        <i class="fas fa-search fa-xs" aria-hidden="true" title="ORDER IN REVIEW"></i>
+                                    {% elif order.status == 1 %}
+                                        <i class="fas fa-spinner fa-pulse fa-xs" aria-hidden="true"
+                                           title="ORDER IN PROGRESS"></i>
+                                    {% elif order.status == 2 %}
+                                        <i class="fas fa-check fa-xs" aria-hidden="true" title="COMPLETED"></i>
+                                    {% endif %}
+                                </span>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
         <div class="row">
             <div class="col-12 col-md-6">
-                <div class="view-order">
-
-                    <div class="own-d-grid">
-                        <table class="own-table" id="order_id" data-order-id="{{ order.id }}">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <h4 class="font-weight-bold amber-lighter-hover mb-3">Detail info</h4>
+                        <table class="table" style="margin-bottom: 0;">
                             <tr>
                                 <th>Type of order:</th>
                                 <td>{{ order.type_order }}</td>
@@ -50,9 +90,6 @@
                                 <th>Deadline:</th>
                                 <td>{{ order.deadline }}</td>
                             </tr>
-                        </table>
-
-                        <table class="own-table">
                             <tr>
                                 <th>Per page:</th>
                                 <td>${{ order.type_order.price_writer|floatformat }}</td>
@@ -66,142 +103,39 @@
                                 <td>${{ order.total_cost_writer|floatformat }}</td>
                             </tr>
                         </table>
+
+                        {% if order.description %}
+                            <h4 class="font-weight-bold amber-lighter-hover mt-3 mb-3">Description: </h4>
+                            <div class="description">
+                                <div class="description-text">
+                                    {% autoescape off %}{{ order.description }}{% endautoescape %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if order.filesorder_set.all %}
+                            <h4 class="font-weight-bold amber-lighter-hover mt-3 mb-3">Files: </h4>
+                            <ul class="files">
+                                {% for file in order.filesorder_set.all %}
+                                    <li>
+                                        <a href="{{ file.file }}">{{ file }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
                     </div>
-
-                    <div class="description">
-                        {% autoescape off %}{{ order.description }}{% endautoescape %}
-                    </div>
-
-                    <ul class="files">
-                        {% for file in order.filesorder_set.all %}
-                            <li>
-                                <a href="{{ file.file }}">{{ file }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-
                 </div>
+                {% include 'dashboard/writer/order/additional.html' %}
             </div>
             <div class="col-12 col-md-6">
-                <ul class="additionally-order-files">
-                    {% for additional in order.additionallyorder.filesadditionallyorder_set.all %}
-                        <li><a href="{{ additional.file.url }}">{{ additional.created_datetime }}</a></li>
-                    {% endfor %}
-                </ul>
-
-                <form action="{% url 'writer-order_detail' order.id %}" method="post" enctype="multipart/form-data"
-                      class="md-form">
-                    {% csrf_token %}
-                    <div class="file-field">
-                        <div class="btn btn-primary btn-sm float-left">
-                            <span>Choose file</span>
-                            <input type="file" name="files" multiple>
-                        </div>
-                        <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text" placeholder="Upload your file">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn bg-btn" style="float:right;">Upload</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="container mt-3">
-        <div class="row">
-            <div class="col-12">
-                <div class="card chat-room">
+                <div class="card mb-2">
                     <div class="card-body">
-
-                        <!-- Grid row -->
-                        <div class="row px-lg-2 px-2">
-
-                            <!-- Grid column -->
-                            <div class="col-12 pl-md-3 px-lg-auto px-0">
-
-                                <div class="chat-message">
-
-                                    <ul class="list-unstyled chat-1 scrollbar-light-blue">
-                                        {% for message in order.chat_set.all %}
-                                            {% if message.user == order.writer %}
-                                                <li class="d-flex justify-content-between mb-4">
-                                                    <img src="{{ message.user.avatar.url }}" alt="avatar"
-                                                         class="avatar rounded-circle mr-2 ml-lg-3 ml-0 z-depth-1">
-                                                    <div class="chat-body white p-3 ml-2 z-depth-1">
-                                                        <div class="header">
-                                                            <strong class="primary-font">{{ message.user.get_full_name }}</strong>
-                                                            <small class="pull-right text-muted">
-                                                                <i class="far fa-clock"></i> {{ message.created_datetime }}
-                                                            </small>
-                                                            {% if message.status == False %}
-                                                                <small style="float:right">
-                                                                    <button type="submit" data-message-id="{{ message.id }}"
-                                                                            class="btn bg-btn btn-sm message_btn">
-                                                                        Accept
-                                                                    </button>
-                                                                </small>
-                                                            {% endif %}
-                                                        </div>
-                                                        <hr class="w-100">
-                                                        <p class="mb-0">
-                                                            {{ message }}
-                                                        </p>
-                                                    </div>
-                                                </li>
-                                            {% else %}
-                                                <li class="d-flex justify-content-between mb-4">
-                                                    <div class="chat-body white p-3 z-depth-1">
-                                                        <div class="header">
-                                                            <strong class="primary-font">{{ message.user.get_full_name }}</strong>
-                                                            <small class="pull-right text-muted">
-                                                                <i class="far fa-clock"></i> {{ message.created_datetime }}
-                                                            </small>
-                                                            {% if message.status == False %}
-                                                                <small style="float:right">
-                                                                    <button type="submit" data-message-id="{{ message.id }}"
-                                                                            class="btn bg-btn btn-sm message_btn">
-                                                                        Accept
-                                                                    </button>
-                                                                </small>
-                                                            {% endif %}
-                                                        </div>
-                                                        <hr class="w-100">
-                                                        <p class="mb-0">
-                                                            {{ message }}
-                                                        </p>
-                                                    </div>
-                                                    <img src="{{ message.user.avatar.url }}" alt="avatar"
-                                                         class="avatar rounded-circle mr-0 ml-3 z-depth-1">
-                                                </li>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </ul>
-
-                                    <form action="{% url 'writer-order_detail' order.id %}" method="post">
-                                        {% csrf_token %}
-                                        <div class="white">
-                                            <div class="form-group basic-textarea">
-                            <textarea name="message" class="form-control pl-2 my-0" id="exampleFormControlTextarea2"
-                                      rows="3"
-                                      placeholder="Type your message here..."></textarea>
-                                            </div>
-                                        </div>
-                                        <button type="submit"
-                                                class="btn btn-outline-pink btn-rounded btn-sm waves-effect waves-dark float-right">
-                                            Send
-                                        </button>
-                                    </form>
-
-                                </div>
-
-                            </div>
-                            <!-- Grid column -->
-
+                        <div class="w-responsive text-center mx-auto">
+                            <h3 class="text-monospace">Chat</h3>
                         </div>
-                        <!-- Grid row -->
-
                     </div>
                 </div>
+                {% include 'dashboard/manager/orders/order/chat.html' %}
             </div>
         </div>
     </div>

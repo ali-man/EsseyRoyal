@@ -3,10 +3,8 @@
 <div class="card chat-room">
     <div class="card-body">
 
-        <!-- Grid row -->
         <div class="row px-lg-2 px-2">
 
-            <!-- Grid column -->
             <div class="col-12 pl-md-3 px-lg-auto px-0">
 
                 <div class="chat-message">
@@ -20,10 +18,17 @@
                                     <div class="chat-body white p-3 ml-2 z-depth-1">
                                         <div class="header">
                                             <strong class="primary-font">{{ message.user.get_full_name }}</strong>
-{#                                            <strong class="primary-font">Anonymous</strong>#}
                                             <small class="pull-right text-muted">
                                                 <i class="far fa-clock"></i> {{ message.created_datetime }}
                                             </small>
+                                            {% if message.status == False %}
+                                                <small style="float:right">
+                                                    <button type="submit" data-message-id="{{ message.id }}"
+                                                            class="btn bg-btn btn-sm message_btn">
+                                                        Accept
+                                                    </button>
+                                                </small>
+                                            {% endif %}
                                         </div>
                                         <hr class="w-100">
                                         <p class="mb-0">
@@ -32,25 +37,30 @@
                                     </div>
                                 </li>
                             {% else %}
-                                {% if message.status %}
-                                    <li class="d-flex justify-content-between mb-4">
-                                        <div class="chat-body white p-3 z-depth-1">
-                                            <div class="header">
-{#                                                <strong class="primary-font">{{ message.user.get_full_name }}</strong>#}
-                                                <strong class="primary-font">Anonymous</strong>
-{#                                                <small class="pull-right text-muted">#}
-{#                                                    <i class="far fa-clock"></i> {{ message.created_datetime }}#}
-{#                                                </small>#}
-                                            </div>
-                                            <hr class="w-100">
-                                            <p class="mb-0">
-                                                {{ message }}
-                                            </p>
+                                <li class="d-flex justify-content-between mb-4">
+                                    <div class="chat-body white p-3 z-depth-1">
+                                        <div class="header">
+                                            <strong class="primary-font">{{ message.user.get_full_name }}</strong>
+                                            <small class="pull-right text-muted">
+                                                <i class="far fa-clock"></i> {{ message.created_datetime }}
+                                            </small>
+                                            {% if message.status == False %}
+                                                <small style="float:right">
+                                                    <button type="submit" data-message-id="{{ message.id }}"
+                                                            class="btn bg-btn btn-sm message_btn">
+                                                        Accept
+                                                    </button>
+                                                </small>
+                                            {% endif %}
                                         </div>
-                                        <img src="{% static 'img/noimage.png' %}" alt="avatar"
-                                             class="avatar rounded-circle mr-0 ml-3 z-depth-1">
-                                    </li>
-                                {% endif %}
+                                        <hr class="w-100">
+                                        <p class="mb-0">
+                                            {{ message }}
+                                        </p>
+                                    </div>
+                                    <img src="{{ message.user.avatar.url }}" alt="avatar"
+                                         class="avatar rounded-circle mr-0 ml-3 z-depth-1">
+                                </li>
                             {% endif %}
                         {% endfor %}
                     </ul>
@@ -65,17 +75,16 @@
                             </div>
                         </div>
                         <button type="submit"
-                                class="btn btn-outline-pink btn-rounded btn-sm waves-effect waves-dark float-right">Send
+                                class="btn btn-outline-pink btn-rounded btn-sm waves-effect waves-dark float-right">
+                            Send
                         </button>
                     </form>
 
                 </div>
 
             </div>
-            <!-- Grid column -->
 
         </div>
-        <!-- Grid row -->
 
     </div>
 </div>

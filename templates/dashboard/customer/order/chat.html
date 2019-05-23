@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="card chat-room">
     <div class="card-body">
 
@@ -33,17 +35,18 @@
                                     <li class="d-flex justify-content-between mb-4">
                                         <div class="chat-body white p-3 z-depth-1">
                                             <div class="header">
-                                                <strong class="primary-font">{{ message.user.get_full_name }}</strong>
-                                                <small class="pull-right text-muted">
-                                                    <i class="far fa-clock"></i> {{ message.created_datetime }}
-                                                </small>
+{#                                                <strong class="primary-font">{{ message.user.get_full_name }}</strong>#}
+                                                <strong class="primary-font">Anonymous</strong>
+{#                                                <small class="pull-right text-muted">#}
+{#                                                    <i class="far fa-clock"></i> {{ message.created_datetime }}#}
+{#                                                </small>#}
                                             </div>
                                             <hr class="w-100">
                                             <p class="mb-0">
                                                 {{ message }}
                                             </p>
                                         </div>
-                                        <img src="{{ message.user.avatar.url }}" alt="avatar"
+                                        <img src="{% static 'img/noimage.png' %}" alt="avatar"
                                              class="avatar rounded-circle mr-0 ml-3 z-depth-1">
                                     </li>
                                 {% endif %}

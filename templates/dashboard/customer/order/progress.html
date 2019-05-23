@@ -12,7 +12,6 @@
         }
 
         .white-darker-hover {
-            color: #fff;
             -webkit-transition: .4s;
             transition: .4s;
         }
@@ -24,15 +23,8 @@
         }
 
         table.table tr th, table.table tr td {
-            color: #fff;
             padding-top: 10px;
             padding-bottom: 10px;
-        }
-
-        .cyan-lighter-hover {
-            color: #00bcd4;
-            -webkit-transition: .4s;
-            transition: .4s;
         }
     </style>
 {% endblock %}
@@ -43,28 +35,35 @@
 
 {% block content %}
 
-    <div class="container mt-5 pb-4" style="background-color: #fff;">
+    <div class="container mt-5 pb-4">
 
         <div class="row">
             <div class="col-12">
-                <h5 class="text-center text-primary mt-4 mb-4" style="color: #757575;">
-                    {{ order.title.upper }}
-                    <span class="status ml-2">
-                        {% if order.status == 0 %}
-                            <i class="fas fa-search" title="ORDER IN REVIEW"></i>
-                        {% elif order.status == 1 %}
-                            <i class="fas fa-spinner" title="ORDER IN PROGRESS"></i>
-                        {% elif order.status == 2 %}
-                            <i class="fas fa-check" title="COMPLETED"></i>
-                        {% endif %}
-                    </span>
-                </h5>
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="w-responsive text-center mx-auto">
+                            <h4 class="text-center text-primary" style="color: #757575;">{{ order.title.upper }}
+                                <span class="badge badge-pill bg-btn">
+                                    {% if order.status == 0 %}
+                                        <i class="fas fa-search fa-xs" aria-hidden="true" title="ORDER IN REVIEW"></i>
+                                    {% elif order.status == 1 %}
+                                        <i class="fas fa-spinner fa-pulse fa-xs" aria-hidden="true"
+                                           title="ORDER IN PROGRESS"></i>
+                                    {% elif order.status == 2 %}
+                                        <i class="fas fa-check fa-xs" aria-hidden="true" title="COMPLETED"></i>
+                                    {% endif %}
+                                </span>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
         <div class="row">
             <div class="col-12 col-md-6">
-                <div class="card indigo">
+                <div class="card mb-2">
                     <div class="card-body">
                         <h4 class="font-weight-bold amber-lighter-hover mb-3">Detail info</h4>
                         <table class="table" style="margin-bottom: 0;">
@@ -95,7 +94,7 @@
                         </table>
 
                         {% if order.description %}
-                            <h4 class="font-weight-bold amber-lighter-hover mb-3">Description: </h4>
+                            <h4 class="font-weight-bold amber-lighter-hover mt-3 mb-3">Description: </h4>
                             <div class="description">
                                 <div class="description-text">
                                     {% autoescape off %}{{ order.description }}{% endautoescape %}
@@ -104,11 +103,11 @@
                         {% endif %}
 
                         {% if order.filesorder_set.all %}
-                            <h4 class="font-weight-bold amber-lighter-hover mb-3">Files: </h4>
+                            <h4 class="font-weight-bold amber-lighter-hover mt-3 mb-3">Files: </h4>
                             <ul class="files">
                                 {% for file in order.filesorder_set.all %}
                                     <li>
-                                        <a href="{{ file.file }}" style="color: #fff;">{{ file }}</a>
+                                        <a href="{{ file.file }}">{{ file }}</a>
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -116,23 +115,16 @@
                         {% endif %}
                     </div>
                 </div>
+                {% include 'dashboard/customer/order/additional.html' %}
             </div>
             <div class="col-12 col-md-6">
-            {% include 'dashboard/customer/order/additional.html' %}
-        </div>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="w-responsive text-center mx-auto p-3 mt-2" style="background-color: #eee;">
-                    <h3 class="text-monospace">Chat</h3>
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="w-responsive text-center mx-auto">
+                            <h3 class="text-monospace">Chat</h3>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
                 {% include 'dashboard/customer/order/chat.html' %}
             </div>
         </div>

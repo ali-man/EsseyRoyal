@@ -53,7 +53,8 @@
                 <div class="card mb-2">
                     <div class="card-body">
                         <div class="w-responsive text-center mx-auto">
-                            <h4 class="text-center text-primary" style="color: #757575;">{{ order.title.upper }}
+                            <h4 class="text-center text-primary" id="order_id" data-order-id="{{ order.id }}"
+                                style="color: #757575;">{{ order.title.upper }}
                                 <span class="badge badge-pill bg-btn">
                                     {% if order.status == 0 %}
                                         <i class="fas fa-search fa-xs" aria-hidden="true" title="ORDER IN REVIEW"></i>
@@ -144,7 +145,7 @@
 
 {% block scripts %}
     <script>
-        window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';
+        {#window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';#}
         $(document).ready(function () {
             let classMessageBtn = $('.message_btn');
             classMessageBtn.click(function () {

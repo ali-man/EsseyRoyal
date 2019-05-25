@@ -52,26 +52,10 @@ urlpatterns = [
 
     path('ajax/chat-message-accept/', chat_message_accept),
 
-    # path('sign-up/', SignUpViews.as_view(), name='signup'),
-    # path('sign-in/', SignInViews.as_view(), name='signin'),
-    # path('logout/', logout_user, name='logout'),
-    # path('dashboard/', dashboard_redirect, name='dashboard'),
-    # path('blog/add-article/', add_article, name='blog-add_article'),
-    # path('blog/add-tag/', add_tag, name='blog-add_tag'),
-    # path('blog/<int:pk>-<str:slug>/', ArticleViews.as_view(), name='blog-detail'),
-    # path('blog/', BlogViews.as_view(), name='blog'),
-    # path('customer/order/view/<int:pk>/', ViewOrderViews.as_view(), name='customer_view_order'),
-    # path('customer/order/add/', AddOrderViews.as_view(), name='customer_add_order'),
-    # path('customer/', CustomerDashboardViews.as_view(), name='customer'),
-    # path('manager/', ManagerDashboardViews.as_view(), name='manager'),
-    # path('admin/manager/edit/<int:pk>/', EditManagerAdminDashboardViews.as_view(), name='admin-manager_edit'),
-    # path('admin/managers/', ManagersAdminDashboardViews.as_view(), name='admin-managers'),
-    # path('admin/writer/edit/<int:pk>/', EditWriterAdminDashboardViews.as_view(), name='admin-writer_edit'),
-    # path('admin/writers/', WritersAdminDashboardViews.as_view(), name='admin-writers'),
-    # path('admin/clients/', ClientsAdminDashboardViews.as_view(), name='admin-clients'),
-    # path('admin/orders-review/', OrderReviewAdminDashboardViews.as_view(), name='admin-order_review'),
-    # path('admin/orders/', OrderAdminDashboardViews.as_view(), name='admin-order'),
-    # path('admin/', AdminDashboardViews.as_view(), name='admin'),
-    # path('ckeditor/', include('ckeditor_uploader.urls')),
+    path('blog/', include('appblog.urls', namespace='appblog')),
+
+    path('pages/', include('django.contrib.flatpages.urls')),
+
+    path('ckeditor/', include('ckeditor_uploader.urls')),
     # path('api_auth/', include('rest_framework.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

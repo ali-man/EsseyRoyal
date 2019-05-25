@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block title %}
+    Blog
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <section class="my-5">
+
+            <div class="card gradient-card mb-5">
+
+                <div class="card-image"
+                     style="background-image: url(https://mdbootstrap.com/img/Photos/Horizontal/Work/4-col/img%20%2814%29.jpg);">
+
+                    <a href="#!">
+                        <div class="text-white d-flex h-100 mask blue-gradient-rgba">
+                            <div class="first-content align-self-center p-3">
+                                <h3 class="card-title">Recent posts</h3>
+                                <p class="lead mb-0">
+                                    Duis aute irure dolor in reprehenderit in
+                                    voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                                    cupidatat non
+                                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                </p>
+                            </div>
+                            <div class="second-content  align-self-center mx-auto text-center">
+                                <i class="fas fa-newspaper fa-3x"></i>
+                                {#                                <i class="fas fa-chart-pie fa-3x"></i>#}
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+
+            </div>
+            {% for article in object_list %}
+                {% if forloop.last %}
+                    <div class="row">
+
+                        <div class="col-lg-5 col-xl-4">
+
+                            <div class="view overlay rounded z-depth-1-half mb-lg-0 mb-4">
+                                <img class="img-fluid" src="{{ article.poster.url }}"
+                                     alt="Sample image">
+                                <a>
+                                    <div class="mask rgba-white-slight"></div>
+                                </a>
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-7 col-xl-8">
+
+                            <h3 class="font-weight-bold mb-3"><strong>{{ article.title }}</strong></h3>
+                            <p class="dark-grey-text">
+                                {{ article.description }}
+                            </p>
+                            <p>by <a class="font-weight-bold">EssayRoyal</a>, {{ article.created_datetime }}</p>
+                            {#                            <a class="btn btn-primary btn-md">Read more</a>#}
+
+                        </div>
+
+                    </div>
+                {% else %}
+                    <div class="row">
+
+                        <div class="col-lg-5 col-xl-4">
+
+                            <div class="view overlay rounded z-depth-1-half mb-lg-0 mb-4">
+                                <img class="img-fluid" src="{{ article.poster.url }}"
+                                     alt="Sample image">
+                                <a>
+                                    <div class="mask rgba-white-slight"></div>
+                                </a>
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-7 col-xl-8">
+
+                            <h3 class="font-weight-bold mb-3"><strong>{{ article.title }}</strong></h3>
+                            <p class="dark-grey-text">
+                                {{ article.description }}
+                            </p>
+                            <p>by <a class="font-weight-bold">EssayRoyal</a>, {{ article.created_datetime }}</p>
+                            {#                            <a class="btn btn-primary btn-md">Read more</a>#}
+
+                        </div>
+
+                    </div>
+
+                    <hr class="my-5">
+                {% endif %}
+            {% endfor %}
+
+
+        </section>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

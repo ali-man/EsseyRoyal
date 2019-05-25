@@ -1,9 +1,43 @@
-<footer class="page-footer pt-0 mt-5">
-    <div class="footer-copyright py-3 text-center">
-        <div class="container-fluid">
-            © 2019 Copyright: <a href="https://essayroyal.com/" target="_blank">
-            EssayRoyal.com </a>
+{% load flatpages %}
+
+<footer class="page-footer font-small bg-block">
+
+    <div class="container">
+
+        <div class="row text-center d-flex justify-content-center pt-5 mb-3">
+
+            {% get_flatpages as flatpages %}
+            {% for page in flatpages %}
+                <div class="col-md-2 mb-3">
+                    <h6 class="text-uppercase font-weight-bold">
+                        <a href="{{ page.url }}">{{ page.title }}</a>
+                    </h6>
+                </div>
+            {% endfor %}
 
         </div>
+        <hr class="rgba-white-light" style="margin: 0 15%;">
+
+        <div class="row d-flex text-center justify-content-center mb-md-0 mb-4">
+
+            <div class="col-md-8 col-12 mt-5">
+                <p style="line-height: 1.7rem">Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+                    accusantium doloremque laudantium, totam rem
+                    aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
+                    explicabo.
+                    Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
+                    consequuntur.</p>
+            </div>
+
+        </div>
+        <hr class="clearfix d-md-none rgba-white-light" style="margin: 10% 15% 5%;">
+
+
     </div>
+
+    <div class="footer-copyright text-center py-3">© 2019 Copyright:
+        <a href="https://mdbootstrap.com/education/bootstrap/"> EssayRoyal.com</a>
+    </div>
+
 </footer>
+<!-- Footer -->

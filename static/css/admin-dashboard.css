@@ -1,0 +1,22 @@
+ul.menu-admin {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  list-style: none; }
+  ul.menu-admin li {
+    background: -moz-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, rgba(8, 27, 73, 0.97)), color-stop(100%, rgba(30, 101, 178, 0.97)));
+    background: -webkit-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: -o-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: -ms-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    margin: 1px;
+    border-radius: 4px; }
+    ul.menu-admin li a {
+      color: #fff;
+      display: inline-block;
+      width: 100%;
+      padding: 5px 10px;
+      font-size: 14px; }

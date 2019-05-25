@@ -24,7 +24,7 @@ class Article(models.Model):
     title = models.CharField(verbose_name='Title', max_length=100)
     slug = models.SlugField(verbose_name='URL', max_length=100, blank=True)
     poster = models.ImageField(verbose_name='Poster', upload_to="blog/posters/")
-    description = RichTextUploadingField(verbose_name='Description')
+    description = models.TextField(verbose_name='Description')
     tags = models.ManyToManyField(Tag, verbose_name='Tags', blank=True)
     status = models.BooleanField(verbose_name='Published ?', default=True)
     created_datetime = models.DateTimeField(verbose_name='Created datetime', auto_now_add=True)

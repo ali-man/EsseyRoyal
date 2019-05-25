@@ -1,5 +1,7 @@
+{% load static %}
+
 <div class="view jarallax" style="height: 100vh;">
-    <img class="jarallax-img" src="https://mdbootstrap.com/img/Photos/Horizontal/Work/4-col/img%20%2814%29.jpg" alt="">
+    <img class="jarallax-img" src="{% static 'img/bg2.jpg' %}" alt="">
     <div class="mask text-white rgba-black-strong">
         <div class="container flex-center">
             <div class="row mt-5">
@@ -13,7 +15,7 @@
 
                             <div class="col-lg-5 text-center text-lg-left">
                                 <img class="img-fluid"
-                                     src="https://mdbootstrap.com/img/Photos/Others/screens-section.jpg"
+                                     src="{% static 'img/work.png' %}"
                                      alt="Sample image">
                             </div>
 

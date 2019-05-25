@@ -102,7 +102,7 @@ class Order(models.Model):
     format_order = models.ForeignKey(FormatOrder, verbose_name='Format of order', on_delete=models.CASCADE)
     number_page = models.IntegerField(verbose_name='Number of page', default=1)
     deadline = models.DateTimeField(verbose_name='Deadline', auto_now=False)
-    description = RichTextField(verbose_name='Description')
+    description = RichTextField(verbose_name='Description', blank=True)
     status = models.IntegerField(verbose_name='Status order', choices=STATUS, default=IN_REVIEW)
     created_datetime = models.DateTimeField(verbose_name='Created datetime', auto_now_add=True)
     per_page = models.DecimalField(verbose_name='Price per page', max_digits=10, decimal_places=2, default=0)

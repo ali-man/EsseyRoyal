@@ -1,0 +1,26 @@
+.success {
+  background-color: #00C851; }
+
+.warning {
+  background-color: #FFBB33; }
+
+.info {
+  background-color: #33B5E5; }
+
+.error {
+  background-color: #FF3547; }
+
+ul.messages {
+  position: fixed;
+  top: 70px;
+  right: 5px;
+  padding: 0;
+  list-style: none;
+  z-index: 9991; }
+  ul.messages li {
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    opacity: .8;
+    padding: 10px 15px;
+    margin: 0 0 5px; }

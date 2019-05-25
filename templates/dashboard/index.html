@@ -63,5 +63,10 @@
             value: "00:00",
             datepicker: false
         });
+
+        $('.customer_remove_order').click(function () {
+            let orderID = $(this).attr('data-order-id');
+            $('#id_remove').val(orderID);
+        });
     </script>
 {% endblock %}

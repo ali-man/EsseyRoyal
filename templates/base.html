@@ -157,6 +157,30 @@
 <!-- Main navigation -->
 <!--Main Layout-->
 <main>
+    {#    <div class="position-fixed">#}
+    {#        {% if messages %}#}
+    {#            {% for message in messages %}#}
+    {#                {% if message.tags == 'error' %}#}
+    {#                    <a class="btn btn-danger" onclick="toastr.error({{ message }});">{{ message }}</a>#}
+    {#                {% elif message.tags == 'info' %}#}
+    {#                    <a class="btn btn-info" onclick="toastr.info({{ message }});">{{ message }}</a>#}
+    {#                {% elif message.tags == 'warning' %}#}
+    {#                    <a class="btn btn-warning" onclick="toastr.warning({{ message }});">{{ message }}</a>#}
+    {#                {% elif message.tags == 'success' %}#}
+    {#                    <a class="btn btn-success" onclick="toastr.success({{ message }});">{{ message }}</a>#}
+    {#                {% endif %}#}
+    {#            {% endfor %}#}
+    {#        {% endif %}#}
+    {#    </div>#}
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     {% block content %}
 
     {% endblock %}
@@ -167,6 +191,26 @@
 {% include 'footer.html' %}
 
 {% include 'scripts.html' %}
+<script>
+    let $message = $('.messages');
+    if ($message[0] !== undefined) {
+        setTimeout(function () {
+            $message.stop().animate({
+                opacity: 0,
+            }, 800, function () {
+                $(this).remove();
+            })
+        }, 8000);
+
+        $message.children('li').click(function () {
+            $(this).stop().animate({
+                opacity: 0,
+            }, 800, function () {
+                $(this).remove();
+            })
+        })
+    }
+</script>
 {% block scripts %}
 {% endblock %}
 </body>

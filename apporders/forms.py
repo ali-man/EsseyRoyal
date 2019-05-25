@@ -46,7 +46,7 @@ class OrderAddForm(forms.Form):
     )
     # deadline_writer = forms.DateTimeField()
     # attached_files = forms.FileField(label='Files', widget=forms.ClearableFileInput(attrs={'multiple': True}))
-    description = forms.CharField(widget=CKEditorWidget())
+    description = forms.CharField(widget=CKEditorWidget(), required=False)
 
 # class OrderForm(forms.ModelForm):
 # deadline_writer = forms.DateTimeField(

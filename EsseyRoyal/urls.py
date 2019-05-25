@@ -9,7 +9,7 @@ from appdashboard.views import DashboardViews, admin_users, admin_selects, admin
     manager_settings
 from apporders.ajax import chat_message_accept
 from apporders.views import ViewOrderViews, add_order_views, UpdateOrderViews, writer_order_detail, writer_order_review, \
-    customer_order_in_progress, manager_order
+    customer_order_in_progress, manager_order, remove_order
 from appusers.views import change_profile
 
 admin.site.site_header = 'Панель управления'
@@ -31,6 +31,7 @@ urlpatterns = [
     path('orders/view/<int:pk>/', ViewOrderViews.as_view(), name='view_order'),
     path('orders/update/<int:pk>/', UpdateOrderViews.as_view(), name='update_order'),
     path('order/new', add_order_views, name='add_order'),
+    path('order/remove', remove_order, name='remove'),
 
     # WRITER
     path('dashboard/w/order/detail-<int:pk>/', writer_order_detail, name='writer-order_detail'),

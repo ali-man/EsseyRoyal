@@ -82,7 +82,8 @@ def change_profile(request):
         user.degree = r['degree']
         user.phone = r['phone']
         user.corporate_email = r['corporate_email']
-        user.avatar = request.FILES['avatar']
+        if 'avatar' in request.FILES:
+            user.avatar = request.FILES['avatar']
         user.save()
         messages.success(request, 'Профиль успешно изменён (перевести)')
         return redirect('/dashboard/')

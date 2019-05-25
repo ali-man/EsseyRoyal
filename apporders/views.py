@@ -73,13 +73,15 @@ class UpdateOrderViews(UpdateView):
     success_url = '/dashboard/'
 
 
-def remove_order(request, pk):
-    user = request.user
-    order = Order.objects.get(id=pk)
-    if order.customer == user:
-        order.remove()
-    messages.success(request, 'Ваш заказ успешно удалён (перевести)')
-    return redirect('/dashboard/')
+def remove_order(request):
+    if '_remove' in request.POST:
+        order_id = int(request.POST['_remove'])
+        user = request.user
+        order = Order.objects.get(id=order_id)
+        if order.customer == user:
+            order.delete()
+        messages.success(request, 'Ваш заказ успешно удалён (перевести)')
+        return redirect('/dashboard/')
 
 
 def add_order_views(request):

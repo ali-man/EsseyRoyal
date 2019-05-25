@@ -105,14 +105,11 @@
 
 <body>
 
-
-<!-- Main navigation -->
 <header>
-    <!--Navbar-->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar">
         <div class="container">
-            <a class="navbar-brand" href="#">
-                <strong>Essay Royal</strong>
+            <a class="navbar-brand" href="/">
+                <img src="https://essayroyal.com/assets/front/images/logo.png" alt="">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-7"
                     aria-controls="navbarSupportedContent-7" aria-expanded="false" aria-label="Toggle navigation">
@@ -141,38 +138,15 @@
                         <a class="nav-link" href="{% url 'login' %}">Sign in</a>
                     {% endif %}
                 </div>
-                {#                <form class="form-inline">#}
-                {#                    <div class="md-form my-0">#}
-                {#                        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">#}
-                {#                    </div>#}
-                {#                </form>#}
             </div>
         </div>
     </nav>
-    <!-- Navbar -->
     {% block home %}
 
     {% endblock %}
 </header>
-<!-- Main navigation -->
-<!--Main Layout-->
-<main>
-    {#    <div class="position-fixed">#}
-    {#        {% if messages %}#}
-    {#            {% for message in messages %}#}
-    {#                {% if message.tags == 'error' %}#}
-    {#                    <a class="btn btn-danger" onclick="toastr.error({{ message }});">{{ message }}</a>#}
-    {#                {% elif message.tags == 'info' %}#}
-    {#                    <a class="btn btn-info" onclick="toastr.info({{ message }});">{{ message }}</a>#}
-    {#                {% elif message.tags == 'warning' %}#}
-    {#                    <a class="btn btn-warning" onclick="toastr.warning({{ message }});">{{ message }}</a>#}
-    {#                {% elif message.tags == 'success' %}#}
-    {#                    <a class="btn btn-success" onclick="toastr.success({{ message }});">{{ message }}</a>#}
-    {#                {% endif %}#}
-    {#            {% endfor %}#}
-    {#        {% endif %}#}
-    {#    </div>#}
 
+<main>
     {% if messages %}
         <ul class="messages">
             {% for message in messages %}
@@ -185,7 +159,6 @@
 
     {% endblock %}
 </main>
-<!--Main Layout-->
 
 
 {% include 'footer.html' %}

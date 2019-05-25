@@ -1,13 +1,15 @@
 import datetime
 
 from django.contrib import messages
+from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView, UpdateView
 from django.views.generic.base import View
 
+from appmail.views import manager_send_mail
 from apporders.forms import OrderAddForm, OrderForm
 from apporders.models import Order, FilesOrder, FilesAdditionallyOrder, AdditionallyOrder, Chat
-from apporders.validators import validate_file_extension, validate_file_views
+from apporders.validators import validate_file_views
 from appusers.models import User
 
 
@@ -79,6 +81,7 @@ def remove_order(request):
         user = request.user
         order = Order.objects.get(id=order_id)
         if order.customer == user:
+            manager_send_mail('Remove order', order.customer, order.title, '')
             order.delete()
         messages.success(request, 'Ваш заказ успешно удалён (перевести)')
         return redirect('/dashboard/')
@@ -111,6 +114,9 @@ def add_order_views(request):
                     files_order.order = order
                     files_order.file = f
                     files_order.save()
+
+            link_order = F'dashboard/m/order/{order.id}/'
+            manager_send_mail('New order', order.customer, order.title, link_order)
             messages.success(request, 'Ваш заказ загружен (перевести)')
             return redirect('/dashboard/')
         else:
@@ -147,6 +153,8 @@ def writer_order_detail(request, pk):
                 file_additional.additionally_order = additionally_order
                 file_additional.file = f
                 file_additional.save()
+            # TODO: отправка письма клиенту о новом загруженном файле в заказе
+            manager_send_mail('New files', order.writer, order.title, F'dashboard/m/order/{order.id}/')
             messages.success(request, 'Файлы успешно загружены (перевести)')
             return redirect(F'/dashboard/w/order/detail-{pk}/')
 
@@ -158,6 +166,7 @@ def writer_order_detail(request, pk):
             chat.status = False
             chat.save()
 
+            manager_send_mail('New message', order.writer, order.title, F'dashboard/m/order/{order.id}/')
             messages.success(request, 'Ваше сообщение отправлено (перевести)')
             return redirect(F'/dashboard/w/order/detail-{pk}/')
         else:
@@ -183,7 +192,8 @@ def customer_order_in_progress(request, pk):
             chat.message = request.POST['message']
             chat.status = False
             chat.save()
-
+            # TODO: отправка письма всем writer-ам о новом заказе
+            manager_send_mail('New message', order.customer, order.title, F'dashboard/m/order/{order.id}/')
             messages.success(request, 'Ваше сообщение отправлено (перевести)')
             return redirect(F'/orders/progress/{pk}/')
         else:
@@ -211,6 +221,8 @@ def writer_order_review(request, pk):
                     additional = AdditionallyOrder()
                     additional.order = order
                     additional.save()
+                # TODO: отправка письма клиенту о принятии заказа
+                manager_send_mail('Take order', order.writer, order.title, F'dashboard/m/order/{order.id}/')
                 messages.success(request, 'Вы успешно приняли заказ (Перевести)')
             else:
                 messages.warning(request, 'Заказ уже принят другим врайтером (Перевести)')
@@ -221,6 +233,15 @@ def writer_order_review(request, pk):
 
 def manager_order(request, pk):
     if request.method == 'GET':
+        user = User.objects.get(email=request.user)
+        this_manager = None
+        for g in user.groups.all():
+            if g.name == 'Manager':
+                this_manager = True
+        if not this_manager:
+            messages.error(request, 'Доступ закрыт (перевести)')
+            return redirect('/dashboard/')
+
         order = get_object_or_404(Order, id=pk)
 
         return render(request, 'dashboard/manager/orders/order/detail.html', locals())

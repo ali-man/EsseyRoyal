@@ -10,6 +10,8 @@ if LOCAL:
     DEBUG = True
     # ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
     ALLOWED_HOSTS = []
+else:
+    DEBUG = False
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -30,8 +32,14 @@ INSTALLED_APPS = [
     'appdashboard',
     'apporders',
     # 'appwork',
-    'appblog'
+    'appblog',
+    'appmail',
 ]
+
+# if DEBUG:
+#     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# else:
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
@@ -121,6 +129,16 @@ PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.MD5PasswordHasher',
     'django.contrib.auth.hashers.CryptPasswordHasher',
 )
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'sendmailtest.essay@gmail.com'
+EMAIL_HOST_PASSWORD = '78qNFR29nFP42ap'
+DEFAULT_FROM_EMAIL = 'TestingMail'
+DEFAULT_TO_EMAIL = 'sendmailtest.essay@gmail.com'
+MANAGER_MAIL = 'aliman.fsd@gmail.com'
+LINK_DOMAIN = 'http://127.0.0.1:8000/'
 
 # -------------------- ckeditor -----------------------
 CKEDITOR_UPLOAD_PATH = 'uploads/'

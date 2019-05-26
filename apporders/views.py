@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView, UpdateView
 from django.views.generic.base import View
 
-from appmail.views import manager_send_mail
+from appmail.views import manager_send_mail, customer_send_mail
 from apporders.forms import OrderAddForm, OrderForm
 from apporders.models import Order, FilesOrder, FilesAdditionallyOrder, AdditionallyOrder, Chat
 from apporders.validators import validate_file_views
@@ -73,6 +73,23 @@ class UpdateOrderViews(UpdateView):
     form_class = OrderForm
     template_name = 'dashboard/customer/order/update.html'
     success_url = '/dashboard/'
+
+    def post(self, request, *args, **kwargs):
+        super(UpdateOrderViews, self).post(request, *args, **kwargs)
+        if 'attached-files' in request.FILES:
+            attached_files = request.FILES.getlist('attached-files')
+            order = Order.objects.get(id=kwargs['pk'])
+            if len(attached_files) != 0:
+                for f in attached_files:
+                    if validate_file_views(f) == 'error':
+                        messages.error(request, 'Загружен не допустимый формат (перевести)')
+                        return redirect('/dashboard/')
+                    files_order = FilesOrder()
+                    files_order.order = order
+                    files_order.file = f
+                    files_order.save()
+            messages.success(request, 'Ваш заказ загружен (перевести)')
+            return redirect('/dashboard/')
 
 
 def remove_order(request):
@@ -150,7 +167,7 @@ def writer_order_detail(request, pk):
                 file_additional.additionally_order = additionally_order
                 file_additional.file = f
                 file_additional.save()
-            # TODO: отправка письма клиенту о новом загруженном файле в заказе
+            customer_send_mail('New files', order.title, order.customer.email, F'orders/progress/{order.id}/')
             manager_send_mail('New files', order.writer, order.title, F'dashboard/m/order/{order.id}/')
             messages.success(request, 'Файлы успешно загружены (перевести)')
             return redirect(F'/dashboard/w/order/detail-{pk}/')
@@ -189,7 +206,6 @@ def customer_order_in_progress(request, pk):
             chat.message = request.POST['message']
             chat.status = False
             chat.save()
-            # TODO: отправка письма всем writer-ам о новом заказе
             manager_send_mail('New message', order.customer, order.title, F'dashboard/m/order/{order.id}/')
             messages.success(request, 'Ваше сообщение отправлено (перевести)')
             return redirect(F'/orders/progress/{pk}/')
@@ -240,13 +256,3 @@ def manager_order(request, pk):
         order = get_object_or_404(Order, id=pk)
 
         return render(request, 'dashboard/manager/orders/order/detail.html', locals())
-
-    if request.method == 'POST':
-        # TODO: Написать смену статуса сообщений чата на AJAX
-        if '_chat_accept' in request.POST:
-            print(request.POST.getlist('_chat_accept'))
-            # message_id = int(request.POST['_chat_accept'])
-            # message = Chat.objects.get(id=message_id)
-            # message.status = True
-            # message.save()
-            return redirect(F'/dashboard/m/order/{pk}/')

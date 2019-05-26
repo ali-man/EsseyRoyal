@@ -119,7 +119,7 @@
                             <ul class="files">
                                 {% for file in order.filesorder_set.all %}
                                     <li>
-                                        <a href="{{ file.file }}">{{ file }}</a>
+                                        <a href="{{ file.file.url }}">{{ file.filename }}</a>
                                     </li>
                                 {% endfor %}
                             </ul>

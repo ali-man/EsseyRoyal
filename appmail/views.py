@@ -43,14 +43,17 @@ def customer_send_mail(title_mail, title, email, link_order):
         Title order: {}
         Link order: {}{}
     '''.format(title, settings.LINK_DOMAIN, link_order)
-    send_mail(title_mail, data, 'EssayRoyal', email, fail_silently=False)
+    send_mail(title_mail, data, 'EssayRoyal', [email], fail_silently=False)
 
 
-def writer_send_mail(title_mail, order_title, link_order):
+def writer_send_mail(title_mail, order_title, link_order, email=None):
     group = Group.objects.get(name='Writer')
-    writers = []
-    for w in group.user_set.all():
-        writers.append(w.email)
+    if email is not None:
+        writers = []
+        for w in group.user_set.all():
+            writers.append(w.email)
+    else:
+        writers = [email]
     data = '''
             Title order: {}
             Link order: {}{}

@@ -138,7 +138,6 @@ class Order(models.Model):
         writer_link_order = F'dashboard/w/order/{self.id}/'
         customer_link_order = F'orders/progress/{self.id}/'
         if self.status == 0:
-
             manager_send_mail('New order', self.customer, self.title, manager_link_order)
             writer_send_mail('New order', self.title, writer_link_order)
         elif self.status == 1:
@@ -155,10 +154,12 @@ class Order(models.Model):
 
 
 class FilesOrder(models.Model):
-    # TODO: Загрузка файлов не более 10, и форматов .xls .doc .docx .pdf .jpg .png .excel
     order = models.ForeignKey(Order, verbose_name='ID Order', on_delete=models.CASCADE)
     file = models.FileField(verbose_name='Attached files', upload_to=upload_files, validators=[validate_file_extension],
                             null=True, blank=True)
+
+    def filename(self):
+        return os.path.basename(self.file.name)
 
     def __str__(self):
         return '%s' % self.id
@@ -186,6 +187,9 @@ class FilesAdditionallyOrder(models.Model):
     class Meta:
         verbose_name = 'File additionally order'
         verbose_name_plural = 'Files additionally order'
+
+    def filename(self):
+        return os.path.basename(self.file.name)
 
     def __str__(self):
         return '%s' % self.file.url

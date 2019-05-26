@@ -1,9 +1,35 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
 
 from appusers.models import User
+
+
+def register(request):
+    if request.method == 'POST':
+        r = request.POST
+        email = r.get('email', None)
+        password1 = r.get('password1', None)
+        password2 = r.get('password2', None)
+
+        if (password1 == password2 is not None) and email is not None:
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                create_user = User.objects.create_user(email=email, password=password2)
+                create_user.save()
+                group = Group.objects.get(name='Customer')
+                create_user.groups.add(group)
+                create_user.save()
+                user = authenticate(email=email, password=password2)
+            login(request, user)
+            messages.success(request, 'Вы успешно зарегистрированы (перевести)')
+        else:
+            messages.error(request, 'Не все поля заполнены (перевести)')
+
+        return redirect('/')
 
 
 class SignUpViews(View):

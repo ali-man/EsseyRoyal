@@ -46,7 +46,7 @@ class DashboardViews(TemplateView):
         context['user_form'] = UserForm(instance=user)
 
         # ADMIN
-        if str(user_group) == '<QuerySet []>':
+        if user.is_superuser: # str(user_group) == '<QuerySet []>'
             context['profile'] = 'admin'
             # Orders
             context['orders'] = orders
@@ -86,7 +86,7 @@ class DashboardViews(TemplateView):
 
         # NOT GROUP
         else:
-            print('Вы не состоите не в одной группе или не авторизованы')
+            messages.warning(self.request, 'Обнаружена ошибка, обратитесь к администрации сайта (перевести)')
 
         return context
 

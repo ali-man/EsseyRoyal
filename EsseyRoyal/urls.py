@@ -10,7 +10,7 @@ from appdashboard.views import DashboardViews, admin_users, admin_selects, admin
 from apporders.ajax import chat_message_accept
 from apporders.views import ViewOrderViews, add_order_views, UpdateOrderViews, writer_order_detail, writer_order_review, \
     customer_order_in_progress, manager_order, remove_order
-from appusers.views import change_profile
+from appusers.views import change_profile, register
 
 admin.site.site_header = 'Панель управления'
 urlpatterns = [
@@ -22,6 +22,7 @@ urlpatterns = [
         redirect_authenticated_user=True
     ), name='login'),
 
+    path('accounts/register/', register, name='register'),
     path('accounts/logout/', LogoutView.as_view(), name='logout'),
 
     path('dashboard/change-profile', change_profile, name='change-profile'),

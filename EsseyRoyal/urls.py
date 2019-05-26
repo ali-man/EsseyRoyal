@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path, include
 
-from EsseyRoyal.views import HomePageViews
+from appaaa.views import HomePageViews
 from appdashboard.views import DashboardViews, admin_users, admin_selects, admin_settings, manager_selects, \
     manager_settings
 from apporders.ajax import chat_message_accept

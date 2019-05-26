@@ -114,9 +114,6 @@ def add_order_views(request):
                     files_order.order = order
                     files_order.file = f
                     files_order.save()
-
-            link_order = F'dashboard/m/order/{order.id}/'
-            manager_send_mail('New order', order.customer, order.title, link_order)
             messages.success(request, 'Ваш заказ загружен (перевести)')
             return redirect('/dashboard/')
         else:
@@ -221,8 +218,6 @@ def writer_order_review(request, pk):
                     additional = AdditionallyOrder()
                     additional.order = order
                     additional.save()
-                # TODO: отправка письма клиенту о принятии заказа
-                manager_send_mail('Take order', order.writer, order.title, F'dashboard/m/order/{order.id}/')
                 messages.success(request, 'Вы успешно приняли заказ (Перевести)')
             else:
                 messages.warning(request, 'Заказ уже принят другим врайтером (Перевести)')

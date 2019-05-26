@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.db import models
 
+from appmail.views import customer_send_mail, writer_send_mail, manager_send_mail
 from apporders.validators import validate_file_extension
 from appusers.models import User
 
@@ -122,20 +123,32 @@ class Order(models.Model):
     def save(self, *args, **kwargs):
         if self.created_datetime:
             deadline = (self.deadline - self.created_datetime).total_seconds()
-            print('create_datetime')
         else:
             deadline = (self.deadline - datetime.datetime.now()).total_seconds()
-            print('today')
         hours = int(divmod(deadline, 3600)[0])
-        print(hours)
         deadlines_price = PriceDeadline.objects.filter(hours__lte=hours)
-        print(deadlines_price)
         last_index = len(deadlines_price) - 1  # Последний индекс из queryset
         price = deadlines_price[last_index].price + self.type_order.price_client  # Цена type of order
         self.per_page = price
         self.total_cost = price * self.number_page
 
         super().save(*args, **kwargs)
+
+        manager_link_order = F'dashboard/m/order/{self.id}/'
+        writer_link_order = F'dashboard/w/order/{self.id}/'
+        customer_link_order = F'orders/progress/{self.id}/'
+        if self.status == 0:
+
+            manager_send_mail('New order', self.customer, self.title, manager_link_order)
+            writer_send_mail('New order', self.title, writer_link_order)
+        elif self.status == 1:
+            customer_send_mail('Take task', self.title, self.customer.email, customer_link_order)
+            manager_send_mail('Take order', self.writer, self.title, manager_link_order)
+        elif self.status == 2:
+            customer_send_mail('Completed task', self.title, self.customer.email, customer_link_order)
+            manager_send_mail('Completed task', self.writer, self.title, manager_link_order)
+
+
 
     def __str__(self):
         return self.title

@@ -4,9 +4,9 @@ from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path, include
 
-from appaaa.views import HomePageViews
+from appaaa.views import HomePageViews, feedback, calculate_home
 from appdashboard.views import DashboardViews, admin_users, admin_selects, admin_settings, manager_selects, \
-    manager_settings
+    manager_settings, admin_detail_writer, admin_detail_customer, admin_detail_manager
 from apporders.ajax import chat_message_accept
 from apporders.views import ViewOrderViews, add_order_views, UpdateOrderViews, writer_order_detail, writer_order_review, \
     customer_order_in_progress, manager_order, remove_order
@@ -21,6 +21,8 @@ urlpatterns = [
         template_name="accounts/login.html",
         redirect_authenticated_user=True
     ), name='login'),
+
+    path('feedback/', feedback, name='feedback'),
 
     path('accounts/register/', register, name='register'),
     path('accounts/logout/', LogoutView.as_view(), name='logout'),
@@ -39,6 +41,9 @@ urlpatterns = [
     path('dashboard/w/order/review-<int:pk>/', writer_order_review, name='writer-order_review'),
 
     # ADMIN
+    path('dashboard/writer/<int:pk>/', admin_detail_writer, name='admin-writer'),
+    path('dashboard/customer/<int:pk>/', admin_detail_customer, name='admin-customer'),
+    path('dashboard/manager/<int:pk>/', admin_detail_manager, name='admin-manager'),
     path('dashboard/users/', admin_users, name='admin-users'),
     path('dashboard/selects/', admin_selects, name='admin-selects'),
     path('dashboard/settings/', admin_settings, name='admin-settings'),
@@ -52,6 +57,7 @@ urlpatterns = [
     path('dashboard/', DashboardViews.as_view(), name='dashboard'),
 
     path('ajax/chat-message-accept/', chat_message_accept),
+    path('ajax/calculate/', calculate_home),
 
     path('blog/', include('appblog.urls', namespace='appblog')),
 

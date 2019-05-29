@@ -1,0 +1,108 @@
+<div class="card wow fadeInRight" data-wow-delay="0.3s">
+    <div class="card-body z-depth-2">
+        <div class="text-center">
+            <h3 class="dark-grey-text">
+                <strong>Calculate your order</strong>
+            </h3>
+            <hr>
+        </div>
+        <div class="form-row mb-4">
+            <div class="col">
+                <select class="mdb-select md-form md-outline colorful-select dropdown-primary" id="id_type_order">
+                    <option value="" disabled selected>Type of order</option>
+                    {% for type in type_order %}
+                        <option value="{{ type.id }}">{{ type }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col">
+                <select class="mdb-select md-form md-outline colorful-select dropdown-primary" id="id_pages_order">
+                    <option value="" disabled selected>Pages</option>
+                    <option value="1">1 Page / 275 Words</option>
+                    <option value="2">2 Pages / 550 Words</option>
+                    <option value="3">3 Pages / 825 Words</option>
+                    <option value="4">4 Pages / 1100 Words</option>
+                    <option value="5">5 Pages / 1375 Words</option>
+                    <option value="6">6 Pages / 1650 Words</option>
+                    <option value="7">7 Pages / 1925 Words</option>
+                    <option value="8">8 Pages / 2200 Words</option>
+                    <option value="9">9 Pages / 2475 Words</option>
+                    <option value="10">10 Pages / 2750 Words</option>
+                    <option value="11">11 Pages / 3025 Words</option>
+                    <option value="12">12 Pages / 3300 Words</option>
+                    <option value="13">13 Pages / 3575 Words</option>
+                    <option value="14">14 Pages / 3850 Words</option>
+                    <option value="15">15 Pages / 4125 Words</option>
+                    <option value="16">16 Pages / 4400 Words</option>
+                    <option value="17">17 Pages / 4675 Words</option>
+                    <option value="18">18 Pages / 4950 Words</option>
+                    <option value="19">19 Pages / 5225 Words</option>
+                    <option value="20">20 Pages / 5500 Words</option>
+                    <option value="21">21 Pages / 5775 Words</option>
+                    <option value="22">22 Pages / 6050 Words</option>
+                    <option value="23">23 Pages / 6325 Words</option>
+                    <option value="24">24 Pages / 6600 Words</option>
+                    <option value="25">25 Pages / 6875 Words</option>
+                    <option value="26">26 Pages / 7150 Words</option>
+                    <option value="27">27 Pages / 7425 Words</option>
+                    <option value="28">28 Pages / 7700 Words</option>
+                    <option value="29">29 Pages / 7975 Words</option>
+                    <option value="30">30 Pages / 8250 Words</option>
+                    <option value="31">31 Pages / 8525 Words</option>
+                    <option value="32">32 Pages / 8800 Words</option>
+                    <option value="33">33 Pages / 9075 Words</option>
+                    <option value="34">34 Pages / 9350 Words</option>
+                    <option value="35">35 Pages / 9625 Words</option>
+                    <option value="36">36 Pages / 9900 Words</option>
+                    <option value="37">37 Pages / 10175 Words</option>
+                    <option value="38">38 Pages / 10450 Words</option>
+                    <option value="39">39 Pages / 10725 Words</option>
+                    <option value="40">40 Pages / 11000 Words</option>
+                    <option value="41">41 Pages / 11275 Words</option>
+                    <option value="42">42 Pages / 11550 Words</option>
+                    <option value="43">43 Pages / 11825 Words</option>
+                    <option value="44">44 Pages / 12100 Words</option>
+                    <option value="45">45 Pages / 12375 Words</option>
+                    <option value="46">46 Pages / 12650 Words</option>
+                    <option value="47">47 Pages / 12925 Words</option>
+                    <option value="48">48 Pages / 13200 Words</option>
+                    <option value="49">49 Pages / 13475 Words</option>
+                    <option value="50">50 Pages / 13750 Words</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col">
+                <div class="md-form">
+                    <input placeholder="Selected date" type="text" id="ddate-picker"
+                           class="form-control datepicker">
+                    <label for="ddate-picker">Date</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="md-form">
+                    <input placeholder="Selected time" type="text" id="ttime-picker" class="form-control timepicker">
+                    <label for="ttime-picker">Time</label>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <button class="btn bg-block" id="calculate_count">Count</button>
+                <div>
+                    <strong>Per page $</strong><strong id="per_page">4</strong>
+                </div>
+                <div>
+                    <strong>Total cost</strong> <strong id="total_cost">$50</strong>
+                </div>
+
+            </div>
+            <hr>
+            {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}" class="btn bg-btn">Request to order</a>
+            {% else %}
+                <a href="#" data-toggle="modal" data-target="#modalLRForm" class="btn bg-btn">Login</a>
+            {% endif %}
+        </div>
+    </div>
+</div>

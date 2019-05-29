@@ -189,10 +189,11 @@ def admin_settings(request):
         return redirect('/accounts/login/')
     user = User.objects.get(email=request.user)
     change_password = PasswordChangeForm(user=user)
-    profile_form = UserForm(instance=request.user)
+    if request.method == 'GET':
+        profile_form = UserForm(instance=user)
     if request.method == 'POST':
         if '_change_profile' in request.POST:
-            profile_form = UserForm(request.user, request.POST)
+            profile_form = UserForm(request.POST, instance=user)
             if profile_form.is_valid():
                 profile_form.save()
                 messages.success(request, 'Ваш профиль успешно изменён (перевести)')
@@ -212,6 +213,55 @@ def admin_settings(request):
                 return redirect('/dashboard/settings/')
 
     return render(request, 'dashboard/admin/settings/index.html', locals())
+
+
+def admin_detail_writer(request, pk):
+    if request.user.is_superuser:
+        writer = User.objects.get(id=pk)
+        orders = writer.order_writer.all()
+        len_accepted_order = len(orders)
+        in_progress = orders.filter(status=1)
+        len_in_progress = len(in_progress)
+        completed = orders.filter(status=2)
+        len_completed = len(completed)
+    else:
+        messages.warning(request, 'Доступ запрещён (перевести)')
+        redirect('/dashboard/')
+    return render(request, 'dashboard/admin/detail/writer.html', locals())
+
+
+def admin_detail_customer(request, pk):
+    if request.user.is_superuser:
+        customer = User.objects.get(id=pk)
+        orders = customer.order_customer.all()
+        len_orders = len(orders)
+        in_progress = orders.filter(status=1)
+        len_in_progress = len(in_progress)
+        completed = orders.filter(status=2)
+        len_completed = len(completed)
+    else:
+        messages.warning(request, 'Доступ запрещён (перевести)')
+        redirect('/dashboard/')
+    return render(request, 'dashboard/admin/detail/customer.html', locals())
+
+
+def admin_detail_manager(request, pk):
+    if request.user.is_superuser:
+        manager = User.objects.get(id=pk)
+        # orders = customer.order_customer.all()
+        # len_orders = len(orders)
+        # in_progress = orders.filter(status=1)
+        # len_in_progress = len(in_progress)
+        # completed = orders.filter(status=2)
+        # len_completed = len(completed)
+    else:
+        messages.warning(request, 'Доступ запрещён (перевести)')
+        redirect('/dashboard/')
+    return render(request, 'dashboard/admin/detail/manager.html', locals())
+
+
+def admin_detail_order(request, pk):
+    pass
 
 
 def manager_selects(request):

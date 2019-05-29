@@ -35,6 +35,11 @@
             background: -ms-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);
             background: linear-gradient(to right, #FDA10E 0%, #FF6C0D 100%);
         }
+
+        .md-outline.select-wrapper + label {
+            top: .5em !important;
+            z-index: 2 !important;
+        }
     </style>
 {% endblock %}
 
@@ -51,7 +56,7 @@
                     <div class="col-md-6 mb-5 mt-md-0 mt-5 white-text text-center text-md-left wow fadeInLeft"
                          data-wow-delay="0.3s">
                         <h1 class="display-4 font-weight-bold">
-                            Need write an essay?
+                            Need to write an essay?
                         </h1>
                         <h1 class="display-4 font-weight">
                             Make it happen!
@@ -64,41 +69,7 @@
                     </div>
 
                     <div class="col-md-6 col-xl-5 mb-4">
-                        <div class="card wow fadeInRight" data-wow-delay="0.3s">
-                            <div class="card-body z-depth-2">
-                                <div class="text-center">
-                                    <h3 class="dark-grey-text">
-                                        <strong>Write to us:</strong>
-                                    </h3>
-                                    <hr>
-                                </div>
-                                <div class="md-form">
-                                    <i class="fa fa-user prefix grey-text"></i>
-                                    <input type="text" id="form3" class="form-control">
-                                    <label for="form3">Your name</label>
-                                </div>
-                                <div class="md-form">
-                                    <i class="fa fa-envelope prefix grey-text"></i>
-                                    <input type="text" id="form2" class="form-control">
-                                    <label for="form2">Your email</label>
-                                </div>
-                                <div class="md-form">
-                                    <i class="fa fa-pencil-alt prefix grey-text"></i>
-                                    <textarea type="text" id="form8" class="md-textarea form-control"
-                                              rows="3"></textarea>
-                                    <label for="form8">Your message</label>
-                                </div>
-                                <div class="text-center mt-3">
-                                    <button class="btn bg-btn">Send</button>
-                                    <hr>
-                                    <fieldset class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="checkbox1">
-                                        <label class="form-check-label" for="checkbox1" class="dark-grey-text">Subscribe
-                                            me to the newsletter</label>
-                                    </fieldset>
-                                </div>
-                            </div>
-                        </div>
+                        {% include 'home/calculate.html' %}
                     </div>
                 </div>
             </div>
@@ -135,6 +106,42 @@
         $(document).ready(function () {
             objectFitImages();
             jarallax(document.querySelectorAll('.jarallax'));
+
+            $('.mdb-select').select2({
+                width: '100%'
+            });
+
+            let currentDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+
+            $('.datepicker').datetimepicker({
+                format: 'd-m-Y',
+                value: currentDate,
+                timepicker: false
+            });
+            $('.timepicker').datetimepicker({
+                format: "H:i",
+                value: currentDate,
+                datepicker: false
+            });
+
+            $('#calculate_count').click(function () {
+
+                let typeOrder = $('#id_type_order').val(); // 4
+                let pagesOrder = $('#id_pages_order').val(); // 4
+                let date = $('#ddate-picker').val(); // 30-05-2019
+                let time = $('#ttime-picker').val(); // 17:30
+                let dataObj = {
+                    typeOrder: typeOrder,
+                    pagesOrder: pagesOrder,
+                    date: date,
+                    time: time
+                };
+                ajaxQyery('calculate', dataObj, fnCalculate);
+                function fnCalculate(data) {
+                    $('#per_page').text(data.per_page);
+                    $('#total_cost').text(data.total_cost);
+                }
+            })
         })
     </script>
 {% endblock %}

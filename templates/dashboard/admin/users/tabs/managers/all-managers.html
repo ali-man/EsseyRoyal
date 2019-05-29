@@ -15,12 +15,11 @@
     <tbody>
     {% for manager in managers %}
         <tr>
-            <td>{{ manager.get_full_name }}</td>
-            <td>{{ manager.email }}</td>
+            <td><a href="{% url 'admin-manager' manager.id %}">{{ manager.get_full_name }}</a></td>
+            <td><a href="{% url 'admin-manager' manager.id %}">{{ manager.email }}</a></td>
             <td>{{ manager.balance }}</td>
         </tr>
     {% endfor %}
-
     </tbody>
     <tfoot>
     <tr>

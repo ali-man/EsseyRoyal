@@ -1,10 +1,14 @@
-<div class="card mb-2">
-    <div class="card-body">
-        <h4 class="font-weight-bold amber-lighter-hover mb-3">Completed works</h4>
-        <ul class="additionally-order-files">
-            {% for additional in order.additionallyorder.filesadditionallyorder_set.all %}
-                <li><a href="{{ additional.file.url }}">{{ additional.filename }}</a></li>
-            {% endfor %}
-        </ul>
+{% if order.additionallyorder.filesadditionallyorder_set.all %}
+
+    <div class="card mb-2">
+        <div class="card-body">
+            <h4 class="font-weight-bold amber-lighter-hover mb-3">Completed works</h4>
+            <ul class="additionally-order-files">
+                {% for additional in order.additionallyorder.filesadditionallyorder_set.all %}
+                    <li><a href="{{ additional.file.url }}">{{ additional.filename }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
-</div>
+
+{% endif %}

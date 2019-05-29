@@ -5,6 +5,7 @@
         <th scope="col">Days</th>
         <th scope="col">Hours</th>
         <th scope="col">Prices</th>
+        <th scope="col"></th>
     </tr>
     </thead>
     <tbody>
@@ -14,14 +15,13 @@
             <td>{{ deadline.days }}</td>
             <td>{{ deadline.hours }}</td>
             <td>{{ deadline.price }}</td>
+            <td><a href="{% url 'selects-price_deadline-remove' deadline.id %}"><i class="fas fa-trash"></i></a></td>
         </tr>
     {% endfor %}
     <tr>
         <form action="{% url 'admin-selects' %}" method="post">
             {% csrf_token %}
-            <td style="vertical-align: middle;">
-                <button type="submit" name="_add_deadline" class="btn bg-btn">Add</button>
-            </td>
+            <td></td>
             <td style="vertical-align: middle;">
                 {{ deadline_form.days }}
             </td>
@@ -30,6 +30,18 @@
             </td>
             <td style="vertical-align: middle;">
                 {{ deadline_form.price }}
+            </td>
+            <td style="vertical-align: middle;">
+                <button type="submit" name="_add_deadline"
+                        style="
+                            padding: 0;
+                            margin: 0;
+                            border: none;
+                            background-color: white;
+                            cursor: pointer;
+                         ">
+                    <i class="fas fa-plus-square"></i>
+                </button>
             </td>
         </form>
     </tr>

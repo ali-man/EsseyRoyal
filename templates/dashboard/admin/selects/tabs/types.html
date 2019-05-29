@@ -5,6 +5,7 @@
         <th scope="col">Title</th>
         <th scope="col">Price for customers</th>
         <th scope="col">Price for writers</th>
+        <th scope="col"></th>
     </tr>
     </thead>
     <tbody>
@@ -14,13 +15,12 @@
             <td>{{ type.title }}</td>
             <td>{{ type.price_client }}</td>
             <td>{{ type.price_writer }}</td>
+            <td><a href="{% url 'selects-type_order-remove' type.id %}"><i class="fas fa-trash"></i></a></td>
         </tr>
     {% endfor %}
     <form action="{% url 'admin-selects' %}" method="post">{% csrf_token %}
         <tr>
-            <td style="vertical-align: middle;">
-                <button type="submit" name="_add_type" class="btn bg-btn">Add</button>
-            </td>
+            <td></td>
             <td style="vertical-align: middle;">
                 {{ type_form.title }}
             </td>
@@ -30,7 +30,19 @@
             <td style="vertical-align: middle;">
                 {{ type_form.price_writer }}
             </td>
+            <td style="vertical-align: middle;">
+                <button type="submit" name="_add_type"
+                        style="
+                            padding: 0;
+                            margin: 0;
+                            border: none;
+                            background-color: white;
+                            cursor: pointer;
+                         ">
+                    <i class="fas fa-plus-square"></i>
+                </button>
+            </td>
         </tr>
-        </form>
+    </form>
     </tbody>
 </table>

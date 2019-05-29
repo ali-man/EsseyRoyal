@@ -6,9 +6,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView, UpdateView
 from django.views.generic.base import View
 
+from appdashboard.views import access_to_manager_and_admin
 from appmail.views import manager_send_mail, customer_send_mail
 from apporders.forms import OrderAddForm, OrderForm
-from apporders.models import Order, FilesOrder, FilesAdditionallyOrder, AdditionallyOrder, Chat
+from apporders.models import Order, FilesOrder, FilesAdditionallyOrder, AdditionallyOrder, Chat, TypeOrder, FormatOrder, \
+    PriceDeadline
 from apporders.validators import validate_file_views
 from appusers.models import User
 
@@ -249,6 +251,8 @@ def manager_order(request, pk):
         for g in user.groups.all():
             if g.name == 'Manager':
                 this_manager = True
+        if user.is_superuser:
+            this_manager = True
         if not this_manager:
             messages.error(request, 'Доступ закрыт (перевести)')
             return redirect('/dashboard/')
@@ -256,3 +260,36 @@ def manager_order(request, pk):
         order = get_object_or_404(Order, id=pk)
 
         return render(request, 'dashboard/manager/orders/order/detail.html', locals())
+
+
+def type_order_remove(request, pk):
+    if access_to_manager_and_admin(request.user):
+        type_order = TypeOrder.objects.get(id=pk)
+        messages.success(request, F'{type_order.title} успешно удалён (перевести)')
+        type_order.delete()
+    else:
+        messages.error(request, 'Ошибка удаления (перевести)')
+
+    return redirect('/dashboard/selects/')
+
+
+def format_order_remove(request, pk):
+    if access_to_manager_and_admin(request.user):
+        format_order = FormatOrder.objects.get(id=pk)
+        messages.success(request, F'{format_order.title} успешно удалён (перевести)')
+        format_order.delete()
+    else:
+        messages.error(request, 'Ошибка удаления (перевести)')
+
+    return redirect('/dashboard/selects/')
+
+
+def price_deadline_order_remove(request, pk):
+    if access_to_manager_and_admin(request.user):
+        price_deadline = PriceDeadline.objects.get(id=pk)
+        messages.success(request, F'{price_deadline.price} успешно удалён (перевести)')
+        price_deadline.delete()
+    else:
+        messages.error(request, 'Ошибка удаления (перевести)')
+
+    return redirect('/dashboard/selects/')

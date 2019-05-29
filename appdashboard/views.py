@@ -265,7 +265,7 @@ def admin_detail_order(request, pk):
 
 
 def manager_selects(request):
-    if request.user.is_anonymous:
+    if not access_to_manager_and_admin(request.user):
         return redirect('/accounts/login/')
     types = TypeOrder.objects.all()
     formats = FormatOrder.objects.all()
@@ -278,14 +278,17 @@ def manager_selects(request):
     if '_add_type' in request.POST:
         form = TypeOrderForm(request.POST)
         if form.is_valid():
+            messages.success(request, F'{form.cleaned_data["title"]} успешно добавлен (перевести)')
             form.save()
     if '_add_format' in request.POST:
         form = FormatOrderForm(request.POST)
         if form.is_valid():
+            messages.success(request, F'{form.cleaned_data["title"]} успешно добавлен (перевести)')
             form.save()
     if '_add_deadline' in request.POST:
         form = PriceDeadlineForm(request.POST)
         if form.is_valid():
+            messages.success(request, F'{form.cleaned_data["title"]} успешно добавлен (перевести)')
             form.save()
 
     return render(request, 'dashboard/manager/selects/index.html', locals())
@@ -319,3 +322,14 @@ def manager_settings(request):
                 return redirect('/dashboard/settings/')
 
     return render(request, 'dashboard/manager/settings/index.html', locals())
+
+
+def access_to_manager_and_admin(_user):
+    user = User.objects.get(email=_user)
+    is_access = False
+    if user.is_superuser:
+        is_access = True
+    for g in user.groups.all():
+        if g.name == 'Manager':
+            is_access = True
+    return is_access

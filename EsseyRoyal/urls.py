@@ -9,7 +9,8 @@ from appdashboard.views import DashboardViews, admin_users, admin_selects, admin
     manager_settings, admin_detail_writer, admin_detail_customer, admin_detail_manager
 from apporders.ajax import chat_message_accept
 from apporders.views import ViewOrderViews, add_order_views, UpdateOrderViews, writer_order_detail, writer_order_review, \
-    customer_order_in_progress, manager_order, remove_order
+    customer_order_in_progress, manager_order, remove_order, type_order_remove, format_order_remove, \
+    price_deadline_order_remove
 from appusers.views import change_profile, register
 
 admin.site.site_header = 'Панель управления'
@@ -53,6 +54,10 @@ urlpatterns = [
     path('dashboard/m/selects/', manager_selects, name='manager-selects'),
     path('dashboard/m/settings/', manager_settings, name='manager-settings'),
     path('dashboard/m/order/<int:pk>/', manager_order, name='manager-order'),
+
+    path('dashboard/selects/type-order/<int:pk>/', type_order_remove, name='selects-type_order-remove'),
+    path('dashboard/selects/format-order/<int:pk>/', format_order_remove, name='selects-format_order-remove'),
+    path('dashboard/selects/price-deadline-order/<int:pk>/', price_deadline_order_remove, name='selects-price_deadline-remove'),
 
     path('dashboard/', DashboardViews.as_view(), name='dashboard'),
 

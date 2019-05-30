@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-md-2">
+        <ul class="nav md-pills pills-primary flex-column" role="tablist">
+            <li class="nav-item">
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#panel22" role="tab">
+                    All
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#panel23" role="tab">
+                    New
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-10">
+        <div class="tab-content vertical">
+            <div class="tab-pane fade in show active" id="panel22" role="tabpanel">
+                {% include 'dashboard/manager/users/tabs/writers/all-writers.html' %}
+            </div>
+            <div class="tab-pane fade" id="panel23" role="tabpanel">
+                {% include 'dashboard/manager/users/tabs/writers/create-writer.html' %}
+            </div>
+        </div>
+    </div>
+</div>

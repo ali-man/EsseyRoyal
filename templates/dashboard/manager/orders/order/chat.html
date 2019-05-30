@@ -64,22 +64,6 @@
                             {% endif %}
                         {% endfor %}
                     </ul>
-
-                    <form action="{% url 'writer-order_detail' order.id %}" method="post">
-                        {% csrf_token %}
-                        <div class="white">
-                            <div class="form-group basic-textarea">
-                            <textarea name="message" class="form-control pl-2 my-0" id="exampleFormControlTextarea2"
-                                      rows="3"
-                                      placeholder="Type your message here..."></textarea>
-                            </div>
-                        </div>
-                        <button type="submit"
-                                class="btn btn-outline-pink btn-rounded btn-sm waves-effect waves-dark float-right">
-                            Send
-                        </button>
-                    </form>
-
                 </div>
 
             </div>

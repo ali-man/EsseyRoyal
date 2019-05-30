@@ -3,6 +3,12 @@ from django import forms
 from appusers.models import User
 
 
+class UserCustomerForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'academic_institution', 'degree', 'phone', 'avatar']
+
+
 class UserForm(forms.ModelForm):
     class Meta:
         model = User

@@ -14,12 +14,6 @@
         <!-- Name -->
         <div class="text-center">
             <h3 class="mb-3 font-weight-bold"><strong>{{ user.get_full_name }}</strong></h3>
-            {% if user.is_superuser %}
-            {% else %}
-                <h6 class="font-weight-bold blue-text mb-4">
-                    Balance: ${{ user.balance }}
-                </h6>
-            {% endif %}
         </div>
 
         <ul class="striped list-unstyled">
@@ -32,6 +26,9 @@
         <ul class="menu-admin">
             <li>
                 <a href="{% url 'dashboard' %}">Orders</a>
+            </li>
+            <li>
+                <a href="{% url 'manager-users' %}">Users</a>
             </li>
             <li>
                 <a href="{% url 'manager-selects' %}">Select management</a>

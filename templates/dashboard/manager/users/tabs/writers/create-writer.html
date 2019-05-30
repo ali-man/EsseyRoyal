@@ -1,0 +1,7 @@
+<form action="{% url 'admin-users' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table class="table">
+        {{ new_writer }}
+    </table>
+    <input type="submit" class="btn bg-btn" name="_create_writer" value="Create">
+</form>

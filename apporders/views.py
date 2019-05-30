@@ -246,19 +246,11 @@ def writer_order_review(request, pk):
 
 def manager_order(request, pk):
     if request.method == 'GET':
-        user = User.objects.get(email=request.user)
-        this_manager = None
-        for g in user.groups.all():
-            if g.name == 'Manager':
-                this_manager = True
-        if user.is_superuser:
-            this_manager = True
-        if not this_manager:
+        if not access_to_manager_and_admin(request.user):
             messages.error(request, 'Доступ закрыт (перевести)')
             return redirect('/dashboard/')
 
         order = get_object_or_404(Order, id=pk)
-
         return render(request, 'dashboard/manager/orders/order/detail.html', locals())
 
 

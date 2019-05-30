@@ -158,7 +158,7 @@ def admin_users(request):
 
 
 def admin_selects(request):
-    if request.user.is_anonymous:
+    if not access_to_manager_and_admin(request.user):
         return redirect('/accounts/login/')
     types = TypeOrder.objects.all()
     formats = FormatOrder.objects.all()

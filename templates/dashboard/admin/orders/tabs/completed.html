@@ -14,14 +14,14 @@
             <tbody class="td-center">
             {% for order in orders_completed %}
                 <tr>
-                    <td>{{ order.customer.first_name }}</td>
+                    <td><a href="{% url 'admin-customer' order.customer.id %}">{{ order.customer.first_name }}</a></td>
                     <td><a href="{% url 'manager-order' order.id %}">{{ order.title }}</a></td>
                     <td>{{ order.type_order }}</td>
                     <td class="text-center">
-                        {{ order.deadline }}
+                        {{ order.deadline|date:'d-m H:i' }}
                     </td>
-                    <td class="text-center">{{ order.total_cost }}</td>
-                    <td>{{ order.writer.first_name }}</td>
+                    <td class="text-center">${{ order.total_cost|floatformat }}</td>
+                    <td><a href="{% url 'admin-writer' order.writer.id %}">{{ order.writer.first_name }}</a></td>
                 </tr>
             {% endfor %}
 

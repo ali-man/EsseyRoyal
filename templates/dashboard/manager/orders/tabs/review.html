@@ -16,7 +16,7 @@
             {% for order in orders_in_review %}
                 <tr>
                     <td>{{ order.customer.first_name }}</td>
-                    <td>{{ order.title }}</td>
+                    <td><a href="{% url 'manager-order' order.id %}">{{ order.title }}</a></td>
                     <td>{{ order.type_order }}</td>
                     <td>{{ order.format_order }}</td>
                     <td class="text-center">

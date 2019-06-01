@@ -261,8 +261,12 @@ def type_order_remove(request, pk):
         type_order.delete()
     else:
         messages.error(request, 'Ошибка удаления (перевести)')
+        return redirect('/dashboard/')
 
-    return redirect('/dashboard/selects/')
+    if request.user.is_superuser:
+        return redirect('/dashboard/selects/')
+    else:
+        return redirect('/dashboard/m/selects/')
 
 
 def format_order_remove(request, pk):
@@ -272,8 +276,12 @@ def format_order_remove(request, pk):
         format_order.delete()
     else:
         messages.error(request, 'Ошибка удаления (перевести)')
+        return redirect('/dashboard/')
 
-    return redirect('/dashboard/selects/')
+    if request.user.is_superuser:
+        return redirect('/dashboard/selects/')
+    else:
+        return redirect('/dashboard/m/selects/')
 
 
 def price_deadline_order_remove(request, pk):
@@ -283,5 +291,9 @@ def price_deadline_order_remove(request, pk):
         price_deadline.delete()
     else:
         messages.error(request, 'Ошибка удаления (перевести)')
+        return redirect('/dashboard/')
 
-    return redirect('/dashboard/selects/')
+    if request.user.is_superuser:
+        return redirect('/dashboard/selects/')
+    else:
+        return redirect('/dashboard/m/selects/')

@@ -3,6 +3,7 @@
     <tr>
         <th scope="col">#</th>
         <th scope="col">Title</th>
+        <th scope="col"></th>
     </tr>
     </thead>
     <tbody>
@@ -10,6 +11,7 @@
         <tr>
             <th scope="row">{{ format.id }}</th>
             <td>{{ format.title }}</td>
+            <td><a href="{% url 'selects-format_order-remove' format.id %}"><i class="fas fa-trash"></i></a></td>
         </tr>
     {% endfor %}
     <tr>

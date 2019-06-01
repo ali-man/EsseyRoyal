@@ -5,6 +5,7 @@
         <th scope="col">Days</th>
         <th scope="col">Hours</th>
         <th scope="col">Prices</th>
+        <th scope="col"></th>
     </tr>
     </thead>
     <tbody>
@@ -14,6 +15,7 @@
             <td>{{ deadline.days }}</td>
             <td>{{ deadline.hours }}</td>
             <td>${{ deadline.price|floatformat }}</td>
+            <td><a href="{% url 'selects-price_deadline-remove' deadline.id %}"><i class="fas fa-trash"></i></a></td>
         </tr>
     {% endfor %}
     <tr>

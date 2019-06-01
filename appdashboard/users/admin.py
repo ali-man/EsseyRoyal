@@ -98,7 +98,10 @@ def admin_selects(request):
         if form.is_valid():
             form.save()
 
-    return render(request, 'dashboard/admin/selects/index.html', locals())
+    if request.user.is_superuser:
+        return render(request, 'dashboard/admin/selects/index.html', locals())
+    else:
+        return render(request, 'dashboard/manager/selects/index.html', locals())
 
 
 def admin_settings(request):

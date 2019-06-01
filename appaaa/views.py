@@ -14,7 +14,6 @@ class HomePageViews(View):
     @staticmethod
     def get(request):
         type_order = TypeOrder.objects.all()
-        articles = Article.objects.all()
 
         return render(request, 'home.html', locals())
 

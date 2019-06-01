@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 
 from appblog.forms import TagForm, ArticleForm
@@ -10,14 +10,19 @@ class ListArticles(ListView):
     template_name = 'blog/main.html'
 
 
+def article(request, article_id):
+    item = get_object_or_404(Article, id=article_id)
+    return render(request, 'blog/detail.html', {'article': item})
+
+
 # class BlogViews(ListView):
 #     model = Article
 #     template_name = 'blog/list-articles.html'
 #
 #
-# class ArticleViews(DetailView):
-#     model = Article
-#     template_name = 'blog/detail-article.html'
+class ArticleViews(DetailView):
+    model = Article
+    template_name = 'blog/detail.html'
 #
 #
 # def add_tag(request):

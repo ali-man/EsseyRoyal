@@ -2,9 +2,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
 
+from appaaa.sitemaps import ArticleSitemap, StaticViewSitemap
 from appaaa.views import HomePageViews, feedback, calculate_home
+from appblog.views import ListArticles, article
 from appdashboard.users.admin import *
 from appdashboard.users.manager import *
 from appdashboard.views import DashboardViews
@@ -14,9 +17,17 @@ from apporders.views import ViewOrderViews, add_order_views, UpdateOrderViews, w
     price_deadline_order_remove
 from appusers.views import change_profile, register
 
+
+sitemaps = {
+    'articles': ArticleSitemap,
+    'static': StaticViewSitemap
+}
+
 admin.site.site_header = 'Панель управления'
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
+         name='django.contrib.sitemaps.views.sitemap'),
     path('', HomePageViews.as_view(), name='home'),
 
     path('accounts/login/', LoginView.as_view(
@@ -66,6 +77,9 @@ urlpatterns = [
 
     path('ajax/chat-message-accept/', chat_message_accept),
     path('ajax/calculate/', calculate_home),
+
+    # path('blog/', ListArticles.as_view(), name='blog-main'),
+    # path('blog/<int:pk>/', article, name='blog-article'),
 
     path('blog/', include('appblog.urls', namespace='appblog')),
 

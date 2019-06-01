@@ -1,5 +1,6 @@
 from django import template
 
+from appblog.models import Article
 from apporders.models import Order
 
 register = template.Library()

@@ -55,12 +55,7 @@
         }
 
         .pills-primary .nav-link.active {
-            {#background: -moz-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);#}
-            {#background: -webkit-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);#}
-            {#background: -o-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);#}
-            {#background: -ms-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);#}
-            {#background: linear-gradient(to right, #FDA10E 0%, #FF6C0D 100%);#}
-            background: -moz-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+        {#background: -moz-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);#}{#background: -webkit-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);#}{#background: -o-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);#}{#background: -ms-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);#}{#background: linear-gradient(to right, #FDA10E 0%, #FF6C0D 100%);#} background: -moz-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
             background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, rgba(8, 27, 73, 0.97)), color-stop(100%, rgba(30, 101, 178, 0.97)));
             background: -webkit-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
             background: -o-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
@@ -93,8 +88,39 @@
             color: #555;
             width: 100%;
         }
+
         .own-orange-text {
             color: #fe740d;
+        }
+
+        ul#tree {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        ul#tree li {
+            padding-bottom: 1rem;
+        }
+
+        ul#tree ul {
+        }
+
+        ul#tree ul li {
+        }
+
+        #toTop {
+            width: 100px;
+            border: 1px solid #ccc;
+            text-align: center;
+            padding: 5px;
+            position: fixed;
+            bottom: 10px; /* отступ кнопки от нижнего края страницы*/
+            right: 10px;
+            cursor: pointer;
+            display: none;
+            color: #fff;
+            font-size: 11px;
         }
     </style>
     {% block css %}
@@ -125,31 +151,37 @@
     {% block content %}
 
     {% endblock %}
+<div id="toTop" class="bg-btn">^ Back to Top</div>
 </main>
-
 
 {% include 'footer.html' %}
 
 {% include 'scripts.html' %}
 <script>
-    let $message = $('.messages');
-    if ($message[0] !== undefined) {
-        setTimeout(function () {
-            $message.stop().animate({
-                opacity: 0,
-            }, 800, function () {
-                $(this).remove();
-            })
-        }, 8000);
+    $(document).ready(function () {
+        // Tree view
+        $("#tree").explr();
 
-        $message.children('li').click(function () {
-            $(this).stop().animate({
-                opacity: 0,
-            }, 800, function () {
-                $(this).remove();
+        // Notification messages
+        let $message = $('.messages');
+        if ($message[0] !== undefined) {
+            setTimeout(function () {
+                $message.stop().animate({
+                    opacity: 0,
+                }, 800, function () {
+                    $(this).remove();
+                })
+            }, 8000);
+
+            $message.children('li').click(function () {
+                $(this).stop().animate({
+                    opacity: 0,
+                }, 800, function () {
+                    $(this).remove();
+                })
             })
-        })
-    }
+        }
+    })
 </script>
 {% block scripts %}
 {% endblock %}

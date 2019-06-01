@@ -1,8 +1,8 @@
-<div class="card wow fadeInRight bg-btn" data-wow-delay="0.3s">
+<div class="card wow fadeInRight" data-wow-delay="0.3s">
     <div class="card-body z-depth-2">
         <div class="text-center">
             <h3 class="dark-grey-text">
-                <strong class="white-text">Calculate your order</strong>
+                <strong style="color: #46585d;">Calculate your order</strong>
             </h3>
             <hr>
         </div>
@@ -17,7 +17,6 @@
             </div>
             <div class="col">
                 <select class="mdb-select md-form md-outline colorful-select dropdown-primary" id="id_pages_order">
-                    <option value="" disabled selected>Pages</option>
                     <option value="1">1 Page / 275 Words</option>
                     <option value="2">2 Pages / 550 Words</option>
                     <option value="3">3 Pages / 825 Words</option>
@@ -75,25 +74,25 @@
             <div class="col">
                 <div class="md-form">
                     <input placeholder="Selected date" type="text" id="ddate-picker"
-                           class="form-control datepicker">
-                    <label for="ddate-picker">Date</label>
+                           class="form-control datepicker white" style="padding: 5px; width: 95%">
+                    <label for="ddate-picker" style="color: #2360a5;">Date</label>
                 </div>
             </div>
             <div class="col">
                 <div class="md-form">
-                    <input placeholder="Selected time" type="text" id="ttime-picker" class="form-control timepicker">
-                    <label for="ttime-picker">Time</label>
+                    <input placeholder="Selected time" type="text" id="ttime-picker" class="form-control timepicker white" style="padding: 5px; width: 95%">
+                    <label for="ttime-picker" style="color: #2360a5;">Time</label>
                 </div>
             </div>
         </div>
         <div class="text-center mt-3">
-            <div class="d-flex justify-content-between align-items-center">
-                <button class="btn bg-block" id="calculate_count">Count</button>
-                <div class="white-text">
-                    <strong>Per page $</strong><strong id="per_page">4</strong>
+            <div class="d-flex justify-content-around align-items-center">
+{#                <button class="btn bg-block" id="calculate_count">Count</button>#}
+                <div style="color: #46585d;">
+                    <strong>Per page</strong><br> <strong id="per_page"></strong>
                 </div>
-                <div class="white-text">
-                    <strong>Total cost</strong> <strong id="total_cost">$50</strong>
+                <div style="color: #46585d;">
+                    <strong>Total cost</strong><br> <strong id="total_cost"></strong>
                 </div>
 
             </div>

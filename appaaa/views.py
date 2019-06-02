@@ -10,6 +10,7 @@ from django.contrib.gis.geoip2 import GeoIP2
 
 from appaaa.models import Feedback
 from appblog.models import Article
+from appmail.views import manager_send_mail, writer_send_mail
 from apporders.models import TypeOrder, PriceDeadline, Order, FeedbackOrder
 
 
@@ -116,5 +117,9 @@ def order_feedback(request):
         feedback_order.text = message
     feedback_order.save()
     messages.success(request, 'Спасибо за ваш отзыв (перевести)')
+
+    manager_send_mail('Rating order', order.customer, order.title, '')
+    writer_send_mail('Rating order', order.title, '')
+
     data = {'ok': 'good'}
     return JsonResponse(data)

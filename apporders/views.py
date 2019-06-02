@@ -7,7 +7,7 @@ from django.views.generic import DetailView, UpdateView
 from django.views.generic.base import View
 
 from appdashboard.views import access_to_manager_and_admin
-from appmail.views import manager_send_mail, customer_send_mail
+from appmail.views import manager_send_mail, customer_send_mail, writer_send_mail
 from apporders.forms import OrderAddForm, OrderForm
 from apporders.models import Order, FilesOrder, FilesAdditionallyOrder, AdditionallyOrder, Chat, TypeOrder, FormatOrder, \
     PriceDeadline
@@ -112,6 +112,8 @@ def completed_order(request, pk):
     order.status = 2
     order.save()
     messages.success(request, 'Completed order (Перевести)')
+    manager_send_mail('Completed order', order.customer, order.title, '')
+    writer_send_mail('Completed order', order.title, '')
     return redirect('/order/completed/feedback/{}/'.format(pk))
 
 

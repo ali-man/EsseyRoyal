@@ -128,6 +128,48 @@
                 {% include 'dashboard/customer/order/chat.html' %}
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="w-responsive text-center mx-auto">
+                            <button type="button" class="btn bg-btn" data-toggle="modal"
+                                    data-target="#basicExampleModal">
+                                Completed order
+                            </button>
+                            <div class="modal fade" id="basicExampleModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">{{ order.title.upper }}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            ...
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-success" data-dismiss="modal">Cancel
+                                            </button>
+                                            <form action="{% url 'completed' order.id %}" method="post">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger">Done</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
     </div>
 
 {% endblock %}

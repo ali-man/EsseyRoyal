@@ -28,11 +28,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'ckeditor',
     'ckeditor_uploader',
+    'django_user_agents',
 
     'appusers',
     'appdashboard',
     'apporders',
-    # 'appwork',
     'appblog',
     'appmail',
     'appaaa',
@@ -58,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware',
 ]
 
 ROOT_URLCONF = 'EsseyRoyal.urls'
@@ -119,6 +120,18 @@ SITE_ID = 1
 
 AUTH_USER_MODEL = 'appusers.User'
 
+# Cache backend is optional, but recommended to speed up user agent parsing
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+
+# Name of cache backend to cache user agents. If it not specified default
+# cache alias will be used. Set to `None` to disable caching.
+USER_AGENTS_CACHE = 'default'
+
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/'
@@ -155,6 +168,8 @@ CKEDITOR_CONFIGS = {
     }, }
 CKEDITOR_IMAGE_BACKEND = 'pillow'
 # -------------------- ckeditor -----------------------
+
+GEOIP_PATH = os.path.join(BASE_DIR, 'static/geoip2')
 
 MEDIA_ROOT = (os.path.join(BASE_DIR, 'media'))
 MEDIA_URL = "/media/"

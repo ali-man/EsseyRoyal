@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/writer-view-order.css' %}">
+    <link rel="stylesheet" href="{% static 'css/libs/chat.min.css' %}">
+    <style>
+        .amber-lighter-hover {
+            color: #ffa000;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .white-darker-hover {
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .white-darker-hover:hover {
+            -webkit-transition: .4s;
+            transition: .4s;
+            color: #d9d9d9;
+        }
+
+        table.table tr th, table.table tr td {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+    View Order
+{% endblock %}
+
+{% block content %}
+
+    <div class="container mt-5 pb-4">
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="w-responsive text-center mx-auto">
+                            <h4 class="text-center text-primary" style="color: #757575;">{{ order.title.upper }}
+                                <span class="badge badge-pill bg-btn">
+                                    {% if order.status == 0 %}
+                                        <i class="fas fa-search fa-xs" aria-hidden="true" title="ORDER IN REVIEW"></i>
+                                    {% elif order.status == 1 %}
+                                        <i class="fas fa-spinner fa-pulse fa-xs" aria-hidden="true"
+                                           title="ORDER IN PROGRESS"></i>
+                                    {% elif order.status == 2 %}
+                                        <i class="fas fa-check fa-xs" aria-hidden="true" title="COMPLETED"></i>
+                                    {% endif %}
+                                </span>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <span id="rateMe" data-order-id="{{ order.id }}">
+                            <i class="fas fa-star py-2 px-1 rate-popover" data-index="0" data-html="true"
+                               data-toggle="popover" data-placement="top" title="Very bad"></i>
+                            <i class="fas fa-star py-2 px-1 rate-popover" data-index="1" data-html="true"
+                               data-toggle="popover" data-placement="top" title="Poor"></i>
+                            <i class="fas fa-star py-2 px-1 rate-popover" data-index="2" data-html="true"
+                               data-toggle="popover" data-placement="top" title="OK"></i>
+                            <i class="fas fa-star py-2 px-1 rate-popover" data-index="3" data-html="true"
+                               data-toggle="popover" data-placement="top" title="Good"></i>
+                            <i class="fas fa-star py-2 px-1 rate-popover" data-index="4" data-html="true"
+                               data-toggle="popover" data-placement="top" title="Excellent"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/libs/addons/rating.js' %}"></script>
+{% endblock %}

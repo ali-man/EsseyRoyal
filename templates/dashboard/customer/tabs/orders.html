@@ -76,8 +76,13 @@
                                    data-original-title="Remove">
                                 <i class="fas fa-times"></i>
                             </a>
-                        {% else %}
+                        {% elif order.status == 1 %}
                             <a href="{% url 'customer-progress_order' order.id %}" class="blue-text"
+                               data-toggle="tooltip"
+                               data-placement="top" title=""
+                               data-original-title="See results"><i class="far fa-eye"></i></a>
+                        {% elif order.status == 2 %}
+                            <a href="{% url 'customer-completed_order' order.id %}" class="blue-text"
                                data-toggle="tooltip"
                                data-placement="top" title=""
                                data-original-title="See results"><i class="far fa-eye"></i></a>

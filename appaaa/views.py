@@ -1,13 +1,16 @@
 import datetime
 
+from django_user_agents.utils import get_user_agent
+
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.generic.base import View
+from django.contrib.gis.geoip2 import GeoIP2
 
 from appaaa.models import Feedback
 from appblog.models import Article
-from apporders.models import TypeOrder, PriceDeadline
+from apporders.models import TypeOrder, PriceDeadline, Order, FeedbackOrder
 
 
 class HomePageViews(View):
@@ -30,11 +33,45 @@ def feedback(request):
         email = r['email']
         subject = r['subject']
         message = r['message']
+
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[-1].strip()
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+
+        g = GeoIP2()
+        geo = g.city(ip)
+
+        ug = get_user_agent(request)
+
         feedback = Feedback()
         feedback.name = name
         feedback.email = email
         feedback.subject = subject
         feedback.message = message
+
+        feedback.ip = ip
+        feedback.country = geo['country_name']
+        feedback.city = geo['city']
+        feedback.time_zone = geo['time_zone']
+
+        if ug.is_mobile:
+            feedback.device = 'Mobile'
+        elif ug.is_tablet:
+            feedback.device = 'Tablet'
+        elif ug.is_touch_capable:
+            feedback.device = 'Touch capable'
+        elif ug.is_pc:
+            feedback.device = 'PC'
+        elif ug.is_bot:
+            feedback.device = 'Bot'
+        else:
+            feedback.device = 'Unknown'
+
+        feedback.browser = F'{ug.browser.family} {ug.browser.version_string}'
+        feedback.operation_system = F'{ug.os.family} {ug.os.version_string}'
+
         feedback.save()
         messages.success(request, 'Ваше сообщение отправлено (перевести)')
         return redirect('/')
@@ -63,4 +100,21 @@ def calculate_home(request):
         'per_page': per_page,
         'total_cost': total_cost
     }
+    return JsonResponse(data)
+
+
+def order_feedback(request):
+    order_id = int(request.GET['orderID'])
+    stars = int(request.GET['stars']) + 1
+    message = request.GET.get('txt', None)
+
+    order = Order.objects.get(id=order_id)
+    feedback_order = FeedbackOrder()
+    feedback_order.order = order
+    feedback_order.rating = stars
+    if message is not None:
+        feedback_order.text = message
+    feedback_order.save()
+    messages.success(request, 'Спасибо за ваш отзыв (перевести)')
+    data = {'ok': 'good'}
     return JsonResponse(data)

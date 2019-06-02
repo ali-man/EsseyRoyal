@@ -106,6 +106,22 @@ def remove_order(request):
         return redirect('/dashboard/')
 
 
+def completed_order(request, pk):
+    user = User.objects.get(email=request.user)
+    order = Order.objects.get(id=pk, customer=user, status=1)
+    order.status = 2
+    order.save()
+    messages.success(request, 'Completed order (Перевести)')
+    return redirect('/order/completed/feedback/{}/'.format(pk))
+
+
+def completed_order_feedback(request, pk):
+    user = User.objects.get(email=request.user)
+    order = Order.objects.get(id=pk, customer=user, status=2)
+
+    return render(request, 'dashboard/customer/order/feedback.html', locals())
+
+
 def add_order_views(request):
     if request.user.groups.all()[0].name == 'Customer':
         form = OrderAddForm(request.POST)
@@ -188,6 +204,14 @@ def writer_order_detail(request, pk):
         else:
             messages.success(request, 'Сообщение не может быть пустым (перевести)')
             return redirect(F'/dashboard/w/order/detail-{pk}/')
+
+
+def customer_order_in_completed(request, pk):
+    if request.method == 'GET':
+        user = User.objects.get(email=request.user)
+        order = get_object_or_404(Order, id=pk, status=2, customer=user)
+
+        return render(request, 'dashboard/customer/order/completed.html', context={'order': order})
 
 
 def customer_order_in_progress(request, pk):

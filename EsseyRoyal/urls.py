@@ -6,7 +6,7 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
 
 from appaaa.sitemaps import ArticleSitemap, StaticViewSitemap
-from appaaa.views import HomePageViews, feedback, calculate_home
+from appaaa.views import HomePageViews, feedback, calculate_home, order_feedback
 from appblog.views import ListArticles, article
 from appdashboard.users.admin import *
 from appdashboard.users.manager import *
@@ -14,7 +14,7 @@ from appdashboard.views import DashboardViews
 from apporders.ajax import chat_message_accept
 from apporders.views import ViewOrderViews, add_order_views, UpdateOrderViews, writer_order_detail, writer_order_review, \
     customer_order_in_progress, manager_order, remove_order, type_order_remove, format_order_remove, \
-    price_deadline_order_remove
+    price_deadline_order_remove, completed_order, completed_order_feedback, customer_order_in_completed
 from appusers.views import change_profile, register
 
 
@@ -44,10 +44,13 @@ urlpatterns = [
 
     # CUSTOMER
     path('orders/progress/<int:pk>/', customer_order_in_progress, name='customer-progress_order'),
+    path('orders/completed/<int:pk>/', customer_order_in_completed, name='customer-completed_order'),
     path('orders/view/<int:pk>/', ViewOrderViews.as_view(), name='view_order'),
     path('orders/update/<int:pk>/', UpdateOrderViews.as_view(), name='update_order'),
     path('order/new', add_order_views, name='add_order'),
     path('order/remove', remove_order, name='remove'),
+    path('order/completed/<int:pk>/', completed_order, name='completed'),
+    path('order/completed/feedback/<int:pk>/', completed_order_feedback, name='completed-feedback'),
 
     # WRITER
     path('dashboard/w/order/detail-<int:pk>/', writer_order_detail, name='writer-order_detail'),
@@ -77,6 +80,7 @@ urlpatterns = [
 
     path('ajax/chat-message-accept/', chat_message_accept),
     path('ajax/calculate/', calculate_home),
+    path('ajax/order-feedback/', order_feedback),
 
     # path('blog/', ListArticles.as_view(), name='blog-main'),
     # path('blog/<int:pk>/', article, name='blog-article'),

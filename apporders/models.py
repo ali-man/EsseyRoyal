@@ -165,6 +165,19 @@ class FilesOrder(models.Model):
         return '%s' % self.id
 
 
+class FeedbackOrder(models.Model):
+    order = models.OneToOneField(Order, verbose_name='Order', on_delete=models.CASCADE)
+    text = models.TextField(verbose_name='Message', blank=True)
+    rating = models.IntegerField(verbose_name='Rating', null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Feedback order'
+        verbose_name_plural = "Feedback's order"
+
+    def __str__(self):
+        return '%s' % self.text
+
+
 class AdditionallyOrder(models.Model):
     order = models.OneToOneField(Order, verbose_name='Order', on_delete=models.CASCADE)
     created_datetime = models.DateTimeField(verbose_name='Created datetime', auto_now_add=True)

@@ -140,6 +140,14 @@
                 ajaxQyery('calculate', dataObj, fnCalculate);
             }
 
+            let listChangeCalculate = ['#id_type_order', '#id_pages_order', '#ddate-picker', '#ttime-picker'];
+
+            for (let i = 0; i < listChangeCalculate.length; i++) {
+                $(listChangeCalculate[i]).change(function () {
+                    fnCount();
+                })
+            }
+
             objectFitImages();
             jarallax(document.querySelectorAll('.jarallax'));
 
@@ -160,14 +168,6 @@
                 value: currentDate,
                 datepicker: false
             });
-
-            let listChangeCalculate = ['#id_type_order', '#id_pages_order', '#ddate-picker', '#ttime-picker'];
-
-            for (let i = 0; i < listChangeCalculate.length; i++) {
-                $(listChangeCalculate[i]).change(function () {
-                    fnCount();
-                })
-            }
         })
     </script>
 {% endblock %}

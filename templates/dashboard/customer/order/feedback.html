@@ -65,7 +65,10 @@
             <div class="col-12">
                 <div class="card mb-2">
                     <div class="card-body">
-                        <span id="rateMe" data-order-id="{{ order.id }}">
+                        <div class="w-responsive text-center mx-auto">
+                            <h3 class="text-monospace amber-lighter-hover">Rating</h3>
+                            <p>Оставьте свой отзыв о выполненном заказе (перевести)</p>
+                            <span id="rateMe" data-order-id="{{ order.id }}">
                             <i class="fas fa-star py-2 px-1 rate-popover" data-index="0" data-html="true"
                                data-toggle="popover" data-placement="top" title="Very bad"></i>
                             <i class="fas fa-star py-2 px-1 rate-popover" data-index="1" data-html="true"
@@ -77,6 +80,7 @@
                             <i class="fas fa-star py-2 px-1 rate-popover" data-index="4" data-html="true"
                                data-toggle="popover" data-placement="top" title="Excellent"></i>
                         </span>
+                        </div>
                     </div>
                 </div>
             </div>

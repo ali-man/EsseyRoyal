@@ -116,3 +116,16 @@ def change_profile(request):
     else:
         messages.error(request, 'Неверный метод запроса (перевести)')
         return redirect('/dashboard/')
+
+
+def login_user(request):
+    email = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(email=email, password=password)
+    if user is not None:
+        login(request, user)
+        messages.success(request, 'Вы успешно авторизовались (пепревести)')
+        return redirect('/dashboard/')
+    else:
+        messages.error(request, 'Неверный логин или пароль (перевести)')
+        return redirect('/')

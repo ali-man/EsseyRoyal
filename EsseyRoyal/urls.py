@@ -15,8 +15,7 @@ from apporders.ajax import chat_message_accept
 from apporders.views import ViewOrderViews, add_order_views, UpdateOrderViews, writer_order_detail, writer_order_review, \
     customer_order_in_progress, manager_order, remove_order, type_order_remove, format_order_remove, \
     price_deadline_order_remove, completed_order, completed_order_feedback, customer_order_in_completed
-from appusers.views import change_profile, register
-
+from appusers.views import change_profile, register, login_user
 
 sitemaps = {
     'articles': ArticleSitemap,
@@ -30,10 +29,12 @@ urlpatterns = [
          name='django.contrib.sitemaps.views.sitemap'),
     path('', HomePageViews.as_view(), name='home'),
 
-    path('accounts/login/', LoginView.as_view(
-        template_name="accounts/login.html",
-        redirect_authenticated_user=True
-    ), name='login'),
+    # path('accounts/login/', LoginView.as_view(
+    #     template_name="accounts/login.html",
+    #     redirect_authenticated_user=True
+    # ), name='login'),
+
+    path('accounts/login/', login_user, name='login'),
 
     path('feedback/', feedback, name='feedback'),
 

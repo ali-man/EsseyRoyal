@@ -1,0 +1,26 @@
+<div class="table-responsive">
+    <table class="table">
+        <thead class="th-center">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Subject</th>
+            <th>View</th>
+        </tr>
+        </thead>
+        <tbody class="td-center">
+        {% for comment in comments %}
+            <tr>
+                <td>{{ comment.user.get_full_name }}</td>
+                <td>{{ comment.user.email }}</td>
+                <td>{{ comment.comment }}</td>
+                <td>
+                    <a href="{% url 'comment-view' comment.id %}" class="blue-text" data-toggle="tooltip"
+                       data-placement="top" title=""
+                       data-original-title="See results"><i class="far fa-eye"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

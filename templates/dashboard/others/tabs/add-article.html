@@ -1,0 +1,7 @@
+<form action="{% url 'others'%}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table class="table">
+        {{ form.as_table }}
+    </table>
+    <button type="submit" class="btn bg-btn">Add</button>
+</form>

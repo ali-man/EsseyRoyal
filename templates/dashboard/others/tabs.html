@@ -1,0 +1,33 @@
+<ul class="nav nav-tabs md-tabs nav-justified bg-block" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#panel555" role="tab">
+            <i class="fas fa-user"></i><br>Feedback's</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#panel666" role="tab">
+            <i class="fas fa-spinner fa-pulse"></i><br>Comments</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#panel777" role="tab">
+            <i class="fas fa-check"></i><br>Add article</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane fade in show active" id="panel555" role="tabpanel">
+
+        {% include 'dashboard/others/tabs/feedbacks.html' %}
+
+    </div>
+
+    <div class="tab-pane fade" id="panel666" role="tabpanel">
+
+        {% include 'dashboard/others/tabs/comments.html' %}
+
+    </div>
+
+    <div class="tab-pane fade" id="panel777" role="tabpanel">
+
+        {% include 'dashboard/others/tabs/add-article.html' %}
+
+    </div>
+</div>

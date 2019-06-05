@@ -8,10 +8,11 @@ from django.http import JsonResponse
 from django.views.generic.base import View
 from django.contrib.gis.geoip2 import GeoIP2
 
-from appaaa.models import Feedback
+from appaaa.models import Feedback, Comment
 from appblog.models import Article
 from appmail.views import manager_send_mail, writer_send_mail
 from apporders.models import TypeOrder, PriceDeadline, Order, FeedbackOrder
+from appusers.models import User
 
 
 class HomePageViews(View):
@@ -123,3 +124,17 @@ def order_feedback(request):
 
     data = {'ok': 'good'}
     return JsonResponse(data)
+
+
+def add_comment(request):
+    if request.method == 'GET':
+        messages.error(request, 'Доступ ограничен (перевести)')
+        return redirect('/')
+    if request.method == 'POST':
+        user = User.objects.get(email=request.user)
+        comment_obj = Comment()
+        comment_obj.user = user
+        comment_obj.comment = request.POST['comment']
+        comment_obj.save()
+        messages.success(request, 'Спасибо за ваш отзыв (перевести)')
+        return redirect('/')

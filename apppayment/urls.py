@@ -4,8 +4,8 @@ from django.urls import path
 
 from appblog.views import ListArticles, article
 
-app_name = 'appblog'
+app_name = 'apppayment'
 urlpatterns = [
-    path('', ListArticles.as_view(), name='main'),
-    path('article/<int:pk>/', article, name='article'),
+    path('ok/', ListArticles),
+    path('fail/', ListArticles),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

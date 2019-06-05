@@ -6,11 +6,11 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
 
 from appaaa.sitemaps import ArticleSitemap, StaticViewSitemap
-from appaaa.views import HomePageViews, feedback, calculate_home, order_feedback
+from appaaa.views import HomePageViews, feedback, calculate_home, order_feedback, add_comment
 from appblog.views import ListArticles, article
 from appdashboard.users.admin import *
 from appdashboard.users.manager import *
-from appdashboard.views import DashboardViews
+from appdashboard.views import DashboardViews, others, feedback_view, comment_view
 from apporders.ajax import chat_message_accept
 from apporders.views import ViewOrderViews, add_order_views, UpdateOrderViews, writer_order_detail, writer_order_review, \
     customer_order_in_progress, manager_order, remove_order, type_order_remove, format_order_remove, \
@@ -36,6 +36,7 @@ urlpatterns = [
 
     path('accounts/login/', login_user, name='login'),
 
+    path('add-comment/', add_comment, name='add-comment'),
     path('feedback/', feedback, name='feedback'),
 
     path('accounts/register/', register, name='register'),
@@ -56,6 +57,10 @@ urlpatterns = [
     # WRITER
     path('dashboard/w/order/detail-<int:pk>/', writer_order_detail, name='writer-order_detail'),
     path('dashboard/w/order/review-<int:pk>/', writer_order_review, name='writer-order_review'),
+
+    path('dashboard/others/feedback/<int:pk>/', feedback_view, name='feedback-view'),
+    path('dashboard/others/comment/<int:pk>/', comment_view, name='comment-view'),
+    path('dashboard/others/', others, name='others'),
 
     # ADMIN
     path('dashboard/writer/<int:pk>/', admin_detail_writer, name='admin-writer'),
@@ -86,10 +91,12 @@ urlpatterns = [
     # path('blog/', ListArticles.as_view(), name='blog-main'),
     # path('blog/<int:pk>/', article, name='blog-article'),
 
+    # path('payments/', include('apppayment.urls', namespace='apppayment')),
     path('blog/', include('appblog.urls', namespace='appblog')),
 
     path('pages/', include('django.contrib.flatpages.urls')),
 
     path('ckeditor/', include('ckeditor_uploader.urls')),
     # path('api_auth/', include('rest_framework.urls')),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

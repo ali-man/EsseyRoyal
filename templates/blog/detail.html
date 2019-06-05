@@ -1,10 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block css %}
+
+{% endblock %}
+
+{% block title %}
+    Detail article
+{% endblock %}
+
+{% block content %}
+
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card mt-5 mb-5">
+                    <div class="card-body">
+                        <div class="media">
+                            <img class="d-flex align-self-start mr-3"
+                                 src="{{ article.poster.url }}"
+                                 alt="Poster" width="300">
+                            <div class="media-body">
+                                <h5 class="mt-0 font-weight-bold">{{ article.title }}</h5>
+                                <p>
+                                    {{ article.description }}
+                                </p>
+                                <p>
+                                    {{ article.created_datetime }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

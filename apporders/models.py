@@ -155,7 +155,7 @@ class Order(models.Model):
 
 class FilesOrder(models.Model):
     order = models.ForeignKey(Order, verbose_name='ID Order', on_delete=models.CASCADE)
-    file = models.FileField(verbose_name='Attached files', upload_to=upload_files, validators=[validate_file_extension],
+    file = models.FileField(verbose_name='Attached files', upload_to='customer/order/files/%Y/%m/%d/', validators=[validate_file_extension],
                             null=True, blank=True)
 
     def filename(self):
@@ -194,7 +194,7 @@ class AdditionallyOrder(models.Model):
 class FilesAdditionallyOrder(models.Model):
     additionally_order = models.ForeignKey(AdditionallyOrder, verbose_name='Additionally order',
                                            on_delete=models.CASCADE)
-    file = models.FileField(verbose_name='File', upload_to=writer_upload_files_to_order)
+    file = models.FileField(verbose_name='File', upload_to='writer/order/files/%Y/%m/%d/')
     created_datetime = models.DateTimeField(verbose_name='Created datetime', auto_now_add=True)
 
     class Meta:

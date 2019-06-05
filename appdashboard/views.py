@@ -2,8 +2,11 @@ import datetime
 
 from django.contrib import messages
 from django.contrib.auth.models import Group
+from django.shortcuts import render, redirect
 from django.views.generic.base import TemplateView
 
+from appaaa.models import Feedback, Comment
+from appblog.forms import ArticleForm
 from apporders.forms import OrderAddForm
 from apporders.models import Order
 
@@ -85,3 +88,44 @@ def access_to_manager_and_admin(_user):
         if g.name == 'Manager':
             is_access = True
     return is_access
+
+
+def others(request):
+    if not access_to_manager_and_admin(request.user):
+        messages.error(request, 'Доступ ограничен (перевести)')
+        return redirect('/dashboard/')
+    context = {}
+    # Feedback's
+    context['feedbacks'] = Feedback.objects.all()
+    # Comments
+    context['comments'] = Comment.objects.all()
+    # Add article
+    context['form'] = ArticleForm()
+
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Статья успешна добавлена (перевести)')
+            return redirect('/dashboard/others/')
+        else:
+            context['form'] = ArticleForm(request.POST, request.FILES)
+            messages.error(request, 'Неверно заполнены поля (перевести)')
+
+    return render(request, 'dashboard/others/index.html', context=context)
+
+
+def feedback_view(request, pk):
+    if not access_to_manager_and_admin(request.user):
+        messages.error(request, 'Доступ ограничен (перевести)')
+        return redirect('/dashboard/')
+    feedback = Feedback.objects.get(id=pk)
+    return render(request, 'dashboard/others/detail/feedback.html', {'feedback': feedback})
+
+
+def comment_view(request, pk):
+    if not access_to_manager_and_admin(request.user):
+        messages.error(request, 'Доступ ограничен (перевести)')
+        return redirect('/dashboard/')
+    comment = Comment.objects.get(id=pk)
+    return render(request, 'dashboard/others/detail/comment.html', {'comment': comment})

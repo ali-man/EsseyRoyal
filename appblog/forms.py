@@ -11,16 +11,16 @@ class TagForm(forms.ModelForm):
 
 class ArticleForm(forms.ModelForm):
 
-    list_tags = forms.ModelMultipleChoiceField(
-        queryset=Tag.objects.all(),
-        required=False,
-        widget=forms.Select(
-            attrs={
-                'class': 'browser-default custom-select js-example-basic-multiple',
-                'multiple': 'multiple'
-            }
-        )
-    )
+    # list_tags = forms.ModelMultipleChoiceField(
+    #     queryset=Tag.objects.all(),
+    #     required=False,
+    #     widget=forms.Select(
+    #         attrs={
+    #             'class': 'browser-default custom-select js-example-basic-multiple',
+    #             'multiple': 'multiple'
+    #         }
+    #     )
+    # )
 
     class Meta:
         model = Article

@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'appblog',
     'appmail',
     'appaaa',
+    # 'apppayment',
 ]
 
 if DEBUG:

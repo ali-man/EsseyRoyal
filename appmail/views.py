@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.contrib.auth.models import Group
-from django.shortcuts import render
 from django.core.mail import send_mail
 
 
@@ -11,9 +10,9 @@ def manager_send_mail(title_mail, customer_name, order_title, link_order):
         if m.corporate_email:
             managers.append(m.corporate_email)
     data = '''
-        Customer name: {}
-        Title order: {}
-        Link order: {}{}
+        Name: {}
+        Title: {}
+        Link: {}{}
     '''.format(customer_name, order_title, settings.LINK_DOMAIN, link_order)
     send_mail(title_mail, data, 'EssayRoyal', managers, fail_silently=False)
 

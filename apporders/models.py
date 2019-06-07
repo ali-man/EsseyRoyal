@@ -145,8 +145,8 @@ class Order(models.Model):
             customer_send_mail('Take task', self.title, self.customer.email, customer_link_order)
             manager_send_mail('Take order', self.writer, self.title, manager_link_order)
         elif self.status == 2:
-            customer_send_mail('Completed task', self.title, self.customer.email, customer_link_order)
-            manager_send_mail('Completed task', self.writer, self.title, manager_link_order)
+            customer_send_mail('Completed order', self.title, self.customer.email, customer_link_order)
+            manager_send_mail('Completed order', self.writer, self.title, manager_link_order)
 
 
 

@@ -44,7 +44,7 @@ jQuery(document).ready(function ($) {
     // ex. to send the information to the server
     $('#rateMe').on('click', '#voteSubmitButton', function () {
 
-        let txt = $('.md-textarea').val();
+        let txt = $('#textarea_val').val();
         let orderID = $('#rateMe').attr('data-order-id');
         ajaxQyery('order-feedback', {txt:txt, stars:starsIndex, orderID: orderID}, fnFeedbackSuccess);
 
@@ -63,7 +63,7 @@ $(function () {
         // Append popover to #rateMe to allow handling form inside the popover
         container: '#rateMe',
         // Custom content for popover
-        content: `<div class="my-0 py-0"> <textarea type="text" style="font-size: 0.78rem" class="md-textarea form-control py-0" placeholder="Write us what can we improve" rows="3"></textarea> <button id="voteSubmitButton" type="submit" class="btn btn-sm btn-primary">Submit!</button> <button id="closePopoverButton" class="btn btn-flat btn-sm">Close</button>  </div>`
+        content: `<div class="my-0 py-0"> <textarea type="text" id="textarea_val" style="font-size: 0.78rem" class="md-textarea form-control py-0" placeholder="Write us what can we improve" rows="3"></textarea> <button id="voteSubmitButton" type="submit" class="btn btn-sm btn-primary">Submit!</button> <button id="closePopoverButton" class="btn btn-flat btn-sm">Close</button>  </div>`
     });
     $('.rate-popover').tooltip();
 });

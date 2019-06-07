@@ -90,8 +90,8 @@ class UpdateOrderViews(UpdateView):
                     files_order.order = order
                     files_order.file = f
                     files_order.save()
-            messages.success(request, 'Ваш заказ загружен (перевести)')
-            return redirect('/dashboard/')
+        messages.success(request, 'Ваш заказ обновлён (перевести)')
+        return redirect('/dashboard/')
 
 
 def remove_order(request):

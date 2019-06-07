@@ -75,6 +75,7 @@ def feedback(request):
         feedback.operation_system = F'{ug.os.family} {ug.os.version_string}'
 
         feedback.save()
+        manager_send_mail('New feedback from site', name, subject, 'dashboard/others/')
         messages.success(request, 'Ваше сообщение отправлено (перевести)')
         return redirect('/')
     else:
@@ -110,20 +111,19 @@ def calculate_home(request):
 
 def order_feedback(request):
     order_id = int(request.GET['orderID'])
-    stars = int(request.GET['stars']) + 1
-    message = request.GET.get('txt', None)
+    stars = int(request.GET['stars'])
 
     order = Order.objects.get(id=order_id)
     feedback_order = FeedbackOrder()
     feedback_order.order = order
     feedback_order.rating = stars
-    if message is not None:
-        feedback_order.text = message
+    if 'txt' in request.GET:
+        feedback_order.text = request.GET['txt']
     feedback_order.save()
     messages.success(request, 'Спасибо за ваш отзыв (перевести)')
 
-    manager_send_mail('Rating order', order.customer, order.title, '')
-    writer_send_mail('Rating order', order.title, '')
+    manager_send_mail('Rating order', order.customer, order.title, 'dashboard/m/order/{}/'.format(order_id))
+    writer_send_mail('Rating order', order.title, 'dashboard/w/order/completed-{}/'.format(order_id))
 
     data = {'ok': 'good'}
     return JsonResponse(data)

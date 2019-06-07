@@ -35,12 +35,25 @@
 
                                 <div class="col-lg-7 col-xl-8">
 
-                                    <h3 class="font-weight-bold mb-3"><strong>{{ article.title }}</strong></h3>
+                                    <h3 class="font-weight-bold mb-3">
+                                        <strong>{{ article.title }}</strong>
+                                        {% if access_is_allowed %}
+                                            <div class="float-right">
+                                                <a href="{% url 'appblog:article-edit' article.id %}">
+                                                    <i class="fas fa-pen fa-sm pr-3"></i>
+                                                </a>
+                                                <a href="{% url 'appblog:article-remove' article.id %}">
+                                                    <i class="fas fa-trash fa-sm red-text"></i>
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    </h3>
                                     <p class="dark-grey-text">
                                         {{ article.description }}
                                     </p>
                                     <p>by <a class="font-weight-bold">EssayRoyal</a>, {{ article.created_datetime }}</p>
-                                    <a href="{% url 'appblog:article' article.id %}" class="btn btn-primary btn-md">Read more</a>
+                                    <a href="{% url 'appblog:article' article.id %}" class="btn btn-primary btn-md">Read
+                                        more</a>
                                 </div>
 
                             </div>
@@ -61,12 +74,25 @@
 
                                 <div class="col-lg-7 col-xl-8">
 
-                                    <h3 class="font-weight-bold mb-3"><strong>{{ article.title }}</strong></h3>
+                                    <h3 class="font-weight-bold mb-3">
+                                        <strong>{{ article.title }}</strong>
+                                        {% if access_is_allowed %}
+                                            <div class="float-right">
+                                                <a href="{% url 'appblog:article-edit' article.id %}">
+                                                    <i class="fas fa-pen fa-sm pr-3"></i>
+                                                </a>
+                                                <a href="{% url 'appblog:article-remove' article.id %}">
+                                                    <i class="fas fa-trash fa-sm red-text"></i>
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    </h3>
                                     <p class="dark-grey-text">
                                         {{ article.description }}
                                     </p>
                                     <p>by <a class="font-weight-bold">EssayRoyal</a>, {{ article.created_datetime }}</p>
-                                    <a href="{% url 'appblog:article' article.id %}" class="btn btn-primary btn-md">Read more</a>
+                                    <a href="{% url 'appblog:article' article.id %}" class="btn btn-primary btn-md">Read
+                                        more</a>
                                 </div>
 
                             </div>

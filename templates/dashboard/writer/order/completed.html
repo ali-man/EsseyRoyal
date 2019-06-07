@@ -1,0 +1,306 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/writer-view-order.css' %}">
+    <link rel="stylesheet" href="{% static 'css/libs/chat.min.css' %}">
+    <style>
+        .amber-lighter-hover {
+            color: #ffa000;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .white-darker-hover {
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .white-darker-hover:hover {
+            -webkit-transition: .4s;
+            transition: .4s;
+            color: #d9d9d9;
+        }
+
+        table.table tr th, table.table tr td {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .description {
+            display: inline-block;
+            width: 100%;
+        }
+
+        .description-text {
+            margin-left: 10px;
+            padding: 5px 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+    View Order
+{% endblock %}
+
+{% block content %}
+
+    <div class="container mt-5 pb-2">
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="w-responsive text-center mx-auto">
+                            <h4 class="text-center text-primary" style="color: #757575;">{{ order.title.upper }}
+                                <span class="badge badge-pill bg-btn">
+                                    {% if order.status == 0 %}
+                                        <i class="fas fa-search fa-xs" aria-hidden="true" title="ORDER IN REVIEW"></i>
+                                    {% elif order.status == 1 %}
+                                        <i class="fas fa-spinner fa-pulse fa-xs" aria-hidden="true"
+                                           title="ORDER IN PROGRESS"></i>
+                                    {% elif order.status == 2 %}
+                                        <i class="fas fa-check fa-xs" aria-hidden="true" title="COMPLETED"></i>
+                                    {% endif %}
+                                </span>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <h4 class="font-weight-bold amber-lighter-hover mb-3">Detail info</h4>
+                        <table class="table" style="margin-bottom: 0;">
+                            <tr>
+                                <th>Type of order:</th>
+                                <td>{{ order.type_order }}</td>
+                            </tr>
+                            <tr>
+                                <th>Format of order:</th>
+                                <td>{{ order.format_order }}</td>
+                            </tr>
+                            <tr>
+                                <th>Deadline:</th>
+                                <td>{{ order.deadline }}</td>
+                            </tr>
+                            <tr>
+                                <th>Per page:</th>
+                                <td>${{ order.type_order.price_writer|floatformat }}</td>
+                            </tr>
+                            <tr>
+                                <th>Number pages:</th>
+                                <td>{{ order.number_page }}</td>
+                            </tr>
+                            <tr>
+                                <th>Total cost:</th>
+                                <td>${{ order.total_cost_writer|floatformat }}</td>
+                            </tr>
+                        </table>
+
+                        {% if order.description %}
+                            <h4 class="font-weight-bold amber-lighter-hover mt-3 mb-3">Description: </h4>
+                            <div class="description">
+                                <div class="description-text">
+                                    {% autoescape off %}{{ order.description }}{% endautoescape %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if order.filesorder_set.all %}
+                            <h4 class="font-weight-bold amber-lighter-hover mt-3 mb-3">Files: </h4>
+                            <ul class="files">
+                                {% for file in order.filesorder_set.all %}
+                                    <li>
+                                        <a href="{{ file.file.url }}">{{ file.filename }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <h4 class="font-weight-bold amber-lighter-hover mb-3">Completed work</h4>
+                        <ul class="additionally-order-files">
+                            {% for additional in order.additionallyorder.filesadditionallyorder_set.all %}
+                                <li><a href="{{ additional.file.url }}">{{ additional.created_datetime }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="w-responsive text-center mx-auto">
+                            <h3 class="text-monospace">Chat</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card chat-room mb-2">
+                    <div class="card-body">
+                        <div class="row px-lg-2 px-2">
+                            <div class="col-12 pl-md-3 px-lg-auto px-0">
+                                <div class="chat-message">
+                                    <ul class="list-unstyled chat-1 scrollbar-light-blue">
+                                        {% for message in order.chat_set.all %}
+                                            {% if message.user == order.writer %}
+                                                <li class="d-flex justify-content-between mb-4">
+                                                    <img src="
+                                            {% if message.user.avatar %}
+                                                {{ message.user.avatar.url }}
+                                            {% else %}
+                                                {% static 'img/noimage.png' %}
+                                            {% endif %}
+                                        " alt="avatar" class="avatar rounded-circle mr-2 ml-lg-3 ml-0 z-depth-1">
+                                                    <div class="chat-body white p-3 ml-2 z-depth-1">
+                                                        <div class="header">
+                                                            <strong class="primary-font">{{ message.user.get_full_name }}</strong>
+                                                            <small class="pull-right text-muted">
+                                                                <i class="far fa-clock"></i> {{ message.created_datetime }}
+                                                            </small>
+                                                        </div>
+                                                        <hr class="w-100">
+                                                        <p class="mb-0">
+                                                            {{ message }}
+                                                        </p>
+                                                    </div>
+                                                </li>
+                                            {% else %}
+                                                {% if message.status %}
+                                                    <li class="d-flex justify-content-between mb-4">
+                                                        <div class="chat-body white p-3 z-depth-1">
+                                                            <div class="header">
+                                                                <strong class="primary-font">Anonymous</strong>
+                                                            </div>
+                                                            <hr class="w-100">
+                                                            <p class="mb-0">
+                                                                {{ message }}
+                                                            </p>
+                                                        </div>
+                                                        <img src="{% static 'img/noimage.png' %}" alt="avatar"
+                                                             class="avatar rounded-circle mr-0 ml-3 z-depth-1">
+                                                    </li>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if order.feedbackorder %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <div class="w-responsive text-center mx-auto">
+                                <h3 class="text-monospace amber-lighter-hover">Rating</h3>
+                                <span id="rateMe">
+                                    {% if order.feedbackorder.rating == 0 %}
+                                        <i class="fas fa-star py-2 px-1 rate-popover amber-text" data-index="0"
+                                           data-html="true" data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Very bad"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover" data-index="1" data-html="true"
+                                           data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Poor"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover" data-index="2" data-html="true"
+                                           data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="OK"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover" data-index="3" data-html="true"
+                                           data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Good"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover" data-index="4" data-html="true"
+                                           data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Excellent"></i>
+                                    {% elif order.feedbackorder.rating == 1 %}
+                                        <i class="fas fa-star py-2 px-1 rate-popover amber-text" data-index="0"
+                                           data-html="true" data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Very bad"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover amber-text" data-index="1"
+                                           data-html="true" data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Poor"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover" data-index="2" data-html="true"
+                                           data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="OK"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover" data-index="3" data-html="true"
+                                           data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Good"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover" data-index="4" data-html="true"
+                                           data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Excellent"></i>
+                                    {% elif order.feedbackorder.rating == 2 %}
+                                        <i class="fas fa-star py-2 px-1 rate-popover amber-text" data-index="0"
+                                           data-html="true" data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Very bad"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover amber-text" data-index="1"
+                                           data-html="true" data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Poor"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover amber-text" data-index="2"
+                                           data-html="true" data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="OK"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover" data-index="3" data-html="true"
+                                           data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Good"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover" data-index="4" data-html="true"
+                                           data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Excellent"></i>
+                                    {% elif order.feedbackorder.rating == 3 %}
+                                        <i class="fas fa-star py-2 px-1 rate-popover amber-text" data-index="0"
+                                           data-html="true" data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Very bad"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover amber-text" data-index="1"
+                                           data-html="true" data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Poor"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover amber-text" data-index="2"
+                                           data-html="true" data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="OK"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover amber-text" data-index="3"
+                                           data-html="true" data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Good"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover" data-index="4" data-html="true"
+                                           data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Excellent"></i>
+                                    {% elif order.feedbackorder.rating == 4 %}
+                                        <i class="fas fa-star py-2 px-1 rate-popover amber-text" data-index="0"
+                                           data-html="true" data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Very bad"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover amber-text" data-index="1"
+                                           data-html="true" data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Poor"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover amber-text" data-index="2"
+                                           data-html="true" data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="OK"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover amber-text" data-index="3"
+                                           data-html="true" data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Good"></i>
+                                        <i class="fas fa-star py-2 px-1 rate-popover amber-text" data-index="4"
+                                           data-html="true" data-toggle="popover" data-placement="top" title=""
+                                           data-original-title="Excellent"></i>
+                                    {% endif %}
+                                </span>
+                                <p>{{ order.feedbackorder.text }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';
+        $('p').addClass('white-darker-hover');
+    </script>
+{% endblock %}

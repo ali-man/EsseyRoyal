@@ -160,6 +160,14 @@ def add_order_views(request):
         return redirect('/')
 
 
+def writer_order_completed(request, pk):
+    if request.method == 'GET':
+        user = User.objects.get(email=request.user)
+        order = get_object_or_404(Order, id=pk, status=2, writer=user)
+
+        return render(request, 'dashboard/writer/order/completed.html', context={'order': order})
+
+
 def writer_order_detail(request, pk):
     if request.method == 'GET':
         user = User.objects.get(email=request.user)
@@ -200,7 +208,7 @@ def writer_order_detail(request, pk):
             chat.status = False
             chat.save()
 
-            manager_send_mail('New message', order.writer, order.title, F'dashboard/m/order/{order.id}/')
+            manager_send_mail('New message from chat', order.writer, order.title, F'dashboard/m/order/{order.id}/')
             messages.success(request, 'Ваше сообщение отправлено (перевести)')
             return redirect(F'/dashboard/w/order/detail-{pk}/')
         else:
@@ -234,7 +242,7 @@ def customer_order_in_progress(request, pk):
             chat.message = request.POST['message']
             chat.status = False
             chat.save()
-            manager_send_mail('New message', order.customer, order.title, F'dashboard/m/order/{order.id}/')
+            manager_send_mail('New message from chat', order.customer, order.title, F'dashboard/m/order/{order.id}/')
             messages.success(request, 'Ваше сообщение отправлено (перевести)')
             return redirect(F'/orders/progress/{pk}/')
         else:

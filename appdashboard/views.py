@@ -80,13 +80,14 @@ class DashboardViews(TemplateView):
 
 
 def access_to_manager_and_admin(_user):
-    user = User.objects.get(email=_user)
     is_access = False
-    if user.is_superuser:
-        is_access = True
-    for g in user.groups.all():
-        if g.name == 'Manager':
+    if _user.is_authenticated:
+        user = User.objects.get(email=_user)
+        if user.is_superuser:
             is_access = True
+        for g in user.groups.all():
+            if g.name == 'Manager':
+                is_access = True
     return is_access
 
 

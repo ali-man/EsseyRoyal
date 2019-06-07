@@ -25,24 +25,12 @@
                     </td>
                     <td>{{ order.title }}</td>
                     <td>{{ order.type_order }}</td>
-                    <td>${{ order.format_order }}</td>
+                    <td>{{ order.format_order }}</td>
                     <td class="text-center">${{ order.total_cost_writer }}</td>
                     <td class="text-center">
-                        {% if order.status == 0 %}
-                            <a href="{% url 'view_order' order.id %}" class="blue-text" data-toggle="tooltip"
+                            <a href="{% url 'writer-order_completed' order.id %}" class="blue-text" data-toggle="tooltip"
                                data-placement="top" title=""
                                data-original-title="See results"><i class="far fa-eye"></i></a>
-                            <a href="{% url 'update_order' order.id %}" class="teal-text" data-toggle="tooltip"
-                               data-placement="top" title=""
-                               data-original-title="Edit"><i
-                                    class="fas fa-pencil-alt"></i></a>
-                            <a class="red-text" data-toggle="tooltip" data-placement="top" title=""
-                               data-original-title="Remove"><i class="fas fa-times"></i></a>
-                        {% else %}
-                            <a href="{% url 'customer-progress_order' order.id %}" class="blue-text" data-toggle="tooltip"
-                               data-placement="top" title=""
-                               data-original-title="See results"><i class="far fa-eye"></i></a>
-                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

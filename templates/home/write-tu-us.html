@@ -20,7 +20,7 @@
                                 <div class="md-form mb-0">
                                     <input type="email"
                                            name="email"
-                                           {% if user.is_authenticated %} value="{{ user.email }}" {% endif %}
+                                            {% if user.is_authenticated %} value="{{ user.email }}" {% endif %}
                                            id="form-contact-email" class="form-control">
                                     <label for="form-contact-email" class="">Your email</label>
                                 </div>
@@ -43,13 +43,16 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="md-form mb-0">
-                                            <textarea name="message" id="form-contact-message"
-                                                      class="form-control md-textarea"
-                                                      rows="3"></textarea>
-                                    <label for="form-contact-message">Your message</label>
-                                    <button type="submit" class="btn-floating btn-lg blue">
-                                        <i class="far fa-paper-plane"></i>
-                                    </button>
+                                    <form action="{% url 'feedback' %}">
+                                        {% csrf_token %}
+                                        <textarea name="message" id="form-contact-message"
+                                                  class="form-control md-textarea"
+                                                  rows="3"></textarea>
+                                        <label for="form-contact-message">Your message</label>
+                                        <button type="submit" class="btn-floating btn-lg blue">
+                                            <i class="far fa-paper-plane"></i>
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -65,7 +68,7 @@
                         <li>
                             <p>
                                 <i class="fas fa-map-marker-alt pr-2"></i>
-                                Example: Company Address: 123 Street, Postal/ZIP code, City, Country
+                                Khorezm Region, Urgench City, Yogdu street House 1/2
                             </p>
                         </li>
                         <li>

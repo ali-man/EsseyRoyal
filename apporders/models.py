@@ -32,6 +32,7 @@ class PriceDeadline(models.Model):
     class Meta:
         verbose_name = 'Price of deadline'
         verbose_name_plural = 'Prices of deadline'
+        ordering = ['hours']
 
     def save(self, *args, **kwargs):
         if self.hours == 0:

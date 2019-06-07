@@ -8,7 +8,8 @@ def manager_send_mail(title_mail, customer_name, order_title, link_order):
     group = Group.objects.get(name='Manager')
     managers = []
     for m in group.user_set.all():
-        managers.append(m.email)
+        if m.corporate_email:
+            managers.append(m.corporate_email)
     data = '''
         Customer name: {}
         Title order: {}

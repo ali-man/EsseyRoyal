@@ -17,9 +17,9 @@ def chat_message_accept(request):
     groups = message.user.groups.all()
     for g in groups:
         if g.name == 'Customer':
-            customer_send_mail('New message in order', order.title, order.customer.email, customer_link_order)
+            customer_send_mail('New message from chat', order.title, order.customer.email, customer_link_order)
         if g.name == 'Writer':
-            writer_send_mail('New message in order', order.title, writer_link_order)
+            writer_send_mail('New message from chat', order.title, writer_link_order)
 
     data = {'ok': 'yeee!!'}
     return JsonResponse(data=data)

@@ -40,7 +40,7 @@ def feedback(request):
         if x_forwarded_for:
             ip = x_forwarded_for.split(',')[-1].strip()
         else:
-            ip = request.META.get('REMOTE_ADDR')
+            ip = request.META.get('HTTP_X_REAL_IP')
 
         g = GeoIP2()
         geo = g.city(ip)
@@ -76,6 +76,9 @@ def feedback(request):
 
         feedback.save()
         messages.success(request, 'Ваше сообщение отправлено (перевести)')
+        return redirect('/')
+    else:
+        messages.error(request, 'Данный страницы не существует (перевести)')
         return redirect('/')
 
 

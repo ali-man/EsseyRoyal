@@ -28,9 +28,12 @@
                 <h6 class="text-uppercase mb-4 font-weight-bold">Blog</h6>
                 {% for article in articles %}
                     <p>
-                        <a href="#">{{ article }}</a>
+                        <a href="{% url 'appblog:article' article.id %}">{{ article }}</a>
                     </p>
                 {% endfor %}
+                <p>
+                    <a href="{% url 'appblog:main' %}">More</a>
+                </p>
             </div>
             <hr class="w-100 clearfix d-md-none">
 

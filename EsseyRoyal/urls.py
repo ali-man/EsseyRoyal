@@ -14,7 +14,8 @@ from appdashboard.views import DashboardViews, others, feedback_view, comment_vi
 from apporders.ajax import chat_message_accept
 from apporders.views import ViewOrderViews, add_order_views, UpdateOrderViews, writer_order_detail, writer_order_review, \
     customer_order_in_progress, manager_order, remove_order, type_order_remove, format_order_remove, \
-    price_deadline_order_remove, completed_order, completed_order_feedback, customer_order_in_completed
+    price_deadline_order_remove, completed_order, completed_order_feedback, customer_order_in_completed, \
+    writer_order_completed
 from appusers.views import change_profile, register, login_user
 
 sitemaps = {
@@ -42,7 +43,7 @@ urlpatterns = [
     path('accounts/register/', register, name='register'),
     path('accounts/logout/', LogoutView.as_view(), name='logout'),
 
-    path('dashboard/change-profile', change_profile, name='change-profile'),
+    path('dashboard/change-profile/', change_profile, name='change-profile'),
 
     # CUSTOMER
     path('orders/progress/<int:pk>/', customer_order_in_progress, name='customer-progress_order'),
@@ -55,6 +56,7 @@ urlpatterns = [
     path('order/completed/feedback/<int:pk>/', completed_order_feedback, name='completed-feedback'),
 
     # WRITER
+    path('dashboard/w/order/completed-<int:pk>/', writer_order_completed, name='writer-order_completed'),
     path('dashboard/w/order/detail-<int:pk>/', writer_order_detail, name='writer-order_detail'),
     path('dashboard/w/order/review-<int:pk>/', writer_order_review, name='writer-order_review'),
 

@@ -144,9 +144,9 @@ ul.messages {
     margin: 0 0 5px; }
 
 
+.md-tabs .nav-link {
+    padding: 10px 0;
+}
+
 span.helptext ul {padding: 10px 0 0 20px;}
 span.helptext ul li {}
-
-main {
-    background-image: url(../img/bg.jpg);
-}

@@ -1,3 +1,7 @@
+main {
+    background: url(../img/bg.jpg) fixed;
+}
+
 .amber-lighter-hover {
     color: #ffa000;
     -webkit-transition: .4s;

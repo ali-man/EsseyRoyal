@@ -1,3 +1,7 @@
+main {
+    background: url(../img/bg.jpg) fixed;
+}
+
 .md-v-line {
     position: absolute;
     border-left: 1px solid rgba(0, 0, 0, .125);

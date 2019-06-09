@@ -3,12 +3,35 @@ from django.contrib.auth.models import Group
 from django.core.mail import send_mail
 
 
-def manager_send_mail(title_mail, customer_name, order_title, link_order):
+def for_get_mail_from_managers():
     group = Group.objects.get(name='Manager')
     managers = []
     for m in group.user_set.all():
         if m.corporate_email:
             managers.append(m.corporate_email)
+
+    return managers
+
+
+def manager_rest_of_time_send_mail(title_mail, order_title, order_link):
+    data = '''
+        Title: {}
+        Link: {}dashboard/m/order/{}/
+    '''.format(order_title, settings.LINK_DOMAIN, order_link)
+    emails = for_get_mail_from_managers()
+    send_mail(title_mail, data, 'EssayRoyal', emails, fail_silently=False)
+
+
+def writer_rest_of_time_send_mail(title_mail, order_title, order_link, email):
+    data = '''
+        Title: {}
+        Link: {}dashboard/w/order/detail-{}/
+    '''.format(order_title, settings.LINK_DOMAIN, order_link)
+    send_mail(title_mail, data, 'EssayRoyal', [email], fail_silently=False)
+
+
+def manager_send_mail(title_mail, customer_name, order_title, link_order):
+    managers = for_get_mail_from_managers()
     data = '''
         Name: {}
         Title: {}

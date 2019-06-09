@@ -47,16 +47,16 @@ class AddOrderViews(View):
             if len(attached_files) != 0:
                 for f in attached_files:
                     if validate_file_views(f) == 'error':
-                        messages.error(request, 'Загружен не допустимый формат (перевести)')
+                        messages.error(request, 'Invalid format loaded')
                         return render(request, 'customer/orders/add_order.html', {'form': form})
                     files_order = FilesOrder()
                     files_order.order = order
                     files_order.file = f
                     files_order.save()
-            messages.success(request, 'Ваш заказ загружен (перевести)')
+            messages.success(request, 'Your order is loaded')
             return redirect(F'/customer/order/view/{order.id}')
         else:
-            messages.success(request, 'Поля не верно заполнены (перевести)')
+            messages.success(request, 'The fields are incorrectly filled')
         return render(request, 'customer/orders/add_order.html', {'form': form})
 
 
@@ -84,13 +84,13 @@ class UpdateOrderViews(UpdateView):
             if len(attached_files) != 0:
                 for f in attached_files:
                     if validate_file_views(f) == 'error':
-                        messages.error(request, 'Загружен не допустимый формат (перевести)')
+                        messages.error(request, 'Invalid format loaded')
                         return redirect('/dashboard/')
                     files_order = FilesOrder()
                     files_order.order = order
                     files_order.file = f
                     files_order.save()
-        messages.success(request, 'Ваш заказ обновлён (перевести)')
+        messages.success(request, 'Your order has been updated.')
         return redirect('/dashboard/')
 
 
@@ -102,7 +102,7 @@ def remove_order(request):
         if order.customer == user:
             manager_send_mail('Remove order', order.customer, order.title, '')
             order.delete()
-        messages.success(request, 'Ваш заказ успешно удалён (перевести)')
+        messages.success(request, 'Your order has been successfully deleted.')
         return redirect('/dashboard/')
 
 
@@ -111,7 +111,7 @@ def completed_order(request, pk):
     order = Order.objects.get(id=pk, customer=user, status=1)
     order.status = 2
     order.save()
-    messages.success(request, 'Completed order (Перевести)')
+    messages.success(request, 'Order status changed to completed')
     manager_send_mail('Completed order', order.customer, order.title, '')
     writer_send_mail('Completed order', order.title, '')
     return redirect('/order/completed/feedback/{}/'.format(pk))
@@ -145,16 +145,16 @@ def add_order_views(request):
             if len(attached_files) != 0:
                 for f in attached_files:
                     if validate_file_views(f) == 'error':
-                        messages.error(request, 'Загружен не допустимый формат (перевести)')
+                        messages.error(request, 'Invalid format loaded')
                         return redirect('/dashboard/')
                     files_order = FilesOrder()
                     files_order.order = order
                     files_order.file = f
                     files_order.save()
-            messages.success(request, 'Ваш заказ загружен (перевести)')
+            messages.success(request, 'Your order is loaded')
             return redirect('/dashboard/')
         else:
-            messages.success(request, 'Поля не верно заполнены (перевести)')
+            messages.success(request, 'The fields are incorrectly filled')
             return redirect('/dashboard/')
     else:
         return redirect('/')
@@ -189,7 +189,7 @@ def writer_order_detail(request, pk):
             req_files = request.FILES.getlist('files')
             for f in req_files:
                 if validate_file_views(f) == 'error':
-                    messages.error(request, 'Загружен не допустимый формат (перевести)')
+                    messages.error(request, 'Invalid format loaded')
                     return redirect('/dashboard/')
                 file_additional = FilesAdditionallyOrder()
                 file_additional.additionally_order = additionally_order
@@ -197,7 +197,7 @@ def writer_order_detail(request, pk):
                 file_additional.save()
             customer_send_mail('New files', order.title, order.customer.email, F'orders/progress/{order.id}/')
             manager_send_mail('New files', order.writer, order.title, F'dashboard/m/order/{order.id}/')
-            messages.success(request, 'Файлы успешно загружены (перевести)')
+            messages.success(request, 'Files uploaded successfully')
             return redirect(F'/dashboard/w/order/detail-{pk}/')
 
         if 'message' in request.POST and request.POST['message'] != '':
@@ -209,10 +209,10 @@ def writer_order_detail(request, pk):
             chat.save()
 
             manager_send_mail('New message from chat', order.writer, order.title, F'dashboard/m/order/{order.id}/')
-            messages.success(request, 'Ваше сообщение отправлено (перевести)')
+            messages.success(request, 'Your message has been sent.')
             return redirect(F'/dashboard/w/order/detail-{pk}/')
         else:
-            messages.success(request, 'Сообщение не может быть пустым (перевести)')
+            messages.success(request, 'Message cannot be empty')
             return redirect(F'/dashboard/w/order/detail-{pk}/')
 
 
@@ -243,10 +243,10 @@ def customer_order_in_progress(request, pk):
             chat.status = False
             chat.save()
             manager_send_mail('New message from chat', order.customer, order.title, F'dashboard/m/order/{order.id}/')
-            messages.success(request, 'Ваше сообщение отправлено (перевести)')
+            messages.success(request, 'Your message has been sent.')
             return redirect(F'/orders/progress/{pk}/')
         else:
-            messages.success(request, 'Сообщение не может быть пустым (перевести)')
+            messages.success(request, 'Message cannot be empty')
             return redirect(F'/orders/progress/{pk}/')
 
 
@@ -270,18 +270,18 @@ def writer_order_review(request, pk):
                     additional = AdditionallyOrder()
                     additional.order = order
                     additional.save()
-                messages.success(request, 'Вы успешно приняли заказ (Перевести)')
+                messages.success(request, 'You have successfully accepted the order')
             else:
-                messages.warning(request, 'Заказ уже принят другим врайтером (Перевести)')
+                messages.warning(request, 'The order has already been accepted by another writer.')
         else:
-            messages.error(request, 'Неверно отправлен запрос на принятие (Перевести)')
+            messages.error(request, 'Invalid request for acceptance')
         return redirect('/dashboard/')
 
 
 def manager_order(request, pk):
     if request.method == 'GET':
         if not access_to_manager_and_admin(request.user):
-            messages.error(request, 'Доступ закрыт (перевести)')
+            messages.error(request, 'Access closed')
             return redirect('/dashboard/')
 
         order = get_object_or_404(Order, id=pk)
@@ -291,10 +291,10 @@ def manager_order(request, pk):
 def type_order_remove(request, pk):
     if access_to_manager_and_admin(request.user):
         type_order = TypeOrder.objects.get(id=pk)
-        messages.success(request, F'{type_order.title} успешно удалён (перевести)')
+        messages.success(request, F'{type_order.title} deleted successfully')
         type_order.delete()
     else:
-        messages.error(request, 'Ошибка удаления (перевести)')
+        messages.error(request, 'Delete error')
         return redirect('/dashboard/')
 
     if request.user.is_superuser:
@@ -306,10 +306,10 @@ def type_order_remove(request, pk):
 def format_order_remove(request, pk):
     if access_to_manager_and_admin(request.user):
         format_order = FormatOrder.objects.get(id=pk)
-        messages.success(request, F'{format_order.title} успешно удалён (перевести)')
+        messages.success(request, F'{format_order.title} deleted successfully')
         format_order.delete()
     else:
-        messages.error(request, 'Ошибка удаления (перевести)')
+        messages.error(request, 'Delete error')
         return redirect('/dashboard/')
 
     if request.user.is_superuser:
@@ -321,10 +321,10 @@ def format_order_remove(request, pk):
 def price_deadline_order_remove(request, pk):
     if access_to_manager_and_admin(request.user):
         price_deadline = PriceDeadline.objects.get(id=pk)
-        messages.success(request, F'{price_deadline.price} успешно удалён (перевести)')
+        messages.success(request, F'{price_deadline.price} deleted successfully')
         price_deadline.delete()
     else:
-        messages.error(request, 'Ошибка удаления (перевести)')
+        messages.error(request, 'Delete error')
         return redirect('/dashboard/')
 
     if request.user.is_superuser:

@@ -24,17 +24,17 @@ def manager_selects(request):
     if '_add_type' in request.POST:
         form = TypeOrderForm(request.POST)
         if form.is_valid():
-            messages.success(request, F'{form.cleaned_data["title"]} успешно добавлен (перевести)')
+            messages.success(request, F'{form.cleaned_data["title"]} successfully added')
             form.save()
     if '_add_format' in request.POST:
         form = FormatOrderForm(request.POST)
         if form.is_valid():
-            messages.success(request, F'{form.cleaned_data["title"]} успешно добавлен (перевести)')
+            messages.success(request, F'{form.cleaned_data["title"]} successfully added')
             form.save()
     if '_add_deadline' in request.POST:
         form = PriceDeadlineForm(request.POST)
         if form.is_valid():
-            messages.success(request, F'{form.cleaned_data["title"]} успешно добавлен (перевести)')
+            messages.success(request, F'{form.cleaned_data["title"]} successfully added')
             form.save()
 
     return render(request, 'dashboard/manager/selects/index.html', locals())
@@ -51,20 +51,20 @@ def manager_settings(request):
             profile_form = UserForm(request.user, request.POST)
             if profile_form.is_valid():
                 profile_form.save()
-                messages.success(request, 'Ваш профиль успешно изменён (перевести)')
+                messages.success(request, 'Your profile has been successfully changed.')
                 return redirect('/dashboard/settings/')
             else:
-                messages.error(request, 'Неверно заполнены поля (перевести)')
+                messages.error(request, 'Invalid fields')
                 return redirect('/dashboard/settings/')
 
         if '_change_password' in request.POST:
             change_password = PasswordChangeForm(user, request.POST)
             if change_password.is_valid():
                 change_password.save()
-                messages.success(request, 'Ваш пароль успешно изменён (перевести)')
+                messages.success(request, 'Your password has been successfully changed.')
                 return redirect('/dashboard/settings/')
             else:
-                messages.error(request, 'Неверно заполнены поля (перевести)')
+                messages.error(request, 'Invalid fields')
                 return redirect('/dashboard/settings/')
 
     return render(request, 'dashboard/manager/settings/index.html', locals())
@@ -139,7 +139,7 @@ def manager_detail_writer(request, pk):
         completed = orders.filter(status=2)
         len_completed = len(completed)
     else:
-        messages.warning(request, 'Доступ запрещён (перевести)')
+        messages.warning(request, 'Access is denied')
         redirect('/dashboard/')
     return render(request, 'dashboard/manager/detail/writer.html', locals())
 
@@ -154,7 +154,7 @@ def manager_detail_customer(request, pk):
         completed = orders.filter(status=2)
         len_completed = len(completed)
     else:
-        messages.warning(request, 'Доступ запрещён (перевести)')
+        messages.warning(request, 'Access is denied')
         redirect('/dashboard/')
     return render(request, 'dashboard/manager/detail/customer.html', locals())
 
@@ -169,7 +169,7 @@ def manager_detail_customer(request, pk):
 #         completed = orders.filter(status=2)
 #         len_completed = len(completed)
 #     else:
-#         messages.warning(request, 'Доступ запрещён (перевести)')
+#         messages.warning(request, 'Access is denied')
 #         redirect('/dashboard/')
 #     return render(request, 'dashboard/admin/detail/writer.html', locals())
 #
@@ -184,6 +184,6 @@ def manager_detail_customer(request, pk):
 #         completed = orders.filter(status=2)
 #         len_completed = len(completed)
 #     else:
-#         messages.warning(request, 'Доступ запрещён (перевести)')
+#         messages.warning(request, 'Access is denied')
 #         redirect('/dashboard/')
 #     return render(request, 'dashboard/admin/detail/customer.html', locals())

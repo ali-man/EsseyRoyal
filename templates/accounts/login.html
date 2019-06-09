@@ -16,7 +16,7 @@
             <div class="col-12">
                 <h2>Sign in</h2>
                 {% if user.is_authenticated %}
-                    <p>Вы уже выполнили вход. (Перевести)</p>
+                    <p>You are already logged in.</p>
                 {% else %}
                     <form method="post">
                         {% csrf_token %}

@@ -25,9 +25,9 @@ def register(request):
                 create_user.save()
                 user = authenticate(email=email, password=password2)
             login(request, user)
-            messages.success(request, 'Вы успешно зарегистрированы (перевести)')
+            messages.success(request, 'You have successfully registered')
         else:
-            messages.error(request, 'Не все поля заполнены (перевести)')
+            messages.error(request, 'Not all fields are filled.')
 
         return redirect('/')
 
@@ -36,7 +36,7 @@ class SignUpViews(View):
     @staticmethod
     def get(request):
         if request.user.is_authenticated:
-            messages.info(request, 'Вы авторизованы (Перевести)')
+            messages.info(request, 'You are logged in')
             redirect('/')
         return render(request, 'appusers/sign-up.html', locals())
 
@@ -56,9 +56,9 @@ class SignUpViews(View):
             create_user.save()
             user = authenticate(email=email, password=password2)
             login(request, user)
-            messages.success(request, 'Вы успешно зарегистрированы (перевести)')
+            messages.success(request, 'You have successfully registered')
         else:
-            messages.error(request, 'Не все поля заполнены (перевести)')
+            messages.error(request, 'Not all fields are filled.')
 
         return redirect('/')
 
@@ -67,7 +67,7 @@ class SignInViews(View):
     @staticmethod
     def get(request):
         if request.user.is_authenticated:
-            messages.info(request, 'Вы авторизованы (Перевести)')
+            messages.info(request, 'You are logged in')
             return redirect('/')
         return render(request, 'appusers/sign-in.html')
 
@@ -81,20 +81,20 @@ class SignInViews(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    messages.success(request, 'Вы успешно авторизовались (перевести)')
+                    messages.success(request, 'You are successfully logged in.')
                 else:
-                    messages.error(request, 'Ваш аккаунт заблокирован (перевести)')
+                    messages.error(request, 'Your account has been blocked.')
             else:
-                messages.error(request, 'Неверный email или пароль (перевести)')
+                messages.error(request, 'Invalid email or password')
         else:
-            messages.error(request, 'Заполните все формы (перевести)')
+            messages.error(request, 'Complete all forms')
 
         return redirect('/')
 
 
 def logout_user(request):
     logout(request)
-    messages.success(request, 'Вы успешно разлогинились (перевести)')
+    messages.success(request, 'You successfully logged out')
     return redirect('/')
 
 
@@ -111,10 +111,10 @@ def change_profile(request):
         if 'avatar' in request.FILES:
             user.avatar = request.FILES['avatar']
         user.save()
-        messages.success(request, 'Профиль успешно изменён (перевести)')
+        messages.success(request, 'Profile successfully changed')
         return redirect('/dashboard/')
     else:
-        messages.error(request, 'Неверный метод запроса (перевести)')
+        messages.error(request, 'Invalid request method')
         return redirect('/dashboard/')
 
 
@@ -124,8 +124,8 @@ def login_user(request):
     user = authenticate(email=email, password=password)
     if user is not None:
         login(request, user)
-        messages.success(request, 'Вы успешно авторизовались (пепревести)')
+        messages.success(request, 'You are successfully logged in.')
         return redirect('/dashboard/')
     else:
-        messages.error(request, 'Неверный логин или пароль (перевести)')
+        messages.error(request, 'wrong login or password')
         return redirect('/')

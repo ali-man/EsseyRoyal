@@ -74,7 +74,7 @@ class DashboardViews(TemplateView):
 
         # NOT GROUP
         else:
-            messages.warning(self.request, 'Обнаружена ошибка, обратитесь к администрации сайта (перевести)')
+            messages.warning(self.request, 'An error was found, contact the site administration.')
 
         return context
 
@@ -93,7 +93,7 @@ def access_to_manager_and_admin(_user):
 
 def others(request):
     if not access_to_manager_and_admin(request.user):
-        messages.error(request, 'Доступ ограничен (перевести)')
+        messages.error(request, 'Access closed')
         return redirect('/dashboard/')
     context = {}
     # Feedback's
@@ -107,18 +107,18 @@ def others(request):
         form = ArticleForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Статья успешна добавлена (перевести)')
+            messages.success(request, 'Article successfully added')
             return redirect('/dashboard/others/')
         else:
             context['form'] = ArticleForm(request.POST, request.FILES)
-            messages.error(request, 'Неверно заполнены поля (перевести)')
+            messages.error(request, 'Invalid fields')
 
     return render(request, 'dashboard/others/index.html', context=context)
 
 
 def feedback_view(request, pk):
     if not access_to_manager_and_admin(request.user):
-        messages.error(request, 'Доступ ограничен (перевести)')
+        messages.error(request, 'Access closed')
         return redirect('/dashboard/')
     feedback = Feedback.objects.get(id=pk)
     return render(request, 'dashboard/others/detail/feedback.html', {'feedback': feedback})
@@ -126,7 +126,7 @@ def feedback_view(request, pk):
 
 def comment_view(request, pk):
     if not access_to_manager_and_admin(request.user):
-        messages.error(request, 'Доступ ограничен (перевести)')
+        messages.error(request, 'Access closed')
         return redirect('/dashboard/')
     comment = Comment.objects.get(id=pk)
     return render(request, 'dashboard/others/detail/comment.html', {'comment': comment})

@@ -76,10 +76,10 @@ def feedback(request):
 
         feedback.save()
         manager_send_mail('New feedback from site', name, subject, 'dashboard/others/')
-        messages.success(request, 'Ваше сообщение отправлено (перевести)')
+        messages.success(request, 'Your message has been sent.')
         return redirect('/')
     else:
-        messages.error(request, 'Данный страницы не существует (перевести)')
+        messages.error(request, 'This page does not exist.')
         return redirect('/')
 
 
@@ -120,7 +120,7 @@ def order_feedback(request):
     if 'txt' in request.GET:
         feedback_order.text = request.GET['txt']
     feedback_order.save()
-    messages.success(request, 'Спасибо за ваш отзыв (перевести)')
+    messages.success(request, 'Thanks for your feedback')
 
     manager_send_mail('Rating order', order.customer, order.title, 'dashboard/m/order/{}/'.format(order_id))
     writer_send_mail('Rating order', order.title, 'dashboard/w/order/completed-{}/'.format(order_id))
@@ -131,7 +131,7 @@ def order_feedback(request):
 
 def add_comment(request):
     if request.method == 'GET':
-        messages.error(request, 'Доступ ограничен (перевести)')
+        messages.error(request, 'Access is limited')
         return redirect('/')
     if request.method == 'POST':
         user = User.objects.get(email=request.user)
@@ -139,5 +139,5 @@ def add_comment(request):
         comment_obj.user = user
         comment_obj.comment = request.POST['comment']
         comment_obj.save()
-        messages.success(request, 'Спасибо за ваш отзыв (перевести)')
+        messages.success(request, 'Thanks for your feedback')
         return redirect('/')

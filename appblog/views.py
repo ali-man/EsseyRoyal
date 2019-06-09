@@ -32,7 +32,7 @@ class ArticleViews(DetailView):
 
 def article_edit(request, pk):
     if not access_to_manager_and_admin(request.user):
-        messages.error(request, 'Доступ ограничен (перевести)')
+        messages.error(request, 'Access is limited')
         return redirect('/dashboard/')
     article = Article.objects.get(id=pk)
     form = ArticleForm(instance=article)
@@ -40,16 +40,16 @@ def article_edit(request, pk):
         form = ArticleForm(request.POST, request.FILES, instance=article)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Статья успешно обновлена (перевести)')
+            messages.success(request, 'Article successfully updated')
             return redirect('/blog/')
     return render(request, 'blog/edit.html', context={'form': form, 'article': article})
 
 
 def article_remove(request, pk):
     if not access_to_manager_and_admin(request.user):
-        messages.error(request, 'Доступ ограничен (перевести)')
+        messages.error(request, 'Access is limited')
         return redirect('/dashboard/')
     article = Article.objects.get(id=pk)
     article.delete()
-    messages.info(request, 'Статья успешно удалена (Перевести)')
+    messages.info(request, 'Article successfully deleted')
     return redirect('/blog/')

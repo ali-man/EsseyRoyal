@@ -45,7 +45,7 @@ class EditProfileMixin:
             if 'photo' in request.FILES:
                 f.photo = request.FILES['photo']
             f.save()
-            messages.success(request, 'Врайтер успешно изменён (перевести)')
+            messages.success(request, 'Writer successfully changed')
             return redirect(F'/admin/{model_name}s/')
         else:
             return render(request, self.template, context={

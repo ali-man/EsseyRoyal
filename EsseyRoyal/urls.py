@@ -5,6 +5,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
 
+from appaaa.cron import search_deadline
 from appaaa.sitemaps import ArticleSitemap, StaticViewSitemap
 from appaaa.views import HomePageViews, feedback, calculate_home, order_feedback, add_comment
 from appblog.views import ListArticles, article
@@ -34,6 +35,8 @@ urlpatterns = [
     #     template_name="accounts/login.html",
     #     redirect_authenticated_user=True
     # ), name='login'),
+
+    path('cron/search-deadline/', search_deadline),
 
     path('accounts/login/', login_user, name='login'),
 

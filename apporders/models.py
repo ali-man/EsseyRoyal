@@ -3,25 +3,11 @@ import os
 
 from ckeditor.fields import RichTextField
 from django.conf import settings
-from django.contrib import admin
 from django.db import models
 
 from appmail.views import customer_send_mail, writer_send_mail, manager_send_mail
 from apporders.validators import validate_file_extension
 from appusers.models import User
-
-
-def upload_files(instance, filename):
-    return os.path.join(settings.MEDIA_ROOT + '/customer/%s/orders/%s/attached_files/' % (
-        instance.order.customer.id, instance.order.id), filename)
-
-
-def writer_upload_files_to_order(instance, filename):
-    customer_id = instance.additionally_order.order.customer.id
-    order_id = instance.additionally_order.order.id
-    path = F'/customer/{customer_id}/orders/{order_id}/writer_files/'
-    result = os.path.join(settings.MEDIA_ROOT + path, filename)
-    return result
 
 
 class PriceDeadline(models.Model):
@@ -137,7 +123,7 @@ class Order(models.Model):
 
         manager_link_order = F'dashboard/m/order/{self.id}/'
         writer_link_order = F'dashboard/w/order/{self.id}/'
-        customer_link_order = F'orders/progress/{self.id}/'
+        customer_link_order = F'order/progress/{self.id}/'
         if self.status == 0:
             manager_send_mail('New order', self.customer, self.title, manager_link_order)
             writer_send_mail('New order', self.title, writer_link_order)

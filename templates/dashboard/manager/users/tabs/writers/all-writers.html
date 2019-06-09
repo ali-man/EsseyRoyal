@@ -15,8 +15,8 @@
     <tbody>
     {% for writer in writers %}
         <tr>
-            <td><a href="{% url 'manager-writer' writer.id %}">{{ writer.get_full_name }}</a></td>
-            <td><a href="{% url 'manager-writer' writer.id %}">{{ writer.email }}</a></td>
+            <td><a href="{% url 'appdashboard:manager-writer' writer.id %}">{{ writer.get_full_name }}</a></td>
+            <td><a href="{% url 'appdashboard:manager-writer' writer.id %}">{{ writer.email }}</a></td>
             <td>{{ writer.balance }}</td>
         </tr>
     {% endfor %}

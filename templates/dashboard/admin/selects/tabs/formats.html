@@ -11,11 +11,11 @@
         <tr>
             <th scope="row">{{ format.id }}</th>
             <td>{{ format.title }}</td>
-            <td><a href="{% url 'selects-format_order-remove' format.id %}"><i class="fas fa-trash"></i></a></td>
+            <td><a href="{% url 'appdashboard:selects-format_order-remove' format.id %}"><i class="fas fa-trash"></i></a></td>
         </tr>
     {% endfor %}
     <tr>
-        <form action="{% url 'admin-selects' %}" method="post">
+        <form action="{% url 'appdashboard:admin-selects' %}" method="post">
             {% csrf_token %}
             <td></td>
             <td style="vertical-align: middle;">

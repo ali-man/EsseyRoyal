@@ -12,7 +12,7 @@ def chat_message_accept(request):
 
     order = message.order
     writer_link_order = F'dashboard/w/order/{order.id}/'
-    customer_link_order = F'orders/progress/{order.id}/'
+    customer_link_order = F'order/progress/{order.id}/'
 
     groups = message.user.groups.all()
     for g in groups:

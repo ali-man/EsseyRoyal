@@ -15,10 +15,10 @@
             <td>{{ type.title }}</td>
             <td>{{ type.price_client }}</td>
             <td>{{ type.price_writer }}</td>
-            <td><a href="{% url 'selects-type_order-remove' type.id %}"><i class="fas fa-trash"></i></a></td>
+            <td><a href="{% url 'appdashboard:selects-type_order-remove' type.id %}"><i class="fas fa-trash"></i></a></td>
         </tr>
     {% endfor %}
-    <form action="{% url 'admin-selects' %}" method="post">{% csrf_token %}
+    <form action="{% url 'appdashboard:admin-selects' %}" method="post">{% csrf_token %}
         <tr>
             <td></td>
             <td style="vertical-align: middle;">

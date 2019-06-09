@@ -142,3 +142,11 @@ ul.messages {
     opacity: .8;
     padding: 10px 15px;
     margin: 0 0 5px; }
+
+
+span.helptext ul {padding: 10px 0 0 20px;}
+span.helptext ul li {}
+
+main {
+    background-image: url(../img/bg.jpg);
+}

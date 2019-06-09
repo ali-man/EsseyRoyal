@@ -60,7 +60,7 @@
                         {% endfor %}
                     </ul>
 
-                    <form action="{% url 'customer-progress_order' order.id %}" method="post">
+                    <form action="{% url 'apporders:customer-progress_order' order.id %}" method="post">
                         {% csrf_token %}
                         <div class="white">
                             <div class="form-group basic-textarea">

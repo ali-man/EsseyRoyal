@@ -15,7 +15,7 @@
             {% for order in orders_in_progress %}
                 <tr>
                     <td>{{ order.customer.first_name }}</td>
-                    <td><a href="{% url 'manager-order' order.id %}" style="color: #406bde">{{ order.title }}</a></td>
+                    <td><a href="{% url 'appdashboard:manager-order' order.id %}" style="color: #406bde">{{ order.title }}</a></td>
                     <td>{{ order.type_order }}</td>
                     <td class="text-center">
                         {{ order.deadline }}

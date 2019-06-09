@@ -1,4 +1,4 @@
-<form action="change-profile" method="post" enctype="multipart/form-data">
+<form action="{% url 'appdashboard:change-profile' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <table class="table">
         {{ user_form }}

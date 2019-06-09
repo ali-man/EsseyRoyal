@@ -15,11 +15,11 @@
             <td>{{ deadline.days }}</td>
             <td>{{ deadline.hours }}</td>
             <td>{{ deadline.price }}</td>
-            <td><a href="{% url 'selects-price_deadline-remove' deadline.id %}"><i class="fas fa-trash"></i></a></td>
+            <td><a href="{% url 'appdashboard:selects-price_deadline-remove' deadline.id %}"><i class="fas fa-trash"></i></a></td>
         </tr>
     {% endfor %}
     <tr>
-        <form action="{% url 'admin-selects' %}" method="post">
+        <form action="{% url 'appdashboard:admin-selects' %}" method="post">
             {% csrf_token %}
             <td></td>
             <td style="vertical-align: middle;">

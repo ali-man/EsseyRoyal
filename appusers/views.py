@@ -1,8 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
-from django.shortcuts import render, redirect
-from django.views.generic.base import View
+from django.shortcuts import redirect
 
 from appusers.models import User
 
@@ -28,66 +27,6 @@ def register(request):
             messages.success(request, 'You have successfully registered')
         else:
             messages.error(request, 'Not all fields are filled.')
-
-        return redirect('/')
-
-
-class SignUpViews(View):
-    @staticmethod
-    def get(request):
-        if request.user.is_authenticated:
-            messages.info(request, 'You are logged in')
-            redirect('/')
-        return render(request, 'appusers/sign-up.html', locals())
-
-    @staticmethod
-    def post(request):
-        r = request.POST
-        first_name = r.get('firstname', None)
-        last_name = r.get('lastname', None)
-        email = r.get('email', None)
-        password1 = r.get('password1', None)
-        password2 = r.get('password2', None)
-
-        if (password1 == password2 is not None) and email is not None:
-            create_user = User.objects.create_user(email=email, password=password2)
-            create_user.first_name = first_name if first_name is not None else ''
-            create_user.last_name = last_name if last_name is not None else ''
-            create_user.save()
-            user = authenticate(email=email, password=password2)
-            login(request, user)
-            messages.success(request, 'You have successfully registered')
-        else:
-            messages.error(request, 'Not all fields are filled.')
-
-        return redirect('/')
-
-
-class SignInViews(View):
-    @staticmethod
-    def get(request):
-        if request.user.is_authenticated:
-            messages.info(request, 'You are logged in')
-            return redirect('/')
-        return render(request, 'appusers/sign-in.html')
-
-    @staticmethod
-    def post(request):
-        r = request.POST
-        email = r.get('email', None)
-        password = r.get('password', None)
-        if email and password is not None:
-            user = authenticate(email=email, password=password)
-            if user is not None:
-                if user.is_active:
-                    login(request, user)
-                    messages.success(request, 'You are successfully logged in.')
-                else:
-                    messages.error(request, 'Your account has been blocked.')
-            else:
-                messages.error(request, 'Invalid email or password')
-        else:
-            messages.error(request, 'Complete all forms')
 
         return redirect('/')
 

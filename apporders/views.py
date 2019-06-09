@@ -1,10 +1,8 @@
 import datetime
 
 from django.contrib import messages
-from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView, UpdateView
-from django.views.generic.base import View
 
 from appdashboard.views import access_to_manager_and_admin
 from appmail.views import manager_send_mail, customer_send_mail, writer_send_mail
@@ -17,47 +15,6 @@ from appusers.models import User
 
 def to_deadline(d, t):
     return datetime.datetime(d.year, d.month, d.day, t.hour, t.minute)
-
-
-class AddOrderViews(View):
-    @staticmethod
-    def get(request):
-        order_form = OrderAddForm()
-
-        return render(request, 'customer/orders/add_order.html', {'form': order_form})
-
-    @staticmethod
-    def post(request):
-        form = OrderAddForm(request.POST)
-        attached_files = request.FILES.getlist('attached-files')
-        if form.is_valid():
-            date = form.cleaned_data['date_deadline']
-            time = form.cleaned_data['time_deadline']
-            deadline = to_deadline(date, time)
-            order = Order()
-            user = User.objects.get(email=request.user)
-            order.customer = user
-            order.title = form.cleaned_data['title']
-            order.type_order = form.cleaned_data['type_order']
-            order.number_page = form.cleaned_data['number_page']
-            order.format_order = form.cleaned_data['format_order']
-            order.deadline = deadline
-            order.description = form.cleaned_data['description']
-            order.save()
-            if len(attached_files) != 0:
-                for f in attached_files:
-                    if validate_file_views(f) == 'error':
-                        messages.error(request, 'Invalid format loaded')
-                        return render(request, 'customer/orders/add_order.html', {'form': form})
-                    files_order = FilesOrder()
-                    files_order.order = order
-                    files_order.file = f
-                    files_order.save()
-            messages.success(request, 'Your order is loaded')
-            return redirect(F'/customer/order/view/{order.id}')
-        else:
-            messages.success(request, 'The fields are incorrectly filled')
-        return render(request, 'customer/orders/add_order.html', {'form': form})
 
 
 class ViewOrderViews(DetailView):
@@ -195,7 +152,7 @@ def writer_order_detail(request, pk):
                 file_additional.additionally_order = additionally_order
                 file_additional.file = f
                 file_additional.save()
-            customer_send_mail('New files', order.title, order.customer.email, F'orders/progress/{order.id}/')
+            customer_send_mail('New files', order.title, order.customer.email, F'order/progress/{order.id}/')
             manager_send_mail('New files', order.writer, order.title, F'dashboard/m/order/{order.id}/')
             messages.success(request, 'Files uploaded successfully')
             return redirect(F'/dashboard/w/order/detail-{pk}/')
@@ -244,10 +201,10 @@ def customer_order_in_progress(request, pk):
             chat.save()
             manager_send_mail('New message from chat', order.customer, order.title, F'dashboard/m/order/{order.id}/')
             messages.success(request, 'Your message has been sent.')
-            return redirect(F'/orders/progress/{pk}/')
+            return redirect(F'/order/progress/{pk}/')
         else:
             messages.success(request, 'Message cannot be empty')
-            return redirect(F'/orders/progress/{pk}/')
+            return redirect(F'/order/progress/{pk}/')
 
 
 def writer_order_review(request, pk):

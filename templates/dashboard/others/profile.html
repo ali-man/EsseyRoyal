@@ -22,19 +22,26 @@
 
         <ul class="menu-admin">
             <li>
-                <a href="{% url 'dashboard' %}">Orders</a>
+                <a href="{% url 'appdashboard:dashboard' %}">Orders</a>
             </li>
             <li>
-                <a href="{% if user.is_superuser %}{% url 'admin-users' %}{% else %}{% url 'manager-users' %}{% endif %}">Users</a>
+                <a href="
+                        {% if user.is_superuser %}{% url 'appdashboard:admin-users' %}{% else %}{% url 'appdashboard:manager-users' %}{% endif %}">Users</a>
             </li>
             <li>
-                <a href="{% if user.is_superuser %}{% url 'admin-selects' %}{% else %}{% url 'manager-selects' %}{% endif %}">Select management</a>
+                <a href="
+                        {% if user.is_superuser %}{% url 'appdashboard:admin-selects' %}{% else %}{% url 'appdashboard:manager-selects' %}{% endif %}">Select
+                    management</a>
             </li>
             <li>
-                <a href="{% url 'others' %}">Others</a>
+                <a href="{% url 'appdashboard:admin-billing' %}">Billing system</a>
             </li>
             <li>
-                <a href="{% if user.is_superuser %}{% url 'admin-settings' %}{% else %}{% url 'manager-settings' %}{% endif %}">Settings</a>
+                <a href="{% url 'appdashboard:others' %}">Others</a>
+            </li>
+            <li>
+                <a href="
+                        {% if user.is_superuser %}{% url 'appdashboard:admin-settings' %}{% else %}{% url 'appdashboard:manager-settings' %}{% endif %}">Settings</a>
             </li>
         </ul>
 

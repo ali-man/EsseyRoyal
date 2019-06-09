@@ -15,7 +15,7 @@
                 <td>{{ comment.user.email }}</td>
                 <td>{{ comment.comment }}</td>
                 <td>
-                    <a href="{% url 'comment-view' comment.id %}" class="blue-text" data-toggle="tooltip"
+                    <a href="{% url 'appdashboard:comment-view' comment.id %}" class="blue-text" data-toggle="tooltip"
                        data-placement="top" title=""
                        data-original-title="See results"><i class="far fa-eye"></i></a>
                 </td>

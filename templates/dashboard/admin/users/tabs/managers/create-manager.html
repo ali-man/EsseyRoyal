@@ -1,4 +1,4 @@
-<form action="{% url 'admin-users' %}" method="post" enctype="multipart/form-data">
+<form action="{% url 'appdashboard:admin-users' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <table class="table">
         {{ new_manager }}

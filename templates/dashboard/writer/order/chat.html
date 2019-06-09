@@ -61,7 +61,7 @@
                         {% endfor %}
                     </ul>
 
-                    <form action="{% url 'writer-order_detail' order.id %}" method="post">
+                    <form action="{% url 'appdashboard:writer-order_detail' order.id %}" method="post">
                         {% csrf_token %}
                         <div class="white">
                             <div class="form-group basic-textarea">

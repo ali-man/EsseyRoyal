@@ -12,8 +12,8 @@
     <tbody>
     {% for manager in managers %}
         <tr>
-            <td><a href="{% url 'admin-manager' manager.id %}">{{ manager.get_full_name }}</a></td>
-            <td><a href="{% url 'admin-manager' manager.id %}">{{ manager.email }}</a></td>
+            <td><a href="{% url 'appdashboard:admin-manager' manager.id %}">{{ manager.get_full_name }}</a></td>
+            <td><a href="{% url 'appdashboard:admin-manager' manager.id %}">{{ manager.email }}</a></td>
         </tr>
     {% endfor %}
     </tbody>

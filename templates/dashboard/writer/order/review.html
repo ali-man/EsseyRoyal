@@ -3,7 +3,7 @@
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/writer-view-order.css' %}">
-    <link rel="stylesheet" href="{% static 'css/order-update.css' %}">
+    <link rel="stylesheet" href="{% static 'css/order.css' %}">
 {% endblock %}
 
 {% block title %}
@@ -99,7 +99,7 @@
                 <div class="card mb-2">
                     <div class="card-body">
                         <div class="text-right">
-                            <form action="{% url 'writer-order_review' order.id %}" method="post">
+                            <form action="{% url 'appdashboard:writer-order_review' order.id %}" method="post">
                                 {% csrf_token %}
                                 <button class="btn bg-btn" name="take" value="accept">Take</button>
                             </form>

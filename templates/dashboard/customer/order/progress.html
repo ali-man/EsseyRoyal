@@ -132,7 +132,7 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-success" data-dismiss="modal">Cancel
                                             </button>
-                                            <form action="{% url 'completed' order.id %}" method="post">
+                                            <form action="{% url 'apporders:completed' order.id %}" method="post">
                                                 {% csrf_token %}
                                                 <button type="submit" class="btn btn-danger">Done</button>
                                             </form>

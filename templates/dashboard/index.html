@@ -2,38 +2,7 @@
 {% load static %}
 
 {% block css %}
-    <style>
-        .profile-card .avatar {
-            max-width: 150px;
-            max-height: 150px;
-            margin-top: -70px;
-            margin-left: auto;
-            margin-right: auto;
-            -webkit-border-radius: 50%;
-            border-radius: 50%;
-            overflow: hidden;
-        }
-
-        .profile-card {
-            margin-top: 64px;
-            background-color: #fff;
-        }
-
-        .avatar img.rounded-circle {
-            max-width: 150px;
-        }
-
-        .tab-content {
-            background-color: #fff;
-            -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
-            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
-            border-radius: .25rem;
-        }
-
-        .customer-table-td tbody td {
-            width: 100%;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
     <link rel="stylesheet" href="{% static 'css/admin-dashboard.css' %}">
 {% endblock %}
 
@@ -56,51 +25,5 @@
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        $('#date_deadline').datetimepicker({
-            format: 'd-m-Y',
-            value: new Date(),
-            timepicker: false
-        });
-        $('#time_deadline').datetimepicker({
-            format: "H:i",
-            value: "00:00",
-            datepicker: false
-        });
-
-        $('.customer_remove_order').click(function () {
-            let orderID = $(this).attr('data-order-id');
-            $('#id_remove').val(orderID);
-        });
-
-
-        // CUSTOMER CALCULATE
-        function fnCalculate(data) {
-            $('#per_page').text(`$${data.per_page}`);
-            $('#total_cost').text(`$${data.total_cost}`);
-        }
-
-        function fnCount() {
-            let typeOrder = $('#id_type_order').val(); // 4
-            let pagesOrder = $('#id_number_page').val(); // 4
-            let date = $('#date_deadline').val(); // 30-05-2019
-            let time = $('#time_deadline').val(); // 17:30
-            let dataObj = {
-                typeOrder: typeOrder,
-                pagesOrder: pagesOrder,
-                date: date,
-                time: time
-            };
-            ajaxQyery('calculate', dataObj, fnCalculate);
-        }
-
-        let listChangeCalculate = ['#id_type_order', '#id_number_page', '#date_deadline', '#time_deadline'];
-
-        for (let i = 0; i < listChangeCalculate.length; i++) {
-            $(listChangeCalculate[i]).change(function () {
-                fnCount();
-            })
-        }
-
-    </script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
 {% endblock %}

@@ -1,3 +1,121 @@
+body {
+    background-color: rgb(241, 241, 241);
+}
+
+html,
+body,
+header {
+    height: 65px;
+}
+
+.navbar:not(.top-nav-collapse) {
+    background: -moz-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, rgba(8, 27, 73, 0.97)), color-stop(100%, rgba(30, 101, 178, 0.97)));
+    background: -webkit-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: -o-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: -ms-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+}
+
+.contact {
+    background: -moz-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, rgba(8, 27, 73, 0.97)), color-stop(100%, rgba(30, 101, 178, 0.97)));
+    background: -webkit-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: -o-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: -ms-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+}
+
+h6 {
+    line-height: 1.7;
+}
+
+.bg-block, .rgba-indigo-strong, .top-nav-collapse {
+    background: -moz-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, rgba(8, 27, 73, 0.97)), color-stop(100%, rgba(30, 101, 178, 0.97)));
+    background: -webkit-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: -o-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: -ms-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+}
+
+.bg-btn {
+    background: -moz-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);
+    background: -webkit-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);
+    background: -o-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);
+    background: -ms-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);
+    background: linear-gradient(to right, #FDA10E 0%, #FF6C0D 100%);
+}
+
+.pills-primary .nav-link.active {
+    background: -moz-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, rgba(8, 27, 73, 0.97)), color-stop(100%, rgba(30, 101, 178, 0.97)));
+    background: -webkit-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: -o-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: -ms-linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+    background: linear-gradient(45deg, rgba(8, 27, 73, 0.97) 0%, rgba(30, 101, 178, 0.97) 100%);
+}
+
+.menu-login {
+    display: inline-flex;
+}
+
+.menu-login a.nav-link:hover {
+    color: rgba(255, 255, 255, .75);
+}
+
+.menu-login a.nav-link {
+    color: #fff;
+}
+
+.list-unstyled li {
+    font-size: 14px;
+}
+
+.list-unstyled li strong {
+    font-weight: 500;
+}
+
+input {
+    padding-left: 5px;
+    color: #555;
+    width: 100%;
+}
+
+.own-orange-text {
+    color: #fe740d;
+}
+
+ul#tree {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul#tree li {
+    padding-bottom: 1rem;
+}
+
+ul#tree ul {
+}
+
+ul#tree ul li {
+}
+
+#toTop {
+    width: 100px;
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 5px;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    cursor: pointer;
+    display: none;
+    color: #fff;
+    font-size: 11px;
+}
+
 .success {
   background-color: #00C851; }
 

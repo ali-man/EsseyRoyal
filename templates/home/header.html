@@ -1,0 +1,29 @@
+{% load static %}
+
+<div class="view"
+     style="background-image: url('{% static 'img/main-bg.png' %}'); background-repeat: no-repeat; background-size: cover; background-position: center center;">
+    <div class="mask rgba-indigo-strong d-flex justify-content-center align-items-center">
+        <div class="container">
+            <div class="row pt-lg-5 mt-lg-5 align-items-center">
+                <div class="col-md-6 mb-5 mt-md-0 mt-5 white-text text-center text-md-left wow fadeInLeft"
+                     data-wow-delay="0.3s">
+                    <h1 class="display-4 font-weight-bold">
+                        Need to write an essay?
+                    </h1>
+                    <h1 class="display-4 font-weight">
+                        Make it happen!
+                    </h1>
+                    <hr class="hr-light">
+                    <h6 class="mb-3">
+                        We are providing professional writing service by the cheapest rates in a shortest deadlines.
+                    </h6>
+                    {#                        <a class="btn btn-outline-white">Learn more</a>#}
+                </div>
+
+                <div class="col-md-6 col-xl-5 mb-4">
+                    {% include 'home/calculate.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

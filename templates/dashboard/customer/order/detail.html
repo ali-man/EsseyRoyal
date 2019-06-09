@@ -2,39 +2,7 @@
 {% load static %}
 
 {% block css %}
-    <style>
-        .amber-lighter-hover {
-            color: #ffa000;
-            -webkit-transition: .4s;
-            transition: .4s;
-        }
-
-        .white-darker-hover {
-            -webkit-transition: .4s;
-            transition: .4s;
-        }
-
-        .white-darker-hover:hover {
-            -webkit-transition: .4s;
-            transition: .4s;
-            color: #d9d9d9;
-        }
-
-        table.table tr th, table.table tr td {
-            padding-top: 10px;
-            padding-bottom: 10px;
-        }
-
-        .description {
-            display: inline-block;
-            width: 100%;
-        }
-
-        .description-text {
-            margin-left: 10px;
-            padding: 5px 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/customer.css' %}">
 {% endblock %}
 
 {% block title %}

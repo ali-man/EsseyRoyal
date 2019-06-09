@@ -1,0 +1,41 @@
+html,
+body,
+header,
+.view {
+    height: 100%;
+}
+
+@media (max-width: 740px) {
+    html,
+    body,
+    header,
+    .view {
+        height: 1100px;
+    }
+}
+
+@media (min-width: 800px) and (max-width: 850px) {
+    html,
+    body,
+    header,
+    .view {
+        height: 700px;
+    }
+}
+
+.accordion.md-accordion.accordion-5 .card .card-header {
+    background: -moz-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);
+    background: -webkit-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);
+    background: -o-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);
+    background: -ms-linear-gradient(left, #FDA10E 0%, #FF6C0D 100%);
+    background: linear-gradient(to right, #FDA10E 0%, #FF6C0D 100%);
+}
+
+.md-outline.select-wrapper + label {
+    top: .5em !important;
+    z-index: 2 !important;
+}
+
+#per_page, #total_cost {
+    font-size: 24px;
+}

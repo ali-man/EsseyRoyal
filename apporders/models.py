@@ -150,9 +150,6 @@ class FilesOrder(models.Model):
         return os.path.basename(self.file.name)
 
     def save(self, *args, **kwargs):
-        print(self.file)
-        print(self.file.file)
-        print(self.file.path)
         super().save(*args, **kwargs)
         threading.Thread(target=checking_files(self.file)).start()
 

@@ -28,7 +28,9 @@ class Processing:
     FORMATS = ['docx', 'doc', 'xls', 'xlsx', 'excel', 'pdf', 'jpg', 'png']
 
     def extract_text_by_page(self, pdf_path):
-        """ Работа с pdf файлами """
+        """ Работа с pdf файлами
+            Читает все страницы
+        """
         with open(pdf_path, 'rb') as fh:
             for page in PDFPage.get_pages(fh,
                                           caching=True,
@@ -51,7 +53,9 @@ class Processing:
             print(page)
 
     def processing_docx(self, _file):
-        """ Работа с docx файлами """
+        """ Работа с docx файлами
+            Читает все страницы по строчкам, пустые строки пропускает
+        """
         doc = docx.Document(_file)
         _filter = []
         for line in doc.paragraphs:
@@ -61,11 +65,17 @@ class Processing:
         # print(_filter)
 
     def processing_excel(self, f):
-        """ Работа с 'xls', 'xlsx', 'excel' файлами """
-        print('***********************************************')
+        """
+        Работа с 'xls', 'xlsx', 'excel' файлами
+        Читает все страницы по строчкам, пустые строчки пропускает
+        :param f: полученный файл из модели '' из метода save()
+        :return:
+        """
         rb = xlrd.open_workbook(f.path)
-        sheet = rb.sheet_by_index(0)
-        for rownum in range(sheet.nrows):
-            row = sheet.row_values(rownum)
-            for c_el in row:
-                print(c_el)
+        for i in range(rb.nsheets):
+            sheet = rb.sheet_by_index(i)
+            for rownum in range(sheet.nrows):
+                row = sheet.row_values(rownum)
+                for c_el in row:
+                    if len(str(c_el)) > 0:
+                        print(str(c_el))

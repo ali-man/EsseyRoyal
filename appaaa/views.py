@@ -1,4 +1,5 @@
 import datetime
+import threading
 
 from django_user_agents.utils import get_user_agent
 
@@ -19,7 +20,6 @@ class HomePageViews(View):
     @staticmethod
     def get(request):
         type_order = TypeOrder.objects.all()
-
         return render(request, 'home.html', locals())
 
 

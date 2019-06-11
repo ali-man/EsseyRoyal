@@ -1,11 +1,12 @@
 import datetime
 import os
+import threading
 
 from ckeditor.fields import RichTextField
-from django.conf import settings
 from django.db import models
 
 from appmail.views import customer_send_mail, writer_send_mail, manager_send_mail
+from apporders.async_query import checking_files
 from apporders.validators import validate_file_extension
 from appusers.models import User
 
@@ -147,6 +148,13 @@ class FilesOrder(models.Model):
 
     def filename(self):
         return os.path.basename(self.file.name)
+
+    def save(self, *args, **kwargs):
+        print(self.file)
+        print(self.file.file)
+        print(self.file.path)
+        super().save(*args, **kwargs)
+        threading.Thread(target=checking_files(self.file)).start()
 
     def __str__(self):
         return '%s' % self.id

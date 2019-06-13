@@ -26,11 +26,9 @@ class SearchWord:
 # TODO: Вывод в консоль, временное решение
 class Processing:
     FORMATS = ['docx', 'doc', 'xls', 'xlsx', 'excel', 'pdf', 'jpg', 'png']
+    sw = SearchWord()
 
     def extract_text_by_page(self, pdf_path):
-        """ Работа с pdf файлами
-            Читает все страницы
-        """
         with open(pdf_path, 'rb') as fh:
             for page in PDFPage.get_pages(fh,
                                           caching=True,
@@ -48,21 +46,24 @@ class Processing:
                 fake_file_handle.close()
 
     def processing_pdf(self, _file):
-        """ Работа с pdf файлами """
-        for page in self.extract_text_by_page(_file):
-            print(page)
+        """ Работа с pdf файлами
+            Читает все страницы
+        """
+        filter_words = []
+        for page in self.extract_text_by_page(_file.path):
+            filter_words += list(self.sw.search_word(page))
+        print(filter_words)
 
     def processing_docx(self, _file):
         """ Работа с docx файлами
             Читает все страницы по строчкам, пустые строки пропускает
         """
-        doc = docx.Document(_file)
-        _filter = []
+        doc = docx.Document(_file.path)
+        filter_words = []
         for line in doc.paragraphs:
             if len(line.text) != 0:
-                print(line.text)
-                # _filter += list(self.search_word(line.text))
-        # print(_filter)
+                filter_words += list(self.sw.search_word(line.text))
+        print(filter_words)
 
     def processing_excel(self, f):
         """
@@ -72,10 +73,12 @@ class Processing:
         :return:
         """
         rb = xlrd.open_workbook(f.path)
+        filter_words = []
         for i in range(rb.nsheets):
             sheet = rb.sheet_by_index(i)
             for rownum in range(sheet.nrows):
                 row = sheet.row_values(rownum)
                 for c_el in row:
                     if len(str(c_el)) > 0:
-                        print(str(c_el))
+                        filter_words += list(self.sw.search_word(str(c_el)))
+        print(filter_words)

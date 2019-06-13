@@ -79,6 +79,7 @@ class Order(models.Model):
     IN_REVIEW = 0
     IN_PROGRESS = 1
     COMPLETED = 2
+    MODERATION = 3  # TODO: Написать систему модерации, за счёт проверки файлов на фильтр слов
 
     STATUS = (
         (IN_REVIEW, 'In review'),

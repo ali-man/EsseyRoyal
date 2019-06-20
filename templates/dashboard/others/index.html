@@ -8,6 +8,11 @@
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
     <link rel="stylesheet" href="{% static 'css/admin-dashboard.css' %}">
+    <style>
+        .pt-3-half {
+            padding-top: 1.4rem;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -29,4 +34,187 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const $tableID = $('#table');
+        const $BTN = $('#export-btn');
+        const $EXPORT = $('#export');
+
+        const newTr = `
+                     <tr class="hide">
+                       <td class="pt-3-half change-td" contenteditable="true">Example</td>
+                       <td class="pt-3-half">
+                         <span class="table-up"><a href="#!" class="indigo-text"><i class="fas fa-long-arrow-alt-up" aria-hidden="true"></i></a></span>
+                         <span class="table-down"><a href="#!" class="indigo-text"><i class="fas fa-long-arrow-alt-down" aria-hidden="true"></i></a></span>
+                       </td>
+                       <td>
+                         <span class="table-remove"><button type="button" class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light">Remove</button></span>
+                       </td>
+                     </tr>`;
+
+        $('.table-add').on('click', 'i', () => {
+
+            const $clone = $tableID.find('tbody tr').last().clone(true).removeClass('hide table-line');
+
+            if ($tableID.find('tbody tr').length === 0) {
+
+                $('tbody').append(newTr);
+            }
+
+            $tableID.find('table').append(newTr);
+
+            $('.change-td').blur(function () {
+                let word = $(this).text();
+                let csrf = $("input[name=csrfmiddlewaretoken]").val();
+                if ($(this).hasAttr('data-word-id')) {
+                    console.log($(this).hasAttr('data-word-id'));
+                    let wordID = $(this).attr('data-word-id');
+                    $.ajax({
+                        url: '/ajax/add-word/',
+                        method: 'post',
+                        data: {
+                            csrfmiddlewaretoken: csrf,
+                            word: word,
+                            wordID: wordID
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+                        }
+                    });
+                } else {
+                    console.log($(this).hasAttr('data-word-id'));
+                    $.ajax({
+                        url: '/ajax/add-word/',
+                        method: 'post',
+                        data: {
+                            csrfmiddlewaretoken: csrf,
+                            word: word,
+                            wordID: 'no'
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+                        }
+                    });
+                }
+            })
+        });
+
+        $tableID.on('click', '.table-remove', function () {
+            let word = $(this).parents('tr').children('td.change-td')
+            let csrf = $("input[name=csrfmiddlewaretoken]").val();
+            if (word.hasAttr('data-word-id')) {
+                $.ajax({
+                    url: '/ajax/add-word/',
+                    method: 'post',
+                    data: {
+                        csrfmiddlewaretoken: csrf,
+                        word: word.text(),
+                        wordID: 'remove'
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+
+            $(this).parents('tr').detach();
+        });
+
+        $tableID.on('click', '.table-up', function () {
+
+            const $row = $(this).parents('tr');
+
+            if ($row.index() === 1) {
+                return;
+            }
+
+            $row.prev().before($row.get(0));
+        });
+
+        $tableID.on('click', '.table-down', function () {
+
+            const $row = $(this).parents('tr');
+            $row.next().after($row.get(0));
+        });
+
+        // A few jQuery helpers for exporting only
+        jQuery.fn.pop = [].pop;
+        jQuery.fn.shift = [].shift;
+
+        $BTN.on('click', () => {
+
+            const $rows = $tableID.find('tr:not(:hidden)');
+            const headers = [];
+            const data = [];
+
+            // Get the headers (add special header logic here)
+            $($rows.shift()).find('th:not(:empty)').each(function () {
+
+                headers.push($(this).text().toLowerCase());
+            });
+
+            // Turn all existing rows into a loopable array
+            $rows.each(function () {
+                const $td = $(this).find('td');
+                const h = {};
+
+                // Use the headers from earlier to name our hash keys
+                headers.forEach((header, i) => {
+
+                    h[header] = $td.eq(i).text();
+                });
+
+                data.push(h);
+            });
+
+            // Output the result
+            $EXPORT.text(JSON.stringify(data));
+            console.log(data);
+        });
+
+        $.fn.hasAttr = function (name) {
+            return this.attr(name) !== undefined;
+        };
+        $('.change-td').blur(function () {
+            let word = $(this).text();
+            let csrf = $("input[name=csrfmiddlewaretoken]").val();
+            if ($(this).hasAttr('data-word-id')) {
+                console.log($(this).hasAttr('data-word-id'));
+                let wordID = $(this).attr('data-word-id');
+                $.ajax({
+                    url: '/ajax/add-word/',
+                    method: 'post',
+                    data: {
+                        csrfmiddlewaretoken: csrf,
+                        word: word,
+                        wordID: wordID
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                    }
+                });
+            } else {
+                console.log($(this).hasAttr('data-word-id'));
+                $.ajax({
+                    url: '/ajax/add-word/',
+                    method: 'post',
+                    data: {
+                        csrfmiddlewaretoken: csrf,
+                        word: word,
+                        wordID: 'no'
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+        })
+    </script>
 {% endblock %}

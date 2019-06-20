@@ -15,7 +15,7 @@ urlpatterns = [
     path('w/order/completed-<int:pk>/', writer_order_completed, name='writer-order_completed'),
     path('w/order/detail-<int:pk>/', writer_order_detail, name='writer-order_detail'),
     path('w/order/review-<int:pk>/', writer_order_review, name='writer-order_review'),
-    path('feedback/<int:pk>/', feedback_view, name='feedback-view'),
+    # path('feedback/<int:pk>/', feedback_view, name='feedback-view'),
     path('others/comment/<int:pk>/', comment_view, name='comment-view'),
     path('others/', others, name='others'),
     # ADMIN

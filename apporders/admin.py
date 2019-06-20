@@ -32,9 +32,9 @@ class TypeOrderAdmin(admin.ModelAdmin):
 
 admin.site.register(PriceDeadline)
 admin.site.register(FormatOrder)
-admin.site.register(Earning)
 admin.site.register(AdditionallyOrder, AdditionallyOrderAdmin)
 admin.site.register(Chat)
 admin.site.register(FeedbackOrder)
+admin.site.register(FilterWord)
 admin.site.register(TypeOrder, TypeOrderAdmin)
 admin.site.register(Order, OrderAdmin)

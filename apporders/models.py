@@ -1,4 +1,5 @@
 import datetime
+import json
 import os
 import threading
 
@@ -9,6 +10,19 @@ from appmail.views import customer_send_mail, writer_send_mail, manager_send_mai
 from apporders.async_query import checking_files
 from apporders.validators import validate_file_extension
 from appusers.models import User
+
+
+class FilterWord(models.Model):
+    word = models.CharField(verbose_name='Word', max_length=30, unique=True)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        words = [i.word for i in FilterWord.objects.all()]
+        with open('static/words.json', 'w') as write_file:
+            json.dump(words, write_file)
+
+    def __str__(self):
+        return self.word
 
 
 class PriceDeadline(models.Model):
@@ -51,30 +65,6 @@ class FormatOrder(models.Model):
         return self.title
 
 
-class Earning(models.Model):
-    NOT_COMPLETED = 0
-    COMPLETED = 1
-    STATUS = (
-        (NOT_COMPLETED, 'Not completed'),
-        (COMPLETED, 'Completed')
-    )
-
-    date_order = models.DateTimeField(verbose_name='Дата получения заказа', auto_now_add=True)
-    number_pages = models.IntegerField(verbose_name='Количество страниц', default=0)
-    earned_amount = models.DecimalField(verbose_name='Цена клиента', max_digits=10, decimal_places=2)
-    status = models.IntegerField(verbose_name='Статус', choices=STATUS, default=NOT_COMPLETED)
-
-    class Meta:
-        verbose_name = 'Earning'
-        verbose_name_plural = 'Earnings'
-
-    def save(self, *args, **kwargs):
-        super(Earning, self).save(*args, **kwargs)
-
-    def __str__(self):
-        return '%s' % self.status
-
-
 class Order(models.Model):
     IN_REVIEW = 0
     IN_PROGRESS = 1
@@ -85,6 +75,7 @@ class Order(models.Model):
         (IN_REVIEW, 'In review'),
         (IN_PROGRESS, 'In progress'),
         (COMPLETED, 'Completed'),
+        (MODERATION, 'Moderation'),
     )
     customer = models.ForeignKey(User, verbose_name='Customer', related_name='order_customer', on_delete=models.CASCADE)
     title = models.CharField(verbose_name='Title of order', max_length=100)
@@ -93,7 +84,7 @@ class Order(models.Model):
     number_page = models.IntegerField(verbose_name='Number of page', default=1)
     deadline = models.DateTimeField(verbose_name='Deadline', auto_now=False)
     description = RichTextField(verbose_name='Description', blank=True)
-    status = models.IntegerField(verbose_name='Status order', choices=STATUS, default=IN_REVIEW)
+    status = models.IntegerField(verbose_name='Status order', choices=STATUS, default=MODERATION)
     created_datetime = models.DateTimeField(verbose_name='Created datetime', auto_now_add=True)
     per_page = models.DecimalField(verbose_name='Price per page', max_digits=10, decimal_places=2, default=0)
     total_cost = models.DecimalField(verbose_name='Total cost', max_digits=10, decimal_places=2, default=0)
@@ -136,15 +127,14 @@ class Order(models.Model):
             customer_send_mail('Completed order', self.title, self.customer.email, customer_link_order)
             manager_send_mail('Completed order', self.writer, self.title, manager_link_order)
 
-
-
     def __str__(self):
         return self.title
 
 
 class FilesOrder(models.Model):
     order = models.ForeignKey(Order, verbose_name='ID Order', on_delete=models.CASCADE)
-    file = models.FileField(verbose_name='Attached files', upload_to='customer/order/files/%Y/%m/%d/', validators=[validate_file_extension],
+    file = models.FileField(verbose_name='Attached files', upload_to='customer/order/files/%Y/%m/%d/',
+                            validators=[validate_file_extension],
                             null=True, blank=True)
 
     def filename(self):
@@ -152,7 +142,7 @@ class FilesOrder(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        threading.Thread(target=checking_files(self.file)).start()
+        threading.Thread(target=checking_files(self.file, self.order.id)).start()
 
     def __str__(self):
         return '%s' % self.id

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+{% endblock %}
+
+{% block title %}
+    Chat
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card grey lighten-3 chat-room my-5">
+                    <div class="card-body">
+
+                        <div class="row px-lg-2 px-2">
+
+                            <div class="col-md-6 col-xl-4 px-0">
+
+                                {% include 'accounts/chat/members.html' %}
+
+                            </div>
+
+                            <div class="col-md-6 col-xl-8 pl-md-3 px-lg-auto px-0">
+
+                                {% include 'accounts/chat/messages.html' %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/chats.js' %}"></script>
+    <script src="{% static 'js/fu/jquery.ui.widget.js' %}"></script>
+    <script src="{% static 'js/fu/jquery.iframe-transport.js' %}"></script>
+    <script src="{% static 'js/fu/jquery.fileupload.js' %}"></script>
+    <script>
+        $(function () {
+            $('#fileupload').fileupload({
+                dataType: 'json',
+                done: function (e, data) {
+                    $.each(data.originalFiles, function (index, file) {
+
+                        {#$('.fileupload-text').text('upload completed ' + file.name);#}
+
+                    });
+                }
+            });
+        });
+
+        function sendChatAjax() {
+
+            let data = $('#formdata').serialize();
+            let _file = $('#id_files').val();
+            console.log(data);
+            console.log(_file);
+
+            $.ajax({
+                method: 'POST',
+                data: data + '&upload_files=' + _file,
+                dataType: 'json',
+                success: function (msg) {
+                    console.log(msg);
+                }
+            });
+        }
+    </script>
+{% endblock %}

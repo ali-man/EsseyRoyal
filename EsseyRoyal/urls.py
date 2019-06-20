@@ -7,10 +7,9 @@ from django.urls import path, include
 
 from appaaa.cron import search_deadline
 from appaaa.sitemaps import ArticleSitemap, StaticViewSitemap
-from appaaa.views import HomePageViews, feedback, calculate_home, order_feedback, add_comment
-from appchat.views import chat_ajax, chat_ajax_send, chat_ajax_user
+from appaaa.views import HomePageViews, feedback, calculate_home, order_feedback, add_comment, add_word
 from apporders.ajax import chat_message_accept
-from appusers.views import register, login_user
+from appusers.views import register, login_user, ChatViews
 
 sitemaps = {
     'articles': ArticleSitemap,
@@ -34,14 +33,17 @@ urlpatterns = [
 
     path('dashboard/', include('appdashboard.urls'), name='appdashboard'),
 
-    path('ajax/chat-ajax/', chat_ajax),
-    path('ajax/chat-send/', chat_ajax_send),
-    path('ajax/chat-person/', chat_ajax_user),
     path('ajax/chat-message-accept/', chat_message_accept),
     path('ajax/calculate/', calculate_home),
     path('ajax/order-feedback/', order_feedback),
+    path('ajax/add-word/', add_word),
     path('blog/', include('appblog.urls', namespace='appblog')),
     path('pages/', include('django.contrib.flatpages.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
-    path('chat-ajax/', include('appchat.urls')),
+    # Chat for writers, managers and admin
+    # path('ajax/chat-ajax/', chat_ajax),
+    # path('ajax/chat-send/', chat_ajax_send),
+    # path('ajax/chat-person/', chat_ajax_user),
+    # path('chat-ajax/', include('appchat.urls')),
+    path('chat/<int:pk>/', ChatViews.as_view(), name='chat'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

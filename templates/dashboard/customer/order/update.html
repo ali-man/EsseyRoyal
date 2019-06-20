@@ -27,6 +27,8 @@
                                            title="ORDER IN PROGRESS"></i>
                                     {% elif order.status == 2 %}
                                         <i class="fas fa-check fa-xs" aria-hidden="true" title="COMPLETED"></i>
+                                    {% elif order.status == 3 %}
+                                        <i class="fas fa-cash-register fa-xs" aria-hidden="true" title="MODERATION"></i>
                                     {% endif %}
                                 </span>
                             </h4>

@@ -2,13 +2,18 @@ import re
 import docx
 import xlrd
 import io
+import json
 
 from pdfminer.converter import TextConverter
 from pdfminer.pdfinterp import PDFPageInterpreter
 from pdfminer.pdfinterp import PDFResourceManager
 from pdfminer.pdfpage import PDFPage
 
-from appaaa.word_filter import WORDS
+from appmail.views import manager_send_mail
+from apporders.models import Order
+
+with open('static/words.json', 'r') as read_file:
+    WORDS = json.load(read_file)
 
 
 class SearchWord:
@@ -28,6 +33,14 @@ class Processing:
     FORMATS = ['docx', 'doc', 'xls', 'xlsx', 'excel', 'pdf', 'jpg', 'png']
     sw = SearchWord()
 
+    def moderation_order(self, words, order_id):
+        order = Order.objects.get(id=order_id)
+        if len(words) > 0:
+            manager_send_mail('title mail', order.customer, order.title, F'dashboard/m/order/{order.id}/')
+        else:
+            order.status = 1
+            order.save()
+
     def extract_text_by_page(self, pdf_path):
         with open(pdf_path, 'rb') as fh:
             for page in PDFPage.get_pages(fh,
@@ -45,16 +58,17 @@ class Processing:
                 converter.close()
                 fake_file_handle.close()
 
-    def processing_pdf(self, _file):
+    def processing_pdf(self, _file, obj_id):
         """ Работа с pdf файлами
             Читает все страницы
         """
         filter_words = []
         for page in self.extract_text_by_page(_file.path):
             filter_words += list(self.sw.search_word(page))
-        print(filter_words)
 
-    def processing_docx(self, _file):
+        self.moderation_order(filter_words, obj_id)
+
+    def processing_docx(self, _file, obj_id):
         """ Работа с docx файлами
             Читает все страницы по строчкам, пустые строки пропускает
         """
@@ -63,9 +77,10 @@ class Processing:
         for line in doc.paragraphs:
             if len(line.text) != 0:
                 filter_words += list(self.sw.search_word(line.text))
-        print(filter_words)
 
-    def processing_excel(self, f):
+        self.moderation_order(filter_words, obj_id)
+
+    def processing_excel(self, f, obj_id):
         """
         Работа с 'xls', 'xlsx', 'excel' файлами
         Читает все страницы по строчкам, пустые строчки пропускает
@@ -81,4 +96,5 @@ class Processing:
                 for c_el in row:
                     if len(str(c_el)) > 0:
                         filter_words += list(self.sw.search_word(str(c_el)))
-        print(filter_words)
+
+        self.moderation_order(filter_words, obj_id)

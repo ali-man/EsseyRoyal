@@ -4,7 +4,8 @@ from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from .managers import UserManager
 
@@ -52,3 +53,55 @@ class User(AbstractBaseUser, PermissionsMixin):
         Отправляет электронное письмо этому пользователю.
         '''
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+    # def __str__(self):
+    #     return '%s %s' % (self.first_name, self.last_name) if self.first_name and self.last_name is not '' else self.email
+
+
+class ChatUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Chat user'
+        verbose_name_plural = 'Chat users'
+
+    def __str__(self):
+        return '%s' % self.user
+
+
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    ChatUser.objects.get_or_create(user=instance)
+
+
+class FileChatUser(models.Model):
+    chat = models.ForeignKey(ChatUser, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='files/chat/%Y/%m/%d/')
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)
+
+    def filename(self):
+        path_name = self.file.name
+        name = path_name.split('/')[-1]
+        return name
+
+    def __str__(self):
+        return '%s' % self.owner
+
+
+class MessageChatUser(models.Model):
+    chat = models.ForeignKey(ChatUser, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField()
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)
+    updated_date = models.DateField(auto_now=True)
+    updated_time = models.TimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Message from chat'
+        verbose_name_plural = 'Messages from chat'
+
+    def __str__(self):
+        return '%s' % self.owner

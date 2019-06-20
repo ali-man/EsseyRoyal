@@ -12,7 +12,7 @@ from django.contrib.gis.geoip2 import GeoIP2
 from appaaa.models import Feedback, Comment
 from appblog.models import Article
 from appmail.views import manager_send_mail, writer_send_mail
-from apporders.models import TypeOrder, PriceDeadline, Order, FeedbackOrder
+from apporders.models import TypeOrder, PriceDeadline, Order, FeedbackOrder, FilterWord
 from appusers.models import User
 
 
@@ -141,3 +141,25 @@ def add_comment(request):
         comment_obj.save()
         messages.success(request, 'Thanks for your feedback')
         return redirect('/')
+
+
+def add_word(request):
+    if request.is_ajax():
+        if request.POST['wordID'] == 'no':
+            word = FilterWord()
+            word.word = request.POST['word'].strip()
+            word.save()
+            return JsonResponse({'ok': 'create'})
+        elif request.POST['wordID'] == 'remove':
+            word_strip = request.POST['word'].strip()
+            try:
+                word = FilterWord.objects.get(word=word_strip)
+                word.delete()
+                return JsonResponse({'ok': 'remove'})
+            except FilterWord.DoesNotExist:
+                pass
+        else:
+            word = FilterWord.objects.get(id=int(request.POST['wordID']))
+            word.word = request.POST['word'].strip()
+            word.save()
+            return JsonResponse({'ok': 'edit'})

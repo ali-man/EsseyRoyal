@@ -1,25 +1,26 @@
 import re
 
-WORDS = [
-    'contact',
-    ' me ',
-    'email',
-    'mail',
-    '@',
-    'gmail',
-    '.com',
-    'direct',
-    'phone',
-    'reach',
-    'out',
-    'whatsup',
-    'telegram',
-    'facebook',
-    'social network',
-    'find me',
-    'instagram',
-    'hi',
-]
+
+# WORDS = [
+#     'contact',
+#     ' me ',
+#     'email',
+#     'mail',
+#     '@',
+#     'gmail',
+#     '.com',
+#     'direct',
+#     'phone',
+#     'reach',
+#     'out',
+#     'whatsup',
+#     'telegram',
+#     'facebook',
+#     'social network',
+#     'find me',
+#     'instagram',
+#     'hi',
+# ]
 
 if __name__ == '__main__':
     TEXT = 'Find me Alitelegramsher 914266874 Rustamovich me mail'

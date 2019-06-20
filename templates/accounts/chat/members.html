@@ -1,0 +1,60 @@
+{% load static %}
+
+<div class="white z-depth-1 px-3 pt-3 pb-0">
+    <form id="formdata" data-chat-id="{{ chat.id }}" enctype="multipart/form-data">{% csrf_token %}
+        <div class="form-group basic-textarea">
+                <textarea class="form-control pl-2 my-0" name="message" rows="3"
+                          placeholder="Type your message here..."></textarea>
+        </div>
+
+        <form class="md-form">
+            <div class="file-field">
+                <div class="btn btn-cyan btn-sm float-left">
+                    <span>Upload file</span>
+                    <input type="file" name="files[]" id="fileupload" multiple data-url="{% url 'chat' chat.id %}">
+                </div>
+            </div>
+        </form>
+
+        <button type="button" id="js-send-message" onclick="sendChatAjax()"
+                class="btn btn-info btn-rounded btn-sm waves-effect waves-light float-right">
+            Send
+        </button>
+    </form>
+    <br><br>
+    <hr>
+    <br>
+    <ul class="list-unstyled friend-list">
+        {% for file in files_from_chat %}
+            <li class="p-2">
+                <a href="{{ file.file.url }}" class="d-flex justify-content-between">
+                    <img src="
+                    {% if file.owner.avatar %}
+                        {{ file.owner.avatar.url }}
+                    {% else %}
+                        {% static 'img/noimage.png' %}
+                    {% endif %}
+                    " alt="avatar" width="40" height="40"
+                         class="avatar rounded-circle d-flex align-self-center mr-2 z-depth-1">
+                    <div class="text-small">
+                        <strong>{{ file.filename }}</strong>
+                        <p class="last-message text-muted">
+                            {% if file.owner.get_full_name %}
+                                {{ file.owner.get_full_name }}
+                            {% else %}
+                                {{ file.owner.email }}
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="chat-footer">
+                        <p class="text-smaller text-muted mb-0">
+                            {{ file.created_time.hour }}:{{ file.created_time.minute }}
+                             {{ file.created_date.day }}.{{ file.created_date.month }}.{{ file.created_date.year }}
+                        </p>
+{#                        <span class="badge badge-danger float-right">1</span>#}
+                    </div>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

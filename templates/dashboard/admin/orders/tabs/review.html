@@ -15,7 +15,15 @@
             <tbody class="td-center">
             {% for order in orders_in_review %}
                 <tr>
-                    <td><a href="{% url 'appdashboard:admin-customer' order.customer.id %}">{{ order.customer.first_name }}</a></td>
+                    <td>
+                        <a href="{% url 'appdashboard:admin-customer' order.customer.id %}">
+                            {% if order.customer.get_full_name %}
+                                {{ order.customer.get_full_name }}
+                            {% else %}
+                                {{ order.customer.email }}
+                            {% endif %}
+                        </a>
+                    </td>
                     <td><a href="{% url 'appdashboard:manager-order' order.id %}">{{ order.title }}</a></td>
                     <td>{{ order.type_order }}</td>
                     <td>{{ order.format_order }}</td>
@@ -24,9 +32,21 @@
                     </td>
                     <td class="text-center">${{ order.total_cost|floatformat }}</td>
                     <td class="text-center">
-                        <a href="{% url 'apporders:view_order' order.id %}" class="blue-text" data-toggle="tooltip"
-                           data-placement="top" title=""
-                           data-original-title="See results"><i class="far fa-eye"></i></a>
+                        {% if order.status == 0 %}
+                            <a href="{% url 'apporders:view_order' order.id %}"
+                               class="blue-text" data-toggle="tooltip"
+                               data-placement="top" title=""
+                               data-original-title="See results">
+                                <i class="far fa-eye"></i>
+                            </a>
+                        {% elif order.status == 3 %}
+                            <a href="{% url 'apporders:view_order' order.id %}"
+                               class="blue-text" data-toggle="tooltip"
+                               data-placement="top" title=""
+                               data-original-title="See results">
+                                <i class="fas fa-cash-register"></i>
+                            </a>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

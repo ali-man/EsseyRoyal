@@ -20,6 +20,8 @@ class HomePageViews(View):
     @staticmethod
     def get(request):
         type_order = TypeOrder.objects.all()
+        comments_1 = Comment.objects.all()[:3]
+        comments_2 = Comment.objects.all()[3:6]
         return render(request, 'home.html', locals())
 
 

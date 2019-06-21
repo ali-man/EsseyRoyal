@@ -52,7 +52,8 @@ def change_profile(request):
         user.academic_institution = r['academic_institution']
         user.degree = r['degree']
         user.phone = r['phone']
-        user.corporate_email = r['corporate_email']
+        if 'corporate_email' in r:
+            user.corporate_email = r['corporate_email']
         if 'avatar' in request.FILES:
             user.avatar = request.FILES['avatar']
         user.save()

@@ -5,6 +5,7 @@ from appusers.models import User
 
 class Comment(models.Model):
     user = models.ForeignKey(User, verbose_name='User', on_delete=models.CASCADE)
+    title = models.CharField(verbose_name='Title', max_length=30, blank=True)
     comment = models.TextField(verbose_name='Comment')
 
     class Meta:

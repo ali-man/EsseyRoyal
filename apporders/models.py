@@ -7,6 +7,7 @@ import datetime
 import os
 import threading
 
+from django.conf import settings
 from pdfminer.converter import TextConverter
 from pdfminer.pdfinterp import PDFPageInterpreter
 from pdfminer.pdfinterp import PDFResourceManager
@@ -26,7 +27,7 @@ class FilterWord(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         words = [i.word for i in FilterWord.objects.all()]
-        with open('static/words.json', 'w') as write_file:
+        with open(settings.STATIC_ROOT + '/words.json', 'w') as write_file:
             json.dump(words, write_file)
 
     def __str__(self):
@@ -77,7 +78,7 @@ class Order(models.Model):
     IN_REVIEW = 0
     IN_PROGRESS = 1
     COMPLETED = 2
-    MODERATION = 3  # TODO: Написать систему модерации, за счёт проверки файлов на фильтр слов
+    MODERATION = 3
 
     STATUS = (
         (IN_REVIEW, 'In review'),
@@ -217,7 +218,7 @@ class Chat(models.Model):
 class SearchWord:
 
     def search_word(self, line_sting):
-        with open('static/words.json', 'r') as read_file:
+        with open(settings.STATIC_ROOT + '/words.json', 'r') as read_file:
             WORDS = json.load(read_file)
         texts = []
         for word in WORDS:
@@ -227,18 +228,19 @@ class SearchWord:
         return texts
 
 
-# TODO: Проверить файл с несколькими листами
-# TODO: Вывод в консоль, временное решение
 class Processing:
     FORMATS = ['docx', 'doc', 'xls', 'xlsx', 'excel', 'pdf', 'jpg', 'png']
     sw = SearchWord()
 
     def moderation_order(self, words, order_id):
         order = Order.objects.get(id=order_id)
+
+        # TODO: Фильтр слов по полю Description
+
         if len(words) > 0:
-            manager_send_mail('title mail', order.customer, order.title, F'dashboard/m/order/{order.id}/')
+            manager_send_mail('title mail', order.customer, F'{order.title} {words}', F'dashboard/m/order/{order.id}/')
         else:
-            order.status = 1
+            order.status = 0
             order.save()
 
     def extract_text_by_page(self, pdf_path):

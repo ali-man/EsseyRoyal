@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'appblog',
     'appmail',
     'appaaa',
-    # 'appchat',
+    # 'appcourses',
     # 'apppayment',
 ]
 

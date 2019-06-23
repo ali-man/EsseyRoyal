@@ -16,6 +16,12 @@ class UserForm(forms.ModelForm):
 
 
 class CreateUserForm(forms.ModelForm):
+    select_user = forms.ChoiceField(
+        choices=(('1', 'Writer'), ('2', 'Manager')),
+        label='Select group',
+        widget=forms.Select(attrs={'class': 'browser-default custom-select'})
+    )
+
     class Meta:
         model = User
         fields = [
@@ -26,4 +32,4 @@ class CreateUserForm(forms.ModelForm):
         labels = {
             'first_name': 'First name',
             'last_name': 'Last name',
-        }
+        },

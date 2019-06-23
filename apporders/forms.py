@@ -24,6 +24,7 @@ class OrderAddForm(forms.Form):
     format_order = forms.ModelChoiceField(queryset=FormatOrder.objects.all(),
                                           widget=forms.Select(attrs={'class': 'browser-default custom-select'}))
     number_page = forms.IntegerField()
+    _date = datetime.date.today() + datetime.timedelta(days=8)
     date_deadline = forms.DateField(
         required=False, input_formats=['%d-%m-%Y'],
         widget=forms.DateInput(

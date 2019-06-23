@@ -117,6 +117,18 @@ def add_order_views(request):
         return redirect('/')
 
 
+def order_published(request, pk):
+    if access_to_manager_and_admin(request.user):
+        order = Order.objects.get(id=pk)
+        order.status = 0
+        order.save()
+        messages.success(request, 'Order sent to writers')
+        return redirect('/dashboard/')
+    else:
+        messages.error(request, 'Access is denied')
+        return redirect('/dashboard/')
+
+
 def writer_order_completed(request, pk):
     if request.method == 'GET':
         user = User.objects.get(email=request.user)

@@ -17,17 +17,19 @@ def admin_users(request):
     # WRITERS
     writers = User.objects.filter(groups__name='Writer')
     orders_in_progress = orders.filter(status=1)
-    new_writer = CreateUserForm()
+    # new_writer = CreateUserForm()
 
     # CUSTOMER
     customers = User.objects.filter(groups__name='Customer')
 
     # Managers
     managers = User.objects.filter(groups__name='Manager')
-    new_manager = CreateUserForm()
+    # new_manager = CreateUserForm()
+
+    new_user = CreateUserForm()
 
     if request.method == 'POST':
-        if '_create_writer' in request.POST:
+        if '1' == request.POST['select_user']:
             form_writer = CreateUserForm(request.POST, request.FILES)
             if form_writer.is_valid():
                 cd = form_writer.cleaned_data
@@ -49,7 +51,7 @@ def admin_users(request):
             else:
                 messages.error(request, 'Неверно заполнены поля (певести)')
 
-        if '_create_manager' in request.POST:
+        if '2' == request.POST['select_user']:
             create_manager = CreateUserForm(request.POST, request.FILES)
             if create_manager.is_valid():
                 cd = create_manager.cleaned_data
@@ -150,6 +152,12 @@ def admin_detail_writer(request, pk):
     return render(request, 'dashboard/admin/detail/writer.html', locals())
 
 
+def admin_detail_writer_orders(request, pk):
+    writer = User.objects.get(id=pk)
+    orders = Order.objects.filter(writer=writer)
+    return render(request, 'dashboard/admin/detail/orders.html', {'orders': orders})
+
+
 def admin_detail_customer(request, pk):
     if request.user.is_superuser:
         customer = User.objects.get(id=pk)
@@ -178,7 +186,3 @@ def admin_detail_manager(request, pk):
         messages.warning(request, 'Access is denied')
         redirect('/dashboard/')
     return render(request, 'dashboard/admin/detail/manager.html', locals())
-
-
-def admin_detail_order(request, pk):
-    pass

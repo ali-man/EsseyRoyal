@@ -100,7 +100,11 @@
                 <div class="card mb-2">
                     <div class="card-body">
                         <div class="text-right">
-                            <a href="{% url 'apporders:update_order' order.id %}" type="submit" class="btn bg-btn">Edit</a>
+                            {% if order.customer == request.user %}
+                                <a href="{% url 'apporders:update_order' order.id %}" type="submit" class="btn bg-btn">Edit</a>
+                            {% else %}
+                                <a href="{% url 'apporders:published_order' order.id %}" type="submit" class="btn bg-btn">Published</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

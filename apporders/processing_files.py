@@ -4,6 +4,7 @@ import xlrd
 import io
 import json
 
+from django.conf import settings
 from pdfminer.converter import TextConverter
 from pdfminer.pdfinterp import PDFPageInterpreter
 from pdfminer.pdfinterp import PDFResourceManager
@@ -12,7 +13,7 @@ from pdfminer.pdfpage import PDFPage
 from appmail.views import manager_send_mail
 from apporders.models import Order
 
-with open('static/words.json', 'r') as read_file:
+with open(settings.STATIC_ROOT + 'static/words.json', 'r') as read_file:
     WORDS = json.load(read_file)
 
 
@@ -27,8 +28,6 @@ class SearchWord:
         return texts
 
 
-# TODO: Проверить файл с несколькими листами
-# TODO: Вывод в консоль, временное решение
 class Processing:
     FORMATS = ['docx', 'doc', 'xls', 'xlsx', 'excel', 'pdf', 'jpg', 'png']
     sw = SearchWord()

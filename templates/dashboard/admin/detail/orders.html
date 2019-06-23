@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin-dashboard.css' %}">
+{% endblock %}
+
+{% block title %}
+    Detail Writer
+{% endblock %}
+
+{% block content %}
+
+    <div class="container pt-5 pb-5">
+        <div class="row">
+            <div class="col-12 col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="font-weight-bold amber-lighter-hover mb-3">Orders</h4>
+                        {% for order in orders %}
+                            <ul class="list-group mt-3">
+                                <li class="list-group-item">
+                                    <strong class="ml-1">Title:</strong> {{ order.title }}
+                                </li>
+                                <li class="list-group-item">
+                                    <strong class="ml-1">Deadline:</strong> {{ order.deadline }}
+                                </li>
+                                <li class="list-group-item">
+                                    <strong class="ml-1">Status:</strong> {{ order.status }}
+                                </li>
+                            </ul>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 mb-md-0 mb-5">
+                {% include 'dashboard/admin/profile.html' %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

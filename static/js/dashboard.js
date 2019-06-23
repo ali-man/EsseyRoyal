@@ -1,6 +1,6 @@
 $('#date_deadline').datetimepicker({
     format: 'd-m-Y',
-    value: new Date(),
+    value: new Date(new Date().setDate(new Date().getDate() + 1)),
     timepicker: false
 });
 $('#time_deadline').datetimepicker({

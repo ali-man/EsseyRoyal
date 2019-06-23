@@ -144,6 +144,12 @@ def manager_detail_writer(request, pk):
     return render(request, 'dashboard/manager/detail/writer.html', locals())
 
 
+def manager_detail_writer_orders(request, pk):
+    writer = User.objects.get(id=pk)
+    orders = Order.objects.filter(writer=writer)
+    return render(request, 'dashboard/manager/detail/orders.html', {'orders': orders})
+
+
 def manager_detail_customer(request, pk):
     if access_to_manager_and_admin(request.user):
         customer = User.objects.get(id=pk)

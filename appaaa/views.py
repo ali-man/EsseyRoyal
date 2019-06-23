@@ -87,7 +87,9 @@ def feedback(request):
 
 def calculate_home(request):
     type_order_int = int(request.GET['typeOrder']) # 4
-    pages = int(request.GET['pagesOrder']) # 4
+    pages = 1
+    if request.GET['pagesOrder'] != '':
+        pages = int(request.GET['pagesOrder'])  # 4
     date_str = request.GET['date'] # 30-05-2019
     time_str = request.GET['time'] # 17:30
 

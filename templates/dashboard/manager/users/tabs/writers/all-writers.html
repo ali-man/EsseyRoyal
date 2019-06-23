@@ -11,6 +11,9 @@
             Balance
         </th>
         <th class="th-sm">
+            Orders
+        </th>
+        <th class="th-sm">
             Chat
         </th>
     </tr>
@@ -21,6 +24,7 @@
             <td><a href="{% url 'appdashboard:manager-writer' writer.id %}">{{ writer.get_full_name }}</a></td>
             <td><a href="{% url 'appdashboard:manager-writer' writer.id %}">{{ writer.email }}</a></td>
             <td>{{ writer.balance }}</td>
+            <td><a href="{% url 'appdashboard:manager-writer-orders' writer.id %}"><i class="far fa-eye"></i></a></td>
             <td><a href="{% url 'chat' writer.chatuser.id %}"><i class="far fa-comments"></i></a></td>
         </tr>
     {% endfor %}
@@ -37,7 +41,12 @@
         <th>
             Balance
         </th>
-        <th>Chat</th>
+        <th>
+            Orders
+        </th>
+        <th>
+            Chat
+        </th>
     </tr>
     </tfoot>
 </table>

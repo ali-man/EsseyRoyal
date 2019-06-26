@@ -5,7 +5,7 @@
             <tr>
                 <th>Customer</th>
                 <th align="middle">Title</th>
-                <th>Type of order</th>
+                <th>Type</th>
                 <th class="text-center">Deadline</th>
                 <th class="text-center">Total cost</th>
                 <th>Writer</th>
@@ -14,8 +14,15 @@
             <tbody class="td-center">
             {% for order in orders_in_progress %}
                 <tr>
-                    <td>{{ order.customer.first_name }}</td>
-                    <td><a href="{% url 'appdashboard:manager-order' order.id %}" style="color: #406bde">{{ order.title }}</a></td>
+                    <td>
+                        {% if order.customer.get_full_name %}
+                            {{ order.customer.get_full_name }}
+                        {% else %}
+                            {{ order.customer.email }}
+                        {% endif %}
+                    </td>
+                    <td><a href="{% url 'appdashboard:manager-order' order.id %}"
+                           style="color: #406bde">{{ order.title }}</a></td>
                     <td>{{ order.type_order }}</td>
                     <td class="text-center">
                         {{ order.deadline }}

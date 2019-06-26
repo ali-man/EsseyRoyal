@@ -1,0 +1,39 @@
+<!-- Nav tabs -->
+<ul class="nav nav-tabs md-tabs nav-justified bg-block" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#panel444" role="tab">
+            <i class="fas fa-user pr-2"></i>Courses</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#panel555" role="tab">
+            <i class="fas fa-user pr-2"></i>In review</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#panel666" role="tab">
+            <i class="fas fa-user pr-2"></i>In process</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#panel777" role="tab">
+            <i class="fas fa-user pr-2"></i>Completed</a>
+    </li>
+</ul>
+
+<div class="tab-content tab-content-own">
+
+    <div class="tab-pane fade in show active" id="panel444" role="tabpanel">
+        {% include 'dashboard/manager/courses/tabs/courses.html' %}
+    </div>
+
+    <div class="tab-pane fade" id="panel555" role="tabpanel">
+        {% include 'dashboard/manager/courses/tabs/in_review.html' %}
+    </div>
+
+    <div class="tab-pane fade" id="panel666" role="tabpanel">
+        {% include 'dashboard/manager/courses/tabs/in_process.html' %}
+    </div>
+
+    <div class="tab-pane fade" id="panel777" role="tabpanel">
+        {% include 'dashboard/manager/courses/tabs/completed.html' %}
+    </div>
+
+</div>

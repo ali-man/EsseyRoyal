@@ -1,0 +1,16 @@
+<form action="{% url 'appdashboard:customer-course-index' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <table class="table">
+        <tr>
+            <td>Title: </td>
+            <td><input type="text" name="title" required></td>
+        </tr>
+        <tr>
+            <td><label for="id_attached-files">Attached files</label></td>
+            <td>
+                <input type="file" name="files" id="id_attached-files" multiple>
+{#                <small>.xls .doc .docx .pdf .jpg .png .excel</small>#}
+            </td>
+        </tr>
+    </table>
+    <button type="submit" class="btn bg-btn">Send</button>
+</form>

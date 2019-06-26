@@ -5,12 +5,16 @@ from django.urls import path
 from appdashboard.users import admin
 from appdashboard.users.manager import *
 from appdashboard import views
+from appcourses import views as course
 from apporders.views import *
 from appusers.views import change_profile
 
 app_name = 'appdashboard'
 urlpatterns = [
     path('change-profile/', change_profile, name='change-profile'),
+    # Customer
+    path('c/course/<int:course_id>/', course.customer_course_detail, name='customer-course-detail'),
+    path('c/course/', course.customer_index, name='customer-course-index'),
     # WRITER
     path('w/order/completed-<int:pk>/', writer_order_completed, name='writer-order_completed'),
     path('w/order/detail-<int:pk>/', writer_order_detail, name='writer-order_detail'),
@@ -37,6 +41,8 @@ urlpatterns = [
     path('m/selects/price-deadline-order/<int:pk>/', price_deadline_order_remove, name='selects-price_deadline-remove'),
     path('m/selects/', manager_selects, name='manager-selects'),
     path('m/settings/', manager_settings, name='manager-settings'),
+    path('m/courses/<int:course_id>/', course.manager_course_detail, name='manager-course-detail'),
+    path('m/courses/', course.manager_courses, name='manager-courses'),
     path('m/users/', manager_users, name='manager-users'),
     path('', views.DashboardViews.as_view(), name='dashboard'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

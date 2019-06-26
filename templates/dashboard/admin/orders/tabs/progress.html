@@ -5,7 +5,7 @@
             <tr>
                 <th>Customer</th>
                 <th align="middle">Title</th>
-                <th>Type of order</th>
+                <th>Type</th>
                 <th class="text-center">Deadline</th>
                 <th class="text-center">Price</th>
                 <th>Writer</th>
@@ -15,8 +15,18 @@
             {% for order in orders_in_progress %}
                 <tr>
                     <td>
-                        <a href="{% url 'appdashboard:admin-customer' order.customer.id %}">
-                            {{ order.customer.first_name }}
+                        <a href="{% url 'appdashboard:admin-customer' order.customer.id %}" title="
+                            {% if order.customer.get_full_name %}
+                                {{ order.customer.get_full_name }}
+                            {% else %}
+                                {{ order.customer.email }}
+                            {% endif %}
+                            ">
+                            {% if order.customer.get_full_name %}
+                                {{ order.customer.get_full_name|truncatechars:9 }}
+                            {% else %}
+                                {{ order.customer.email|truncatechars:9 }}
+                            {% endif %}
                         </a>
                     </td>
                     <td>

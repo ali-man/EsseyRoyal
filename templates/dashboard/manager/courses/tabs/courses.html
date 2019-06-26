@@ -1,0 +1,43 @@
+<div class="tab-pane fade active show" id="panel83" role="tabpanel">
+    <div class="table-responsive">
+        <table class="table">
+            <thead class="th-center">
+                <tr>
+                    <th>Customer</th>
+                    <th>Title</th>
+                    <th>Tasks</th>
+                    <th>Files</th>
+                    <th>Created date and time</th>
+                </tr>
+            </thead>
+            <tbody class="td-center">
+            {% for course in courses %}
+                <tr>
+                    <td>
+                        {% if course.customer.get_full_name %}
+                            {{ course.customer.get_full_name }}
+                        {% else %}
+                            {{ course.customer.email }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'appdashboard:manager-course-detail' course.id %}" style="color: blue">{{ course.title }}</a>
+                    </td>
+                    <td>
+                        {{ course.task_set.count }}
+                    </td>
+                    <td>
+                        {% for file in course.coursefile_set.all %}
+                            {{ file.filename }}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {{ course.created_datetime }}
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>

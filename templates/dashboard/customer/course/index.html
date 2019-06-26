@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+{% endblock %}
+
+{% block title %}
+    Course
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row" style="min-height: 100vh">
+            <div class="col-12 col-md-8 mt-5">
+
+                {% include 'dashboard/customer/course/tabs.html' %}
+
+            </div>
+
+            <div class="col-12 col-md-4 mt-5 mb-md-0 mb-5">
+
+                {% include 'dashboard/customer/profile.html' %}
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+            $('#dtBasicExample').DataTable();
+            $('.dataTables_length').addClass('bs-select');
+        });
+    </script>
+{% endblock %}

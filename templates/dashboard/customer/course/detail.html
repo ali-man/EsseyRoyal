@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin-dashboard.css' %}">
+    <style>
+        .md-form {
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+        }
+
+        ul.course li {
+            border: none;
+        }
+
+        ul.task {
+            box-shadow: 0 3px 3px 0 #c3c3c3;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+    Course: {{ course.title }} detail
+{% endblock %}
+
+{% block content %}
+
+    <div class="container pt-5 pb-5">
+        <div class="row">
+            <div class="col-12 col-md-8">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h4 class="font-weight-bold amber-lighter-hover">Course: {{ course.title }}</h4>
+                        <ul class="list-group mb-5 mr-5 course">
+                            <li class="list-group-item">
+                                <div class="md-v-line"></div>
+                                <i class="fas fa-signature mr-4 pr-3"></i>
+                                <strong class="ml-1">
+                                    Files:
+                                    {% for file in course.coursefile_set.all %}
+                                        {% if forloop.first %}
+                                            <a href="{{ file.file.url }}">{{ file.filename }}</a>
+                                        {% else %}
+                                            , <a href="{{ file.file }}">{{ file.filename }}</a>
+                                        {% endif %}
+                                    {% endfor %}
+                                </strong>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="md-v-line"></div>
+                                <i class="fas fa-signature mr-4 pr-3"></i>
+                                <strong class="ml-1">Price:</strong> ${{ course.price }}
+                            </li>
+                            <li class="list-group-item">
+                                <div class="md-v-line"></div>
+                                <i class="fas fa-signature mr-4 pr-3"></i>
+                                <strong class="ml-1">Created datetime:</strong> {{ course.created_datetime }}
+                            </li>
+                        </ul>
+
+                        {% for task in course.task_set.all %}
+                            {% if task.price_status != 0 %}
+                                <div class="z-depth-3 py-5 mb-5">
+                                    <h5 class="font-weight-bold amber-lighter-hover ml-5 mb-1">
+                                        Task: {{ task.title }}</h5>
+                                    <ul class="list-group ml-5 mr-5 mb-3">
+                                        <li class="list-group-item">
+                                            <div class="md-v-line"></div>
+                                            <i class="fas fa-signature mr-4 pr-3"></i><strong
+                                                class="ml-1">Question:</strong> {{ task.question }}
+                                        </li>
+                                        <li class="list-group-item">
+                                            <div class="md-v-line"></div>
+                                            <i class="fas fa-at mr-5"></i>
+                                            <strong>Pages:</strong> {{ task.pages }}
+                                        </li>
+                                        <li class="list-group-item">
+                                            <div class="md-v-line"></div>
+                                            <i class="fas fa-phone mr-5"></i>
+                                            <strong>Description:</strong> {{ task.description }}
+                                        </li>
+                                        <li class="list-group-item">
+                                            <div class="md-v-line"></div>
+                                            <i class="fas fa-university mr-5"></i>
+                                            <strong>Due date:</strong> {{ task.due_date }}
+                                        </li>
+                                        <li class="list-group-item">
+                                            <div class="md-v-line"></div>
+                                            <i class="fas fa-at mr-5"></i><strong>
+                                            Price:</strong> ${{ task.price_for_customer }}
+                                        </li>
+                                        {% if task.price_status == 2 %}
+                                            <li class="list-group-item">
+                                                <div class="md-v-line"></div>
+                                                <i class="fas fa-dollar-sign mr-5"></i>
+                                                <strong class="ml-2">Status:</strong> {{ task.status }}
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+
+                                    {% if task.price_status == 1 %}
+                                        <div class="ml-5">
+                                            <button class="btn bg-btn">Refuse</button>
+                                            <button class="btn bg-btn">Take</button>
+                                        </div>
+                                    {% elif task.price_status == 2 %}
+                                        {% if task.status == 0 %}
+                                            <div class="ml-5">
+                                                <button class="btn bg-btn">Refuse</button>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4 mb-md-0 mb-5">
+                {% include 'dashboard/manager/profile.html' %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+            $('.mdb-select').materialSelect();
+        });
+    </script>
+{% endblock %}

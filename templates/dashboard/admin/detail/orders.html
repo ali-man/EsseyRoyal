@@ -19,17 +19,19 @@
                     <div class="card-body">
                         <h4 class="font-weight-bold amber-lighter-hover mb-3">Orders</h4>
                         {% for order in orders %}
-                            <ul class="list-group mt-3">
-                                <li class="list-group-item">
-                                    <strong class="ml-1">Title:</strong> {{ order.title }}
-                                </li>
-                                <li class="list-group-item">
-                                    <strong class="ml-1">Deadline:</strong> {{ order.deadline }}
-                                </li>
-                                <li class="list-group-item">
-                                    <strong class="ml-1">Status:</strong> {{ order.status }}
-                                </li>
-                            </ul>
+                            <div class="z-depth-1">
+                                <ul class="list-group mt-3 py-3 pl-3 pr-3">
+                                    <li class="list-group-item">
+                                        <strong class="ml-1">Title:</strong> {{ order.title }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong class="ml-1">Deadline:</strong> {{ order.deadline }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong class="ml-1">Status:</strong> {{ order.status }}
+                                    </li>
+                                </ul>
+                            </div>
                         {% endfor %}
                     </div>
                 </div>

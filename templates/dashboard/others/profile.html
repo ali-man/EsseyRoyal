@@ -25,11 +25,16 @@
                 <a href="{% url 'appdashboard:dashboard' %}">Orders</a>
             </li>
             <li>
+                <a href="{% url 'appdashboard:manager-courses' %}">Courses</a>
+            </li>
+            <li>
                 <a href="
+
                         {% if user.is_superuser %}{% url 'appdashboard:admin-users' %}{% else %}{% url 'appdashboard:manager-users' %}{% endif %}">Users</a>
             </li>
             <li>
                 <a href="
+
                         {% if user.is_superuser %}{% url 'appdashboard:admin-selects' %}{% else %}{% url 'appdashboard:manager-selects' %}{% endif %}">Select
                     management</a>
             </li>
@@ -41,6 +46,7 @@
             </li>
             <li>
                 <a href="
+
                         {% if user.is_superuser %}{% url 'appdashboard:admin-settings' %}{% else %}{% url 'appdashboard:manager-settings' %}{% endif %}">Settings</a>
             </li>
         </ul>

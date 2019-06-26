@@ -1,0 +1,38 @@
+<table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th class="th-sm">Title
+        </th>
+        <th class="th-sm">Attached file
+        </th>
+        <th class="th-sm">Price
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for course in courses %}
+        <tr>
+            <td>
+                <a href="{% url 'appdashboard:customer-course-detail' course.id %}">{{ course.title }}</a>
+            </td>
+            <td>
+                {% for file in course.coursefile_set.all %}
+                    <a href="{{ file.file.url }}">{{ file.filename }}</a>
+                {% endfor %}
+            </td>
+            <td>${{ course.price }}</td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+    <tfoot>
+    <tr>
+        <th>Title
+        </th>
+        <th>Attached file
+        </th>
+        <th>Price
+        </th>
+    </tr>
+    </tfoot>
+</table>

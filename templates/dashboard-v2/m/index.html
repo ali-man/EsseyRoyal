@@ -1,0 +1,43 @@
+{% extends 'dashboard-v2/index.html' %}
+
+{% block balance %}
+
+{% endblock %}
+
+{% block menu %}
+    <li class="list-group-item">
+        <div class="md-v-line"></div>
+        <i class="far fa-list-alt" style="margin-right: 50px;"></i>
+        <a href="{% url 'manager:orders' %}">Orders</a>
+    </li>
+    <li class="list-group-item">
+        <div class="md-v-line"></div>
+        <i class="fas fa-clipboard-list" style="margin-right: 55px;"></i>
+        <a href="{% url 'manager:courses' %}">Courses</a>
+    </li>
+    <li class="list-group-item">
+        <div class="md-v-line"></div>
+        <i class="fas fa-users mr-5"></i>
+        <a href="{% url 'manager:courses' %}">Users</a>
+    </li>
+    <li class="list-group-item">
+        <div class="md-v-line"></div>
+        <i class="far fa-calendar-check" style="margin-right: 55px;"></i>
+        <a href="{% url 'manager:courses' %}">Selects</a>
+    </li>
+    <li class="list-group-item">
+        <div class="md-v-line"></div>
+        <i class="far fa-caret-square-down" style="margin-right: 55px;"></i>
+        <a href="{% url 'manager:courses' %}">Others</a>
+    </li>
+    <li class="list-group-item">
+        <div class="md-v-line"></div>
+        <i class="fas fa-user-cog mr-5"></i>
+        <a href="{% url 'manager:settings' %}">Settings</a>
+    </li>
+    <li class="list-group-item">
+        <div class="md-v-line"></div>
+        <i class="fas fa-sign-out-alt mr-5"></i>
+        <a href="">Log out</a>
+    </li>
+{% endblock %}

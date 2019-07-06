@@ -1,0 +1,132 @@
+{% extends 'dashboard-v2/c/index.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/customer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/libs/chat.min.css' %}">
+{% endblock %}
+
+{% block title %}
+    Dashboard - In process
+{% endblock %}
+
+{% block section %}
+
+    <h4 class="text-center h4-responsive py-4 mb-3" style="background-color: #f5f5f5">{{ order.title }}</h4>
+
+    <div class="row mb-2">
+        <div class="col">
+            <div class="mb-2">
+                <div class="card-body">
+                    <h4 class="font-weight-bold amber-lighter-hover mb-3">Detail info</h4>
+                    <table class="table" style="margin-bottom: 0;">
+                        <tr>
+                            <th>Type of order:</th>
+                            <td>{{ order.type_order }}</td>
+                        </tr>
+                        <tr>
+                            <th>Format of order:</th>
+                            <td>{{ order.format_order }}</td>
+                        </tr>
+                        <tr>
+                            <th>Deadline:</th>
+                            <td>{{ order.deadline }}</td>
+                        </tr>
+                        <tr>
+                            <th>Per page:</th>
+                            <td>${{ order.per_page }}</td>
+                        </tr>
+                        <tr>
+                            <th>Number pages:</th>
+                            <td>{{ order.number_page }}</td>
+                        </tr>
+                        <tr>
+                            <th>Total cost:</th>
+                            <td>${{ order.total_cost }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-4 mr-3" style="background-color: #f5f5f5">
+            {% if order.filesorder_set.all %}
+                <h4 class="font-weight-bold amber-lighter-hover mt-3 mb-3">Files: </h4>
+                <ul class="files">
+                    {% for file in order.filesorder_set.all %}
+                        <li>
+                            <a href="{{ file.file.url }}">{{ file.filename }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {% if order.description %}
+                <h4 class="font-weight-bold amber-lighter-hover mt-3 mb-3">Description: </h4>
+                <div class="description">
+                    <div class="description-text">
+                        {% autoescape off %}{{ order.description }}{% endautoescape %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% include 'dashboard-v2/c/orders/detail/include/additional.html' %}
+
+    {% if order.additionallyorder.filesadditionallyorder_set.all %}
+        <div class="row">
+            <div class="col-12">
+                <div class="mb-2">
+                    <div class="card-body py-2 pr-2">
+                        <button type="button" class="btn bg-btn float-right" data-toggle="modal"
+                                data-target="#basicExampleModal">
+                            Completed order
+                        </button>
+                        <div class="modal fade" id="basicExampleModal" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">{{ order.title.upper }}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Are you sure that the order is completed? After clicking "Done", the order
+                                            will
+                                            be moved to status " Completed", and the order is considered as a
+                                            completed</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel
+                                        </button>
+                                        <form method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="completed" value="true">
+                                            <button type="submit" class="btn btn-success">Done</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block pod-menu %}
+
+    <h4 class="text-center h4-responsive py-4" style="background-color: #f5f5f5">Chat</h4>
+
+    {% include 'dashboard-v2/c/orders/detail/include/chat.html' %}
+
+{% endblock %}

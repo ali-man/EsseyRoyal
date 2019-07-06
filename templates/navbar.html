@@ -54,6 +54,18 @@
                 <div class="dropdown-menu dropdown-menu-right dropdown-info"
                      aria-labelledby="navbarDropdownMenuLink-4">
                     {% if user.is_authenticated %}
+                        {% for group in user.groups.all %}
+                            {% if group.name == 'Customer' %}
+                                <a class="dropdown-item" href="{% url 'customer:index' %}">Dashboard v2</a>
+                            {% elif group.name == 'Writer' %}
+                                <a class="dropdown-item" href="{% url 'writer:index' %}">Dashboard v2</a>
+                            {% elif group.name == 'Manager' %}
+                                <a class="dropdown-item" href="{% url 'manager:index' %}">Dashboard v2</a>
+                            {% else %}
+{#                                <a class="dropdown-item" href="{% url 'admin:index' %}">Dashboard v2</a>#}
+                            {% endif %}
+                        {% endfor %}
+
                         <a class="dropdown-item" href="{% url 'appdashboard:dashboard' %}">Dashboard</a>
                         <a class="dropdown-item" href="{% url 'appdashboard:customer-course-index' %}">Course</a>
                         {% for group in user.groups.all %}

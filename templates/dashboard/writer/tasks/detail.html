@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin-dashboard.css' %}">
+    <style>
+        .md-form {
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+        }
+
+        ul.course li {
+            border: none;
+        }
+
+        ul.tk {
+            box-shadow: 0 3px 3px 0 #c3c3c3;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+    Course {{ course.title }} detail
+{% endblock %}
+
+{% block content %}
+
+    <div class="container pt-5 pb-5">
+        <div class="row">
+            <div class="col-12 col-md-8">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h4 class="font-weight-bold amber-lighter-hover">Course: {{ course.title }}</h4>
+                        <ul class="list-group mb-3 mr-5 course">
+                            <li class="list-group-item">
+                                <div class="md-v-line"></div>
+                                <i class="fas fa-signature mr-4 pr-3"></i>
+                                <strong class="ml-1">Created datetime:</strong> {{ course.created_datetime }}
+                            </li>
+                        </ul>
+
+                        {% for tk in tasks %}
+                            <div class="z-depth-3 py-5 mb-5">
+                                <h5 class="font-weight-bold amber-lighter-hover ml-5 mb-1">Task: {{ tk.title }}</h5>
+                                <ul class="list-group ml-5 mr-5 mb-3">
+                                    {% if tk.question %}
+                                        <li class="list-group-item">
+                                            <div class="md-v-line"></div>
+                                            <i class="fas fa-signature mr-4 pr-3"></i><strong
+                                                class="ml-1">Question:</strong> {{ tk.question }}
+                                        </li>
+                                    {% endif %}
+                                    <li class="list-group-item">
+                                        <div class="md-v-line"></div>
+                                        <i class="fas fa-at mr-5"></i>
+                                        <strong>Pages:</strong> {{ tk.pages }}
+                                    </li>
+                                    {% if tk.description %}
+                                        <li class="list-group-item">
+                                            <div class="md-v-line"></div>
+                                            <i class="fas fa-phone mr-5"></i>
+                                            <strong>Description:</strong> {{ tk.description }}
+                                        </li>
+                                    {% endif %}
+                                    <li class="list-group-item">
+                                        <div class="md-v-line"></div>
+                                        <i class="fas fa-university mr-5"></i>
+                                        <strong>Due date:</strong> {{ tk.due_date }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="md-v-line"></div>
+                                        <i class="fas fa-level-up-alt mr-5"></i><strong
+                                            class="ml-2">Price for writer:</strong> ${{ tk.price_for_writer }}
+                                    </li>
+                                    {% if tk.price_status == 2 %}
+                                        <li class="list-group-item">
+                                            <div class="md-v-line"></div>
+                                            <i class="fas fa-dollar-sign mr-5"></i>
+                                            <strong class="ml-2">Status:</strong> {{ tk.status }}
+                                        </li>
+                                    {% endif %}
+                                    <li class="list-group-item">
+                                        <div class="md-v-line"></div>
+                                        <i class="fas fa-dollar-sign mr-5"></i>
+                                        <strong class="ml-2">Created date time:</strong>
+                                        {{ tk.created_datetime }}
+                                    </li>
+                                </ul>
+                                {% if task.price_status == 2 %}
+                                    {% if task.status == 0 %}
+                                        <div class="ml-5">
+                                            <form method="post">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn bg-btn" name="take" value="{{ task.id }}">Take</button>
+                                            </form>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4 mb-md-0 mb-5">
+                {% include 'dashboard/writer/profile.html' %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

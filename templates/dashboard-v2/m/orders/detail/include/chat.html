@@ -1,0 +1,88 @@
+{% load static %}
+
+<div class="chat-room">
+    <div class="card-body py-2">
+
+        <div class="row px-md-2">
+
+            <div class="chat-message w-100">
+
+                <ul class="list-unstyled chat-1 scrollbar-light-blue">
+                    {% for message in order.chat_set.all %}
+                        {% if message.user == order.writer %}
+                            <li class="d-flex justify-content-between mb-4">
+                                <img src="
+                                        {% if message.user.avatar %}
+                                            {{ message.user.avatar.url }}
+                                        {% else %}
+                                            {% static 'img/noimage.png' %}
+                                        {% endif %}
+                                        " alt="avatar"
+                                     class="avatar rounded-circle mr-2">
+                                <div class="chat-body ml-2 w-100">
+                                    <div class="header">
+                                        <strong class="primary-font">{{ message.user.get_full_name }}</strong>
+                                        <br>
+                                        <small class="pull-right text-muted">
+                                            <i class="far fa-clock"></i> {{ message.created_datetime }}
+                                        </small>
+                                        {% if message.status == False %}
+                                            <form method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="message_id" value="{{ message.id }}">
+                                                <button type="submit"
+                                                        class="btn btn-info btn-sm px-3 ml-0">
+                                                    <i class="far fa-check-circle"></i>
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                    <hr class="w-100 my-1">
+                                    <p class="mb-0">
+                                        {{ message }}
+                                    </p>
+                                </div>
+                            </li>
+                        {% else %}
+                            <li class="d-flex justify-content-between mb-4">
+                                <div class="chat-body mr-2 w-100">
+                                    <div class="header">
+                                        <strong class="primary-font">{{ message.user.get_full_name }}</strong>
+                                        <small class="pull-right text-muted">
+                                            <i class="far fa-clock"></i> {{ message.created_datetime }}
+                                        </small>
+                                    </div>
+                                    <hr class="w-100 my-1">
+                                    <p class="mb-0">
+                                        {{ message }}
+                                    </p>
+                                    {% if message.status == False %}
+                                        <form method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="message_id" value="{{ message.id }}">
+                                            <button type="submit"
+                                                    class="btn btn-info btn-sm px-3 ml-0">
+                                                <i class="far fa-check-circle"></i>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                                <img src="
+                                    {% if message.user.avatar %}
+                                        {{ message.user.avatar.url }}
+                                    {% else %}
+                                        {% static 'img/noimage.png' %}
+                                    {% endif %}
+                                    " alt="avatar"
+                                     class="avatar rounded-circle mr-0 ml-3">
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>

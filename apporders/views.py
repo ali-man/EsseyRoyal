@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView, UpdateView
 
+from appcourses.models import Task
 from appdashboard.views import access_to_manager_and_admin
 from appmail.views import manager_send_mail, customer_send_mail, writer_send_mail
 from apporders.forms import OrderAddForm, OrderForm
@@ -69,8 +70,6 @@ def completed_order(request, pk):
     order.status = 2
     order.save()
     messages.success(request, 'Order status changed to completed')
-    manager_send_mail('Completed order', order.customer, order.title, '')
-    writer_send_mail('Completed order', order.title, '')
     return redirect('/order/completed/feedback/{}/'.format(pk))
 
 
@@ -300,3 +299,39 @@ def price_deadline_order_remove(request, pk):
         return redirect('/dashboard/selects/')
     else:
         return redirect('/dashboard/m/selects/')
+
+
+def writer_tasks(request):
+    writer = User.objects.get(email=request.user)
+    tasks = Task.objects.filter(price_status=2, status=0, to_writer=True)
+    tasks_process = Task.objects.filter(writer=writer, status=1)
+    tasks_completed = Task.objects.filter(writer=writer, status=2)
+
+    return render(request, 'dashboard/writer/tasks/index.html', locals())
+
+
+def writer_task_detail(request, task_slug):
+    writer = User.objects.get(email=request.user)
+    task = get_object_or_404(Task, slug=task_slug, status=0)
+    course = task.course
+    tasks = course.task_set.filter(price_status=2, status=0)
+
+    if request.method == 'POST':
+        r = request.POST
+        take = r.get('take', None)
+        if take is not None:
+
+            task_id = int(take)
+            task = Task.objects.get(id=task_id, status=0)
+            task.status = 1
+            task.writer = writer
+            task.save()
+
+    return render(request, 'dashboard/writer/tasks/detail.html', locals())
+
+
+def writer_task_process(request, task_slug):
+    task = Task.objects.get(slug=task_slug)
+    course = task.course
+
+    return render(request, 'dashboard/writer/tasks/process.html', locals())

@@ -21,6 +21,9 @@ from apporders.validators import validate_file_extension
 from appusers.models import User
 
 
+# TODO: Написать дату принятия заказа Writer-ом
+
+
 class FilterWord(models.Model):
     word = models.CharField(verbose_name='Word', max_length=30, unique=True)
 
@@ -133,7 +136,7 @@ class Order(models.Model):
             customer_send_mail('Take task', self.title, self.customer.email, customer_link_order)
             manager_send_mail('Take order', self.writer, self.title, manager_link_order)
         elif self.status == 2:
-            customer_send_mail('Completed order', self.title, self.customer.email, customer_link_order)
+            writer_send_mail('Completed order', self.title, '')
             manager_send_mail('Completed order', self.writer, self.title, manager_link_order)
 
     def __str__(self):
@@ -266,7 +269,10 @@ class Processing:
         """
         filter_words = []
         for page in self.extract_text_by_page(_file.path):
-            filter_words += list(self.sw.search_word(page))
+            try:
+                filter_words += list(self.sw.search_word(page))
+            except TypeError:
+                continue
 
         self.moderation_order(filter_words, obj_id)
 

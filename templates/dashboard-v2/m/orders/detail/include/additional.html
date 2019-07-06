@@ -1,0 +1,15 @@
+<div class="border mb-2">
+    <div class="card-body">
+        <h4 class="font-weight-bold amber-lighter-hover mb-3">Completed work</h4>
+        <ul class="additionally-order-files">
+            {% for additional in order.additionallyorder.filesadditionallyorder_set.all %}
+                <li>
+                    <a href="{{ additional.file.url }}">
+                        {{ additional.filename }}
+                        <small class="text-black-50">{{ additional.created_datetime }}</small>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

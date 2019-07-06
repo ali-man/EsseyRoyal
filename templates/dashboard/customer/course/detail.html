@@ -48,11 +48,13 @@
                                     {% endfor %}
                                 </strong>
                             </li>
-                            <li class="list-group-item">
-                                <div class="md-v-line"></div>
-                                <i class="fas fa-signature mr-4 pr-3"></i>
-                                <strong class="ml-1">Price:</strong> ${{ course.price }}
-                            </li>
+                            {% if course.price != 0 %}
+                                <li class="list-group-item">
+                                    <div class="md-v-line"></div>
+                                    <i class="fas fa-signature mr-4 pr-3"></i>
+                                    <strong class="ml-1">Price:</strong> ${{ course.price }}
+                                </li>
+                            {% endif %}
                             <li class="list-group-item">
                                 <div class="md-v-line"></div>
                                 <i class="fas fa-signature mr-4 pr-3"></i>
@@ -102,13 +104,25 @@
 
                                     {% if task.price_status == 1 %}
                                         <div class="ml-5">
-                                            <button class="btn bg-btn">Refuse</button>
-                                            <button class="btn bg-btn">Take</button>
+                                            <form method="post">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn bg-btn" name="he_take"
+                                                        value="{{ task.id }}">He take
+                                                </button>
+                                                <button type="submit" class="btn bg-btn" name="agree"
+                                                        value="{{ task.id }}">Agree
+                                                </button>
+                                            </form>
                                         </div>
                                     {% elif task.price_status == 2 %}
                                         {% if task.status == 0 %}
                                             <div class="ml-5">
-                                                <button class="btn bg-btn">Refuse</button>
+                                                <form method="post">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn bg-btn" name="he_take"
+                                                            value="{{ task.id }}">He take
+                                                    </button>
+                                                </form>
                                             </div>
                                         {% endif %}
                                     {% endif %}
@@ -120,7 +134,7 @@
             </div>
 
             <div class="col-12 col-md-4 mb-md-0 mb-5">
-                {% include 'dashboard/manager/profile.html' %}
+                {% include 'dashboard/customer/profile.html' %}
             </div>
         </div>
     </div>

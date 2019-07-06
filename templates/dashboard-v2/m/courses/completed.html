@@ -1,0 +1,23 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Pages</th>
+        <th scope="col">Price</th>
+        <th scope="col">Due date</th>
+        <th scope="col">Writer</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for task in completed %}
+        <tr>
+            <td scope="row">{{ task.title }}</td>
+            <td>{{ task.pages }}</td>
+            <td>${{ task.price_for_customer|floatformat }}</td>
+            <td>{{ task.due_date|date:"H:m d M" }}</td>
+            <td>{{ task.writer }}</td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>

@@ -144,7 +144,10 @@
 
                                 {% if task.price_status == 0 %}
                                     <div class="ml-5">
-                                        <button class="btn bg-btn">Send customer</button>
+                                        <form method="post">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn bg-btn" name="send_customer" value="{{ task.id }}">Send customer</button>
+                                        </form>
                                     </div>
                                 {% elif task.price_status == 2 %}
                                 {% endif %}

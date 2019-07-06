@@ -86,8 +86,8 @@ def feedback(request):
 
 
 def calculate_home(request):
-    type_order_int = int(request.GET['typeOrder']) # 4
     pages = 1
+    type_order_int = int(request.GET['typeOrder'])  # 4
     if request.GET['pagesOrder'] != '':
         pages = int(request.GET['pagesOrder'])  # 4
     date_str = request.GET['date'] # 30-05-2019
@@ -104,6 +104,7 @@ def calculate_home(request):
     deadlines_price = PriceDeadline.objects.filter(hours__lte=hours)
     last_index = len(deadlines_price) - 1  # Последний индекс из queryset
     price = deadlines_price[last_index].price + type_order.price_client  # Цена type of order
+    print(pages)
     per_page = price
     total_cost = price * pages
     data = {
@@ -129,8 +130,9 @@ def order_feedback(request):
     manager_send_mail('Rating order', order.customer, order.title, 'dashboard/m/order/{}/'.format(order_id))
     writer_send_mail('Rating order', order.title, 'dashboard/w/order/completed-{}/'.format(order_id))
 
-    data = {'ok': 'good'}
-    return JsonResponse(data)
+    data = {'ok': F'/c/orders/completed/{order_id}/'}
+    return redirect(F'/c/orders/completed/{order_id}/')
+    # return JsonResponse(data)
 
 
 def add_comment(request):

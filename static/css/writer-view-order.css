@@ -32,26 +32,3 @@
 .writer-result {
   padding: 10px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12); }
-
-
-.amber-lighter-hover {
-    color: #ffa000;
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-
-.white-darker-hover {
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-
-.white-darker-hover:hover {
-    -webkit-transition: .4s;
-    transition: .4s;
-    color: #d9d9d9;
-}
-
-table.table tr th, table.table tr td {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}

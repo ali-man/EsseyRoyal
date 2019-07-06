@@ -1,0 +1,23 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Per page</th>
+        <th scope="col">Pages</th>
+        <th scope="col">Total cost</th>
+        <th scope="col">Deadline</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for order in in_review %}
+        <tr>
+            <td><a href="{% url 'writer:order-preview' order.id %}" class="text-primary">{{ order.title }}</a></td>
+            <td>${{ order.type_order.price_writer|floatformat }}</td>
+            <td>{{ order.number_page }}</td>
+            <td>${{ order.total_cost_writer|floatformat }}</td>
+            <td>{{ order.deadline|date:"H:m d M" }}</td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>

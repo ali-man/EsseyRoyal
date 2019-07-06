@@ -1,0 +1,31 @@
+<div class="table-responsive">
+    <table class="table">
+        <thead class="th-center">
+        <tr>
+            <th align="middle">Title</th>
+            <th class="text-center">Pages</th>
+            <th class="text-center">Price</th>
+            <th class="text-center">Actions</th>
+        </tr>
+        </thead>
+        <tbody class="td-center">
+        {% for task in tasks_process %}
+            <tr>
+                <td>
+                    {{ task.title }}
+                </td>
+                <td class="text-center">
+                    {{ task.pages }}
+                </td>
+                <td class="text-center">${{ task.price_for_writer }}</td>
+                <td class="text-center">
+                    <a href="{% url 'appdashboard:writer-task-process' task.slug %}" class="blue-text"
+                       data-toggle="tooltip" data-placement="top" title=""
+                       data-original-title="See results"><i class="far fa-eye"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>

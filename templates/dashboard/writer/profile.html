@@ -37,6 +37,22 @@
             <li><strong>Date joined:</strong> {{ user.date_joined }}</li>
         </ul>
 
+        <ul class="menu-admin">
+            <li>
+                <a href="{% url 'appdashboard:dashboard' %}">Orders</a>
+            </li>
+            <li>
+                <a href="{% url 'appdashboard:writer-tasks' %}">
+                    Courses
+                </a>
+            </li>
+            <li>
+{#                <a href="{% url 'appdashboard:writer-settings' %}">#}
+                    Settings
+{#                </a>#}
+            </li>
+        </ul>
+
     </div>
 
 </div>

@@ -1,0 +1,29 @@
+{% extends 'dashboard-v2/index.html' %}
+
+{% block menu %}
+    <li class="list-group-item">
+        <div class="md-v-line"></div>
+        <i class="far fa-list-alt" style="margin-right: 50px;"></i>
+        <a href="{% url 'writer:orders' %}">Orders</a>
+    </li>
+    <li class="list-group-item">
+        <div class="md-v-line"></div>
+        <i class="fas fa-clipboard-list" style="margin-right: 55px;"></i>
+        <a href="{% url 'writer:courses' %}">Course's</a>
+    </li>
+    <li class="list-group-item">
+        <div class="md-v-line"></div>
+        <i class="fas fa-user-cog mr-5"></i>
+        <a href="{% url 'writer:settings' %}">Settings</a>
+    </li>
+    <li class="list-group-item">
+        <div class="md-v-line"></div>
+        <i class="far fa-comment-alt mr-5"></i>
+        <a href="">Leave feedback</a>
+    </li>
+    <li class="list-group-item">
+        <div class="md-v-line"></div>
+        <i class="fas fa-sign-out-alt mr-5"></i>
+        <a href="">Log out</a>
+    </li>
+{% endblock %}

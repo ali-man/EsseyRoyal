@@ -1,0 +1,23 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Task</th>
+        <th scope="col">Course</th>
+        <th scope="col">Pages</th>
+        <th scope="col">Price</th>
+        <th scope="col">Deadline</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for task in in_process %}
+        <tr>
+            <td scope="row">{{ task.title }}</td>
+            <td>{{ task.course }}</td>
+            <td>{{ task.pages }}</td>
+            <td>${{ task.price_for_customer|floatformat }}</td>
+            <td>{{ task.due_date|date:"H:m d M" }}</td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>

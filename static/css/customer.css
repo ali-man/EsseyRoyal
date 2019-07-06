@@ -1,5 +1,5 @@
 .amber-lighter-hover {
-    color: #ffa000;
+    color: #215da2;
     -webkit-transition: .4s;
     transition: .4s;
 }
@@ -28,4 +28,9 @@ table.table tr th, table.table tr td {
 .description-text {
     margin-left: 10px;
     padding: 5px 10px;
+}
+
+ul.files li a {
+    color: #217ebf;
+    font-size: 14px;
 }

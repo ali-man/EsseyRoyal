@@ -36,7 +36,7 @@ jQuery(document).ready(function ($) {
 
     function fnFeedbackSuccess(data) {
         if (data.ok) {
-            window.location.href = '/dashboard/';
+            window.location.href = data.ok;
         }
     }
 

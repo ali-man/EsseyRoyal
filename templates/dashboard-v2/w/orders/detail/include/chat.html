@@ -1,0 +1,77 @@
+{% load static %}
+
+<div class="chat-room">
+    <div class="card-body py-2">
+
+        <div class="row px-md-2">
+
+            <div class="chat-message w-100">
+
+                <ul class="list-unstyled chat-1 scrollbar-light-blue">
+                    {% for message in order.chat_set.all %}
+                        {% if message.user == order.writer %}
+                            <li class="d-flex justify-content-between mb-4">
+                                <img src="
+                                        {% if message.user.avatar %}
+                                            {{ message.user.avatar.url }}
+                                        {% else %}
+                                            {% static 'img/noimage.png' %}
+                                        {% endif %}
+                                        " alt="avatar"
+                                     class="avatar rounded-circle mr-2">
+                                <div class="chat-body ml-2 w-100">
+                                    <div class="header">
+                                        <strong class="primary-font">{{ message.user.get_full_name }}</strong>
+                                        {#                                            <br>#}
+                                        {#                                            <small class="pull-right text-muted">#}
+                                        {#                                                <i class="far fa-clock"></i> {{ message.created_datetime }}#}
+                                        {#                                            </small>#}
+                                    </div>
+                                    <hr class="w-100 my-1">
+                                    <p class="mb-0">
+                                        {{ message }}
+                                    </p>
+                                </div>
+                            </li>
+                        {% else %}
+                            {% if message.status %}
+                                <li class="d-flex justify-content-between mb-4">
+                                    <div class="chat-body mr-2 w-100">
+                                        <div class="header">
+                                            <strong class="primary-font">Anonymous</strong>
+                                        </div>
+                                        <hr class="w-100 my-1">
+                                        <p class="mb-0">
+                                            {{ message }}
+                                        </p>
+                                    </div>
+                                    <img src="{% static 'img/noimage.png' %}" alt="avatar"
+                                         class="avatar rounded-circle mr-0 ml-3">
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+
+                {% if order.status != 2 %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="white">
+                            <div class="form-group basic-textarea">
+                            <textarea name="message" class="form-control pl-2 my-0" id="exampleFormControlTextarea2"
+                                      rows="3"
+                                      placeholder="Type your message here..."></textarea>
+                            </div>
+                        </div>
+                        <button type="submit"
+                                class="btn btn-outline-primary waves-effect btn-sm float-right">Send
+                        </button>
+                    </form>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+</div>

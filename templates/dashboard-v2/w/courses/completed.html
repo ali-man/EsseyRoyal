@@ -1,0 +1,21 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Pages</th>
+        <th scope="col">Total cost</th>
+        <th scope="col">Deadline</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for order in completed %}
+        <tr>
+            <td scope="row">{{ order.title }}</td>
+            <td>{{ order.number_page }}</td>
+            <td>${{ order.total_cost|floatformat }}</td>
+            <td>{{ order.deadline|date:"H:m d M" }}</td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>

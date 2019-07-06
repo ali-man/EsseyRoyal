@@ -1,0 +1,52 @@
+{% extends 'dashboard-v2/w/index.html' %}
+
+{% block title %}
+    Dashboard - Courses
+{% endblock %}
+
+{% block section %}
+
+    <div class="classic-tabs">
+
+        <ul class="nav tabs-orange justify-content-around" id="myClassicTabOrange" role="tablist">
+            <li class="nav-item" style="margin-left: 0;">
+                <a class="nav-link waves-light active show" id="profile-tab-classic-orange" data-toggle="tab"
+                   href="#profile-classic-orange"
+                   role="tab" aria-controls="profile-classic-orange" aria-selected="true"><i
+                        class="fas fa-book-open fa-2x pb-2"
+                        aria-hidden="true"></i><br>In review</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link waves-light" id="follow-tab-classic-orange" data-toggle="tab"
+                   href="#follow-classic-orange"
+                   role="tab" aria-controls="follow-classic-orange" aria-selected="false"><i
+                        class="fas fa-spinner fa-2x pb-2"
+                        aria-hidden="true"></i><br>In process</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link waves-light" id="contact-tab-classic-orange" data-toggle="tab"
+                   href="#contact-classic-orange"
+                   role="tab" aria-controls="contact-classic-orange" aria-selected="false"><i
+                        class="fas fa-check fa-2x pb-2"
+                        aria-hidden="true"></i><br>Completed</a>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myClassicTabContentOrange">
+            <div class="tab-pane fade active show" id="profile-classic-orange" role="tabpanel"
+                 aria-labelledby="profile-tab-classic-orange">
+                {% include 'dashboard-v2/w/courses/in-review.html' %}
+            </div>
+            <div class="tab-pane fade" id="follow-classic-orange" role="tabpanel"
+                 aria-labelledby="follow-tab-classic-orange">
+                {% include 'dashboard-v2/w/courses/in-process.html' %}
+            </div>
+            <div class="tab-pane fade" id="contact-classic-orange" role="tabpanel"
+                 aria-labelledby="contact-tab-classic-orange">
+                {% include 'dashboard-v2/w/courses/completed.html' %}
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

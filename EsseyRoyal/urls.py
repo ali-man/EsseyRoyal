@@ -46,4 +46,8 @@ urlpatterns = [
     # path('ajax/chat-person/', chat_ajax_user),
     # path('chat-ajax/', include('appchat.urls')),
     path('chat/<int:pk>/', ChatViews.as_view(), name='chat'),
+
+    path('c/', include('appdashboard.c', namespace='customer')),
+    path('m/', include('appdashboard.m', namespace='manager')),
+    path('w/', include('appdashboard.w', namespace='writer')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

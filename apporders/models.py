@@ -16,6 +16,7 @@ from pdfminer.pdfpage import PDFPage
 from ckeditor.fields import RichTextField
 from django.db import models
 
+from EsseyRoyal.local_settings import LOCAL
 from appmail.views import customer_send_mail, writer_send_mail, manager_send_mail
 from apporders.validators import validate_file_extension
 from appusers.models import User
@@ -29,8 +30,9 @@ class FilterWord(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        words = [i.word for i in FilterWord.objects.all()]
-        with open(settings.STATIC_ROOT + '/words.json', 'w') as write_file:
+        words = [F'{i.word}' for i in FilterWord.objects.all()]
+        path = settings.STATICFILES_DIRS[0] if LOCAL else settings.STATIC_ROOT
+        with open(path + '/words.json', 'w') as write_file:
             json.dump(words, write_file)
 
     def __str__(self):

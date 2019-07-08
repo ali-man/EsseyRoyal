@@ -1,0 +1,24 @@
+<div class="row d-flex justify-content-center modalWrapper">
+    {% include 'dashboard-v2/m/selects/type-order/add.html' %}
+
+    <div class="text-center">
+        <a href="" class="btn btn-info btn-rounded btn-sm" data-toggle="modal" data-target="#modalAdd">Add<i
+                class="fas fa-plus-square ml-1"></i></a>
+    </div>
+
+    {% include 'dashboard-v2/m/selects/type-order/edit.html' %}
+
+    <div class="text-center buttonEditWrapper">
+        <button class="btn btn-info btn-rounded btn-sm buttonEdit" data-toggle="modal" data-target="#modalEdit"
+                disabled>Edit<i class="fas fa-pencil-square-o ml-1"></i></button>
+    </div>
+
+    {% include 'dashboard-v2/m/selects/type-order/delete.html' %}
+
+    <div class="text-center">
+        <button class="btn btn-danger btn-sm btn-rounded buttonDelete" data-toggle="modal" disabled data-target="#modalDelete">
+            Delete
+            <i class="fas fa-times ml-1"></i>
+        </button>
+    </div>
+</div>

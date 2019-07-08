@@ -1,0 +1,17 @@
+{% extends 'dashboard-v2/m/index.html' %}
+{% load static %}
+
+{% block title %}
+    Dashboard - Add article of blog
+{% endblock %}
+
+{% block section %}
+    <h4 class="text-center h4-responsive py-4 mb-3" style="background-color: #f5f5f5">Add article</h4>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table class="table">
+            {{ form.as_table }}
+        </table>
+        <button type="submit" class="btn bg-btn float-right">Add</button>
+    </form>
+{% endblock %}

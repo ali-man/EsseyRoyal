@@ -30,5 +30,5 @@ class ArticleForm(forms.ModelForm):
             #     'class': 'browser-default custom-select js-example-basic-multiple',
             #     'multiple': 'multiple'
             # }),
-            'status': forms.CheckboxInput(attrs={'style': 'opacity: 1;'})
+            'status': forms.CheckboxInput(attrs={'style': 'opacity: 1; position: inherit;'})
         }

@@ -7,9 +7,11 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
+from appaaa.models import Comment
+from appblog.forms import ArticleForm
 from appcourses.models import Course, Task
 from appdashboard.views import access_to_manager_and_admin
-from apporders.models import Order, AdditionallyOrder, Chat, TypeOrder, FormatOrder, PriceDeadline
+from apporders.models import Order, AdditionallyOrder, Chat, TypeOrder, FormatOrder, PriceDeadline, FilterWord
 from appusers.forms import UserForm
 from appusers.models import User
 
@@ -19,7 +21,6 @@ def to_deadline(d, t):
 
 
 def index(request):
-
     return render(request, 'dashboard-v2/m/index.html', locals())
 
 
@@ -134,7 +135,7 @@ def users(request):
 def users_customer(request, pk):
     customer = User.objects.get(id=pk)
     orders = Order.objects.filter(customer=customer)
-    in_review = orders.filter(status__in=[0,3])
+    in_review = orders.filter(status__in=[0, 3])
     in_progress = orders.filter(status=1)
     completed = orders.filter(status=2)
     return render(request, 'dashboard-v2/m/users/customer/tabs.html', locals())
@@ -240,3 +241,54 @@ def deadline(request):
             return redirect('/')
 
     return render(request, 'dashboard-v2/m/selects/deadline.html', locals())
+
+
+def filter_words(request):
+    fws = FilterWord.objects.all()
+
+    if request.method == 'POST':
+        if request.is_ajax():
+            word = request.POST['word']
+
+            if request.POST['action'] == 'add':
+                fw = FilterWord()
+                fw.word = word
+                fw.save()
+
+            fw = FilterWord.objects.get(word=word)
+            if request.POST['action'] == 'edit':
+                fw.word = request.POST['newWord']
+                fw.save()
+
+            if request.POST['action'] == 'delete':
+                fw.delete()
+
+            return JsonResponse({'ok': 'yes'})
+        else:
+            messages.error(request, 'Invalid request')
+            return redirect('/')
+
+    return render(request, 'dashboard-v2/m/others/filter-words.html', locals())
+
+
+def testimonials(request):
+    cm = Comment.objects.all()
+    # TODO: Дописать шаблон testimonials
+
+    return render(request, 'dashboard-v2/m/others/testimonials.html', locals())
+
+
+def add_article(request):
+    form = ArticleForm()
+
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Article successfully added')
+            return redirect('/m/add-article/')
+        else:
+            form = ArticleForm(request.POST, request.FILES)
+            messages.error(request, 'Invalid fields')
+
+    return render(request, 'dashboard-v2/m/others/add-article.html', locals())

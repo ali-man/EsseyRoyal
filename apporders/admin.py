@@ -14,8 +14,11 @@ class FilesAdditionallyOrderAdminInline(admin.TabularInline):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['title', 'created_datetime']
+    list_display = ['title', 'customer', 'created_datetime', 'status', 'completed_datetime', 'writer']
     list_display_links = ['title']
+    list_filter = ['status', 'completed_datetime']
+    list_editable = ['status']
+    search_fields = ['title']
     inlines = [FilesOrderAdminInline]
 
 

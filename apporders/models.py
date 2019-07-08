@@ -67,7 +67,7 @@ class TypeOrder(models.Model):
 
 
 class FormatOrder(models.Model):
-    title = models.CharField(verbose_name='Format of order', max_length=50)
+    title = models.CharField(verbose_name='Format of order', max_length=50, unique=True)
 
     class Meta:
         verbose_name = 'Format of order'
@@ -102,6 +102,7 @@ class Order(models.Model):
     total_cost = models.DecimalField(verbose_name='Total cost', max_digits=10, decimal_places=2, default=0)
     writer = models.ForeignKey(User, verbose_name='Writer', related_name='order_writer', on_delete=models.CASCADE,
                                null=True, blank=True)
+    completed_datetime = models.DateTimeField(verbose_name='Completed datetime', auto_now=True)
 
     class Meta:
         verbose_name = 'Order'
@@ -232,7 +233,7 @@ class SearchWord:
 
 
 class Processing:
-    FORMATS = ['docx', 'doc', 'xls', 'xlsx', 'excel', 'pdf', 'jpg', 'png']
+    FORMATS = ['docx', 'xls', 'xlsx', 'excel', 'pdf']
     sw = SearchWord()
 
     def moderation_order(self, words, order_id):
@@ -320,12 +321,6 @@ def checking_files(f, obj_id):
 
     elif file_format == 'pdf':
         pc.processing_pdf(f, obj_id)
-
-    elif file_format == 'jpg' or file_format == 'png':
-        pass
-
-    elif file_format == 'doc':
-        pass
 
     else:
         pass

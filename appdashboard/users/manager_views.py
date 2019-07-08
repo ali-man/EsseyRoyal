@@ -1,13 +1,15 @@
 import datetime
+import decimal
 
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
 from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from appcourses.models import Course, Task
 from appdashboard.views import access_to_manager_and_admin
-from apporders.models import Order, AdditionallyOrder, Chat
+from apporders.models import Order, AdditionallyOrder, Chat, TypeOrder, FormatOrder, PriceDeadline
 from appusers.forms import UserForm
 from appusers.models import User
 
@@ -25,7 +27,7 @@ def orders(request):
     _orders = Order.objects.all()
     in_review = _orders.filter(status__in=[0, 3])
     in_process = _orders.filter(status=1)
-    completed = _orders.filter(status=2)
+    completed = _orders.filter(status=2).order_by('-completed_datetime')
 
     return render(request, 'dashboard-v2/m/orders/tabs.html', locals())
 
@@ -61,6 +63,9 @@ def order_in_process(request, pk):
 
 
 def order_completed(request, pk):
+    if not access_to_manager_and_admin(request.user):
+        messages.error(request, 'Access closed')
+        return redirect('/')
     order = get_object_or_404(Order, id=pk, status=2)
     return render(request, 'dashboard-v2/m/orders/detail/completed.html', locals())
 
@@ -116,3 +121,122 @@ def detail(request, pk):
     course = Course.objects.get(id=pk)
 
     return render(request, 'dashboard-v2/m/courses/course/detail.html', locals())
+
+
+def users(request):
+    _users = User.objects.all()
+    customers = _users.filter(groups__name='Customer')
+    writers = _users.filter(groups__name='Writer')
+
+    return render(request, 'dashboard-v2/m/users/tabs.html', locals())
+
+
+def users_customer(request, pk):
+    customer = User.objects.get(id=pk)
+    orders = Order.objects.filter(customer=customer)
+    in_review = orders.filter(status__in=[0,3])
+    in_progress = orders.filter(status=1)
+    completed = orders.filter(status=2)
+    return render(request, 'dashboard-v2/m/users/customer/tabs.html', locals())
+
+
+def users_writer(request, pk):
+    writer = User.objects.get(id=pk)
+    orders = Order.objects.filter(writer=writer)
+    in_progress = orders.filter(status=1)
+    completed = orders.filter(status=2)
+    return render(request, 'dashboard-v2/m/users/writer/tabs.html', locals())
+
+
+def type_order(request):
+    types_order = TypeOrder.objects.all()
+
+    if request.method == 'POST':
+        if request.is_ajax():
+            title = request.POST['title']
+            price_customer = request.POST['priceCustomer']
+            price_writer = request.POST['priceWriter']
+            if request.POST['action'] == 'add':
+                to = TypeOrder()
+                to.title = title
+                to.price_client = price_customer
+                to.price_writer = price_writer
+                to.save()
+
+            to = TypeOrder.objects.get(title=title)
+            if request.POST['action'] == 'edit':
+                to.price_client = price_customer
+                to.price_writer = price_writer
+                to.save()
+
+            if request.POST['action'] == 'delete':
+                to.delete()
+
+            return JsonResponse({'ok': 'yes'})
+        else:
+            messages.error(request, 'Неверный запрос')
+            return redirect('/')
+
+    return render(request, 'dashboard-v2/m/selects/type-order.html', locals())
+
+
+def format_order(request):
+    formats_order = FormatOrder.objects.all()
+
+    if request.method == 'POST':
+        if request.is_ajax():
+            title = request.POST['title']
+
+            if request.POST['action'] == 'add':
+                fo = FormatOrder()
+                fo.title = title
+                fo.save()
+
+            fo = FormatOrder.objects.get(title=title)
+            if request.POST['action'] == 'edit':
+                fo.title = request.POST['newTitle']
+                fo.save()
+
+            if request.POST['action'] == 'delete':
+                fo.delete()
+
+            return JsonResponse({'ok': 'yes'})
+        else:
+            messages.error(request, 'Invalid request')
+            return redirect('/')
+
+    return render(request, 'dashboard-v2/m/selects/format-order.html', locals())
+
+
+def deadline(request):
+    deadlines = PriceDeadline.objects.all()
+
+    if request.method == 'POST':
+        if request.is_ajax():
+            price = decimal.Decimal(request.POST['price'].split('$')[-1])
+
+            if request.POST['action'] == 'add':
+                dl = PriceDeadline()
+                if request.POST['day'] != '':
+                    dl.days = int(request.POST['day'])
+                if request.POST['hour'] != '':
+                    dl.hours = int(request.POST['hour'])
+                dl.price = price
+                dl.save()
+
+            dl = PriceDeadline.objects.get(price=price)
+            if request.POST['action'] == 'edit':
+                dl.days = int(request.POST['day'])
+                dl.hours = int(request.POST['hour'])
+                dl.price = decimal.Decimal(request.POST['newPrice'].split('$')[-1])
+                dl.save()
+
+            if request.POST['action'] == 'delete':
+                dl.delete()
+
+            return JsonResponse({'ok': 'yes'})
+        else:
+            messages.error(request, 'Invalid request')
+            return redirect('/')
+
+    return render(request, 'dashboard-v2/m/selects/deadline.html', locals())

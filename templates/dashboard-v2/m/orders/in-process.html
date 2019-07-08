@@ -7,6 +7,7 @@
         <th scope="col">Total cost</th>
         <th scope="col">Deadline</th>
         <th scope="col">Writer</th>
+        <th scope="col">Date of adoption</th>
     </tr>
     </thead>
     <tbody>
@@ -20,6 +21,7 @@
             <td>${{ order.total_cost|floatformat }}</td>
             <td>{{ order.deadline|date:"H:m d M" }}</td>
             <td>{{ order.writer.get_full_name }}</td>
+            <td>{{ order.additionallyorder.created_datetime|date:"H:m d M" }}</td>
         </tr>
     {% endfor %}
 

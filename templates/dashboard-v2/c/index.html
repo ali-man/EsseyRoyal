@@ -1,29 +1,39 @@
 {% extends 'dashboard-v2/index.html' %}
 
 {% block menu %}
-    <li class="list-group-item">
-        <div class="md-v-line"></div>
-        <i class="far fa-list-alt" style="margin-right: 50px;"></i>
-        <a href="{% url 'customer:orders' %}">Orders</a>
+    <li class="list-group-item p-0">
+        <a href="{% url 'customer:orders' %}">
+            <div class="md-v-line"></div>
+            <i class="far fa-list-alt" style="margin-right: 36px; margin-left: 20px;"></i>
+            Orders
+        </a>
     </li>
-    <li class="list-group-item">
-        <div class="md-v-line"></div>
-        <i class="fas fa-clipboard-list" style="margin-right: 55px;"></i>
-        <a href="{% url 'customer:courses' %}">Courses</a>
+    <li class="list-group-item p-0">
+        <a href="{% url 'customer:courses' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-clipboard-list" style="margin-right: 40px; margin-left: 20px;"></i>
+            Courses (TODO)
+        </a>
     </li>
-    <li class="list-group-item">
-        <div class="md-v-line"></div>
-        <i class="fas fa-user-cog mr-5"></i>
-        <a href="{% url 'customer:settings' %}">Settings</a>
+    <li class="list-group-item p-0">
+        <a href="{% url 'customer:settings' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-user-cog" style="margin-right: 32px; margin-left: 20px;"></i>
+            Settings
+        </a>
     </li>
-    <li class="list-group-item">
-        <div class="md-v-line"></div>
-        <i class="far fa-comment-alt mr-5"></i>
-        <a href="">Leave feedback</a>
+    <li class="list-group-item p-0">
+        <a data-toggle="modal" data-target="#modalCommentForm">
+            <div class="md-v-line"></div>
+            <i class="far fa-comment-alt" style="margin-right: 36px; margin-left: 20px;"></i>
+            Leave feedback
+        </a>
     </li>
-    <li class="list-group-item">
-        <div class="md-v-line"></div>
-        <i class="fas fa-sign-out-alt mr-5"></i>
-        <a href="">Log out</a>
+    <li class="list-group-item p-0">
+        <a href="{% url 'logout' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-sign-out-alt" style="margin-right: 36px; margin-left: 20px;"></i>
+            Log out
+        </a>
     </li>
 {% endblock %}

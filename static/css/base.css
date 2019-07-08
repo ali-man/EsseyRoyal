@@ -117,36 +117,80 @@ ul#tree ul li {
 }
 
 .success {
-  background-color: #00C851; }
+    background-color: #00C851;
+}
 
 .warning {
-  background-color: #FFBB33; }
+    background-color: #FFBB33;
+}
 
 .info {
-  background-color: #33B5E5; }
+    background-color: #33B5E5;
+}
 
 .error {
-  background-color: #FF3547; }
+    background-color: #FF3547;
+}
 
 ul.messages {
-  position: fixed;
-  top: 80px;
-  left: 5px;
-  padding: 0;
-  list-style: none;
-  z-index: 9991; }
-  ul.messages li {
+    position: fixed;
+    top: 80px;
+    left: 5px;
+    padding: 0;
+    list-style: none;
+    z-index: 9991;
+}
+
+ul.messages li {
     color: #fff;
     font-size: 14px;
     cursor: pointer;
     opacity: .8;
     padding: 10px 15px;
-    margin: 0 0 5px; }
-
+    margin: 0 0 5px;
+}
 
 .md-tabs .nav-link {
     padding: 10px 0;
 }
 
-span.helptext ul {padding: 10px 0 0 20px;}
-span.helptext ul li {}
+span.helptext ul {
+    padding: 10px 0 0 20px;
+}
+
+span.helptext ul li {
+}
+
+ul.left-menu-dashboard li a {
+    display: inline-block;
+    width: 100%;
+    line-height: 3rem;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: #1d5191;
+}
+ul.left-menu-dashboard li a i {
+    color: #6B666A;
+}
+ul.left-menu-dashboard li a:hover {
+    background-color: #1e5191;
+    color: whitesmoke;
+    animation: color 3ms;
+    padding-left: 5px;
+}
+
+ul.left-menu-dashboard li a:hover i {
+    color: #a2a2a2;
+}
+
+main {
+    background: url('../img/bg.jpg') fixed;
+    padding: 50px 0;
+}
+
+ul.additionally-order-files li a, ul.files li a {
+    font-size: 14px;
+    color: #5f5f5f;
+    font-weight: 400;
+}

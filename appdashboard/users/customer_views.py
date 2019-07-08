@@ -37,7 +37,7 @@ def orders(request):
             return redirect('/')
         in_review = my_orders.filter(status__in=[0, 3])
         in_process = my_orders.filter(status=1)
-        completed = my_orders.filter(status=2)
+        completed = my_orders.filter(status=2).order_by('-completed_datetime')
         new_order = OrderAddForm()
 
     if request.method == 'POST':

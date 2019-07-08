@@ -36,7 +36,7 @@ def orders(request):
             return redirect('/')
         in_review = _orders.filter(status=0)
         in_process = _orders.filter(status=1)
-        completed = _orders.filter(status=2)
+        completed = _orders.filter(status=2).order_by('-completed_datetime')
 
     return render(request, 'dashboard-v2/w/orders/tabs.html', locals())
 
@@ -57,7 +57,7 @@ def order_preview(request, pk):
                 additional.order = order
                 additional.save()
             messages.success(request, 'You have successfully accepted the order')
-            # TODO: Перенаправить на принятый ордер
+            return redirect(F'/w/orders/inprocess/{pk}/')
         else:
             messages.warning(request, 'The order has already been accepted by another writer.')
 

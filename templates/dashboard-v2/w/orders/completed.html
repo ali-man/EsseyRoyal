@@ -4,7 +4,7 @@
         <th scope="col">Title</th>
         <th scope="col">Pages</th>
         <th scope="col">Total cost</th>
-        <th scope="col">Deadline</th>
+        <th scope="col">Expiry date</th>
     </tr>
     </thead>
     <tbody>
@@ -15,7 +15,7 @@
             </td>
             <td>{{ order.number_page }}</td>
             <td>${{ order.total_cost|floatformat }}</td>
-            <td>{{ order.deadline|date:"H:m d M" }}</td>
+            <td>{{ order.completed_datetime|date:"H:m d M" }}</td>
         </tr>
     {% endfor %}
 

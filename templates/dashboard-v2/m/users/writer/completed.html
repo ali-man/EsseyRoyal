@@ -1,0 +1,27 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Per page</th>
+        <th scope="col">Pages</th>
+        <th scope="col">Total cost</th>
+        <th scope="col">Expiry date</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for order in completed %}
+        <tr>
+            <td>
+                <a href="{% url 'manager:order-completed' order.id %}" class="text-primary">
+                    {{ order.title }}
+                </a>
+            </td>
+            <td>${{ order.per_page|floatformat }}</td>
+            <td>{{ order.number_page }}</td>
+            <td>${{ order.total_cost|floatformat }}</td>
+            <td>{{ order.completed_datetime|date:"H:m d M" }}</td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>

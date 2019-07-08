@@ -1,0 +1,63 @@
+{% extends 'dashboard-v2/m/index.html' %}
+
+{% block title %}
+    Dashboard - User Profile
+{% endblock %}
+
+{% block section %}
+
+    <div class="classic-tabs">
+
+        <ul class="nav tabs-orange justify-content-around" id="myClassicTabOrange" role="tablist">
+            <li class="nav-item" style="margin-left: 0;">
+                <a class="nav-link  waves-light active show" id="profile-tab-classic-orange" data-toggle="tab"
+                   href="#profile-info"
+                   role="tab" aria-controls="profile-info" aria-selected="true"><i
+                        class="fas fa-search fa-2x pb-2"
+                        aria-hidden="true"></i><br>Info</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link waves-light" id="follow-tab-classic-orange" data-toggle="tab"
+                   href="#profile-in-review"
+                   role="tab" aria-controls="profile-in-review" aria-selected="false"><i
+                        class="fas fa-spinner fa-2x pb-2"
+                        aria-hidden="true"></i><br>In review</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link waves-light" id="follow-tab-classic-orange" data-toggle="tab"
+                   href="#profile-in-progress"
+                   role="tab" aria-controls="profile-in-progress" aria-selected="false"><i
+                        class="fas fa-spinner fa-2x pb-2"
+                        aria-hidden="true"></i><br>In progress</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link waves-light" id="follow-tab-classic-orange" data-toggle="tab"
+                   href="#profile-completed"
+                   role="tab" aria-controls="profile-completed" aria-selected="false"><i
+                        class="fas fa-spinner fa-2x pb-2"
+                        aria-hidden="true"></i><br>Completed</a>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myClassicTabContentOrange">
+            <div class="tab-pane fade active show" id="profile-info" role="tabpanel"
+                 aria-labelledby="profile-info">
+                {% include 'dashboard-v2/m/users/customer/info.html' %}
+            </div>
+            <div class="tab-pane fade" id="profile-in-review" role="tabpanel"
+                 aria-labelledby="profile-in-review">
+                {% include 'dashboard-v2/m/users/customer/in-review.html' %}
+            </div>
+            <div class="tab-pane fade" id="profile-in-progress" role="tabpanel"
+                 aria-labelledby="profile-in-progress">
+                {% include 'dashboard-v2/m/users/customer/in-progress.html' %}
+            </div>
+            <div class="tab-pane fade" id="profile-completed" role="tabpanel"
+                 aria-labelledby="profile-completed">
+                {% include 'dashboard-v2/m/users/customer/completed.html' %}
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

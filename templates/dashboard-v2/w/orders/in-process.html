@@ -5,6 +5,7 @@
         <th scope="col">Pages</th>
         <th scope="col">Total cost</th>
         <th scope="col">Deadline</th>
+        <th scope="col">Date of adoption</th>
     </tr>
     </thead>
     <tbody>
@@ -18,6 +19,7 @@
             <td>{{ order.number_page }}</td>
             <td>${{ order.total_cost_writer|floatformat }}</td>
             <td>{{ order.deadline|date:"H:m d M" }}</td>
+            <td>{{ order.additionallyorder.created_datetime|date:"H:m d M" }}</td>
         </tr>
     {% endfor %}
 

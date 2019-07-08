@@ -3,6 +3,9 @@
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/order.css' %}">
+    <style>
+        .table td {border: none;}
+    </style>
 {% endblock %}
 
 {% block title %}
@@ -30,11 +33,11 @@
     <form method="post" enctype="multipart/form-data">{% csrf_token %}
         <div class="row">
             <div class="col-12">
-                <div class="card mb-2">
+                <div class="border mb-2">
                     <table class="table">
                         {% for field in form %}
                             <tr>
-                                <td width="120">{{ field.label }}</td>
+                                <td width="150">{{ field.label }}:</td>
                                 <td>{{ field }}</td>
                             </tr>
                             {% if field.errors %}
@@ -45,10 +48,10 @@
                             {% endif %}
                         {% endfor %}
                         <tr>
-                            <td><label for="id_attached-files">Attached files</label></td>
+                            <td><label for="id_attached-files">Attached files:</label></td>
                             <td>
                                 <input type="file" name="attached-files" id="id_attached-files" multiple>
-                                <small>.xls .doc .docx .pdf .jpg .png .excel</small>
+                                <small>.xls .docx .pdf .xlsx</small>
                             </td>
                         </tr>
                     </table>
@@ -57,10 +60,8 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <div class="card mb-2">
-                    <div class="card-body py-2 pr-2">
-                        <button type="submit" class="btn bg-btn float-right">Save</button>
-                    </div>
+                <div class="card-body py-2 pr-0">
+                    <button type="submit" class="btn bg-btn float-right">Save</button>
                 </div>
             </div>
         </div>

@@ -5,39 +5,81 @@
 {% endblock %}
 
 {% block menu %}
-    <li class="list-group-item">
-        <div class="md-v-line"></div>
-        <i class="far fa-list-alt" style="margin-right: 50px;"></i>
-        <a href="{% url 'manager:orders' %}">Orders</a>
+    <li class="list-group-item p-0">
+        <a href="{% url 'manager:orders' %}">
+            <div class="md-v-line"></div>
+            <i class="far fa-list-alt" style="margin-right: 36px; margin-left: 20px;"></i>
+            Orders
+        </a>
     </li>
-    <li class="list-group-item">
-        <div class="md-v-line"></div>
-        <i class="fas fa-clipboard-list" style="margin-right: 55px;"></i>
-        <a href="{% url 'manager:courses' %}">Courses</a>
+    <li class="list-group-item p-0">
+        <a href="{% url 'manager:courses' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-clipboard-list" style="margin-right: 40px; margin-left: 20px;"></i>
+            Courses
+        </a>
     </li>
-    <li class="list-group-item">
-        <div class="md-v-line"></div>
-        <i class="fas fa-users mr-5"></i>
-        <a href="{% url 'manager:courses' %}">Users</a>
+    <li class="list-group-item p-0">
+        <a href="{% url 'manager:users' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-users" style="margin-right: 34px; margin-left: 20px;"></i>
+            Users
+        </a>
     </li>
-    <li class="list-group-item">
-        <div class="md-v-line"></div>
-        <i class="far fa-calendar-check" style="margin-right: 55px;"></i>
-        <a href="{% url 'manager:courses' %}">Selects</a>
+    <li class="list-group-item p-0">
+        <a href="{% url 'manager:type-order' %}">
+            <div class="md-v-line"></div>
+            <i class="far fa-calendar-check" style="margin-right: 38px; margin-left: 20px;"></i>
+            Type of order
+        </a>
     </li>
-    <li class="list-group-item">
-        <div class="md-v-line"></div>
-        <i class="far fa-caret-square-down" style="margin-right: 55px;"></i>
-        <a href="{% url 'manager:courses' %}">Others</a>
+    <li class="list-group-item p-0">
+        <a href="{% url 'manager:format-order' %}">
+            <div class="md-v-line"></div>
+            <i class="far fa-calendar-check" style="margin-right: 38px; margin-left: 20px;"></i>
+            Format of order
+        </a>
     </li>
-    <li class="list-group-item">
-        <div class="md-v-line"></div>
-        <i class="fas fa-user-cog mr-5"></i>
-        <a href="{% url 'manager:settings' %}">Settings</a>
+    <li class="list-group-item p-0">
+        <a href="{% url 'manager:deadline' %}">
+            <div class="md-v-line"></div>
+            <i class="far fa-calendar-check" style="margin-right: 38px; margin-left: 20px;"></i>
+            Deadline
+        </a>
     </li>
-    <li class="list-group-item">
-        <div class="md-v-line"></div>
-        <i class="fas fa-sign-out-alt mr-5"></i>
-        <a href="">Log out</a>
+    <li class="list-group-item p-0">
+        <a href="{% url 'manager:courses' %}">
+            <div class="md-v-line"></div>
+            <i class="far fa-caret-square-down" style="margin-right: 38px; margin-left: 20px;"></i>
+            Filter word
+        </a>
+    </li>
+    <li class="list-group-item p-0">
+        <a href="{% url 'manager:courses' %}">
+            <div class="md-v-line"></div>
+            <i class="far fa-caret-square-down" style="margin-right: 38px; margin-left: 20px;"></i>
+            Comments
+        </a>
+    </li>
+    <li class="list-group-item p-0">
+        <a href="{% url 'manager:courses' %}">
+            <div class="md-v-line"></div>
+            <i class="far fa-caret-square-down" style="margin-right: 38px; margin-left: 20px;"></i>
+            Add article
+        </a>
+    </li>
+    <li class="list-group-item p-0">
+        <a href="{% url 'manager:settings' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-user-cog" style="margin-right: 32px; margin-left: 20px;"></i>
+            Settings
+        </a>
+    </li>
+    <li class="list-group-item p-0">
+        <a href="{% url 'logout' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-sign-out-alt" style="margin-right: 36px; margin-left: 20px;"></i>
+            Log out
+        </a>
     </li>
 {% endblock %}

@@ -29,7 +29,7 @@ class SearchWord:
 
 
 class Processing:
-    FORMATS = ['docx', 'doc', 'xls', 'xlsx', 'excel', 'pdf', 'jpg', 'png']
+    FORMATS = ['docx', 'xls', 'xlsx', 'excel', 'pdf']
     sw = SearchWord()
 
     def moderation_order(self, words, order_id):

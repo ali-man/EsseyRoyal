@@ -73,7 +73,7 @@
                                 <a class="dropdown-item" href="{% url 'chat' user.chatuser.id %}">Chat</a>
                             {% endif %}
                         {% endfor %}
-                        <a class="dropdown-item" data-toggle="modal" data-target="#modalCommentForm">Оставить отзыв</a>
+{#                        <a class="dropdown-item" data-toggle="modal" data-target="#modalCommentForm">Оставить отзыв</a>#}
                         <a class="dropdown-item" href="{% url 'logout' %}">Log out</a>
                     {% else %}
                         <a class="dropdown-item" data-toggle="modal" data-target="#modalLRForm" href="#">

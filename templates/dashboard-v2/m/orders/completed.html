@@ -1,23 +1,39 @@
 <table class="table">
     <thead>
     <tr>
+        <th scope="col">Customer</th>
         <th scope="col">Title</th>
         <th scope="col">Pages</th>
         <th scope="col">Total cost</th>
         <th scope="col">Deadline</th>
+        <th scope="col">Writer</th>
         <th scope="col">Expiry date</th>
+        <th scope="col">Rating</th>
     </tr>
     </thead>
     <tbody>
     {% for order in completed %}
         <tr>
             <td>
+                <a href="{% url 'manager:users-customer' order.customer.id %}" class="text-primary">
+                    {{ order.customer.get_full_name }}
+                </a>
+            </td>
+            <td>
                 <a href="{% url 'manager:order-completed' order.id %}" class="text-primary">{{ order.title }}</a>
             </td>
             <td>{{ order.number_page }}</td>
             <td>${{ order.total_cost|floatformat }}</td>
             <td>{{ order.deadline|date:"H:m d M" }}</td>
+            <td>
+                <a href="{% url 'manager:users-writer' order.writer.id %}" class="text-primary">
+                    {{ order.writer.get_full_name }}
+                </a>
+            </td>
             <td>{{ order.completed_datetime|date:"H:m d M" }}</td>
+            <td width="86">
+                {% include 'dashboard-v2/m/orders/rating.html' %}
+            </td>
         </tr>
     {% endfor %}
 

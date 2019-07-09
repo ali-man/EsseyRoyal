@@ -272,8 +272,31 @@ def filter_words(request):
 
 
 def testimonials(request):
-    cm = Comment.objects.all()
-    # TODO: Дописать шаблон testimonials
+    tms = Comment.objects.all()
+
+    if request.method == 'POST':
+        if request.is_ajax():
+            if request.POST['action'] == 'add':
+                c = Comment()
+                if request.POST['fullName'] != '':
+                    c.full_name = request.POST['fullName']
+                if request.POST['academicInstitution'] != '':
+                    c.academic_institution = request.POST['academicInstitution']
+                c.comment = request.POST['comment']
+                c.save()
+
+            comment = request.POST['comment']
+            c = Comment.objects.get(comment=comment)
+            if request.POST['action'] == 'edit':
+                c.full_name = request.POST['fullName']
+                c.academic_institution = request.POST['academicInstitution']
+                c.comment = request.POST['newComment']
+                c.save()
+
+            if request.POST['action'] == 'delete':
+                c.delete()
+
+            return JsonResponse({'ok': 'yes'})
 
     return render(request, 'dashboard-v2/m/others/testimonials.html', locals())
 

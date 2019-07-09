@@ -13,14 +13,22 @@
     <tbody>
     {% for order in in_process %}
         <tr>
-            <td>{{ order.customer.get_full_name }}</td>
+            <td>
+                <a href="{% url 'manager:users-customer' order.customer.id %}" class="text-primary">
+                    {{ order.customer.get_full_name }}
+                </a>
+            </td>
             <td>
                 <a href="{% url 'manager:order-inprocess' order.id %}" class="text-primary">{{ order.title }}</a>
             </td>
             <td>{{ order.number_page }}</td>
             <td>${{ order.total_cost|floatformat }}</td>
             <td>{{ order.deadline|date:"H:m d M" }}</td>
-            <td>{{ order.writer.get_full_name }}</td>
+            <td>
+                <a href="{% url 'manager:users-writer' order.writer.id %}" class="text-primary">
+                    {{ order.writer.get_full_name }}
+                </a>
+            </td>
             <td>{{ order.additionallyorder.created_datetime|date:"H:m d M" }}</td>
         </tr>
     {% endfor %}

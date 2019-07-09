@@ -12,7 +12,7 @@
     {% for customer in customers %}
         <tr>
             <td>
-                <a href="{% url 'manager:users-customer' customer.id %}">
+                <a href="{% url 'manager:users-customer' customer.id %}" class="text-primary">
                     {{ customer.email }}
                 </a>
             </td>

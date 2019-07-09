@@ -1,0 +1,108 @@
+{% extends 'dashboard-v2/m/index.html' %}
+{% load static %}
+
+{% block title %}
+    Dashboard - Testimonials
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/table-editor.css' %}">
+{% endblock %}
+
+{% block section %}
+    {% csrf_token %}
+    <h4 class="text-center h4-responsive py-4 mb-3" style="background-color: #f5f5f5">Testimonials</h4>
+
+    <div class="wrapper-editor">
+
+        {% include 'dashboard-v2/m/others/testimonials/buttons.html' %}
+
+        <table id="dtBasicExample" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th class="th-sm">Names</th>
+                <th class="th-sm">Institutions</th>
+                <th class="th-sm">Comments</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for testimonial in tms %}
+                <tr>
+                    {% if testimonial.user %}
+                        <td>{{ testimonial.user.get_full_name }}</td>
+                        <td>{{ testimonial.user.academic_institution }}</td>
+                    {% else %}
+                        <td>{{ testimonial.full_name }}</td>
+                        <td>{{ testimonial.academic_institution }}</td>
+                    {% endif %}
+                    <td>{{ testimonial.comment }}</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>Names</th>
+                <th>Institutions</th>
+                <th>Comments</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/table-editor.js' %}"></script>
+    <script>
+        $('#dtBasicExample').mdbEditor({
+            modalEditor: true
+        });
+        $('.dataTables_length').addClass('bs-select');
+
+        function funcAjax(action, fullName, academicInstitution, comment, newComment) {
+            $.ajax({
+                method: 'POST',
+                data: {
+                    csrfmiddlewaretoken: csrf,
+                    action: action,
+                    fullName: fullName,
+                    academicInstitution: academicInstitution,
+                    comment: comment,
+                    newComment: newComment,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.ok) {
+                        console.log(data.ok);
+                    }
+                }
+            });
+        }
+
+        let csrf = $("input[name=csrfmiddlewaretoken]").val();
+        let addForm = $('#add_form');
+        let editForm = $('#edit_form');
+        let deleteForm = $('#btnYes');
+
+        addForm.click(function () {
+            let fullName = $('#addFullname').val();
+            let academicInstitution = $('#addAcademicInstitution').val();
+            let comment = $('#addComment').val();
+            funcAjax('add', fullName, academicInstitution, comment, '');
+        });
+        editForm.click(function () {
+            let tr = $('.tr-color-selected');
+            let comment = $(tr).children('td')[2].innerText;
+            let fullName = $('#editFullname').val();
+            let academicInstitution = $('#editAcademicInstitution').val();
+            let newComment = $('#editComment').val();
+            funcAjax('edit', fullName, academicInstitution, comment, newComment);
+        });
+        deleteForm.click(function () {
+            let tr = $('.tr-color-selected');
+            let comment = $(tr).children('td')[2].innerText;
+            funcAjax('delete', '', '', comment, '');
+        });
+    </script>
+{% endblock %}

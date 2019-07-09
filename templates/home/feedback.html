@@ -31,19 +31,25 @@
                         {% if forloop.first %}
                             <div class="col-md-4">
                                 <div class="testimonial">
-{#                                    <div class="avatar mx-auto">#}
-{#                                        <img src="{% if user.avatar %}{{ user.avatar.url }}#}
-{#                                        {% else %}{% static 'img/noimage.png' %}{% endif %}"#}
-{#                                             class="rounded-circle img-fluid">#}
-{#                                    </div>#}
+                                    {#                                    <div class="avatar mx-auto">#}
+                                    {#                                        <img src="{% if user.avatar %}{{ user.avatar.url }}#}
+                                    {#                                        {% else %}{% static 'img/noimage.png' %}{% endif %}"#}
+                                    {#                                             class="rounded-circle img-fluid">#}
+                                    {#                                    </div>#}
                                     <h4 class="font-weight-bold mt-4">
-                                        {% if com.user.get_full_name %}
+                                        {% if com.user %}
                                             {{ com.user.get_full_name }}
                                         {% else %}
-                                            {{ com.user.email }}
+                                            {{ com.full_name }}
                                         {% endif %}
                                     </h4>
-                                    <h6 class="blue-text font-weight-bold my-3">{{ com.title }}</h6>
+                                    <h6 class="blue-text font-weight-bold my-3">
+                                        {% if com.user %}
+                                            {{ com.user.academic_institution }}
+                                        {% else %}
+                                            {{ com.academic_institution }}
+                                        {% endif %}
+                                    </h6>
                                     <p class="font-weight-normal">
                                         <i class="fas fa-quote-left pr-2"></i>
                                         {{ com.comment }}
@@ -60,19 +66,24 @@
                         {% else %}
                             <div class="col-md-4 clearfix d-none d-md-block">
                                 <div class="testimonial">
-{#                                    <div class="avatar mx-auto">#}
-{#                                        <img src="{% if user.avatar %}{{ user.avatar.url }}#}
-{#                                        {% else %}{% static 'img/noimage.png' %}{% endif %}"#}
-{#                                             class="rounded-circle img-fluid">#}
-{#                                    </div>#}
+                                    {#                                    <div class="avatar mx-auto">#}
+                                    {#                                        <img src="{% if user.avatar %}{{ user.avatar.url }}#}
+                                    {#                                        {% else %}{% static 'img/noimage.png' %}{% endif %}"#}
+                                    {#                                             class="rounded-circle img-fluid">#}
+                                    {#                                    </div>#}
                                     <h4 class="font-weight-bold mt-4">
-                                        {% if com.user.get_full_name %}
+                                        {% if com.user %}
                                             {{ com.user.get_full_name }}
                                         {% else %}
-                                            {{ com.user.email }}
+                                            {{ com.full_name }}
                                         {% endif %}
                                     </h4>
-                                    <h6 class="blue-text font-weight-bold my-3">{{ com.title }}</h6>
+                                    <h6 class="blue-text font-weight-bold my-3">
+                                        {% if com.user %}
+                                            {{ com.user.academic_institution }}
+                                        {% else %}
+                                            {{ com.academic_institution }}
+                                        {% endif %}</h6>
                                     <p class="font-weight-normal">
                                         <i class="fas fa-quote-left pr-2"></i>
                                         {{ com.comment }}
@@ -97,19 +108,25 @@
                         {% if forloop.first %}
                             <div class="col-md-4">
                                 <div class="testimonial">
-{#                                    <div class="avatar mx-auto">#}
-{#                                        <img src="{% if user.avatar %}{{ user.avatar.url }}#}
-{#                                        {% else %}{% static 'img/noimage.png' %}{% endif %}"#}
-{#                                             class="rounded-circle img-fluid">#}
-{#                                    </div>#}
+                                    {#                                    <div class="avatar mx-auto">#}
+                                    {#                                        <img src="{% if user.avatar %}{{ user.avatar.url }}#}
+                                    {#                                        {% else %}{% static 'img/noimage.png' %}{% endif %}"#}
+                                    {#                                             class="rounded-circle img-fluid">#}
+                                    {#                                    </div>#}
                                     <h4 class="font-weight-bold mt-4">
-                                        {% if com.user.get_full_name %}
+                                        {% if com.user %}
                                             {{ com.user.get_full_name }}
                                         {% else %}
-                                            {{ com.user.email }}
+                                            {{ com.full_name }}
                                         {% endif %}
                                     </h4>
-                                    <h6 class="blue-text font-weight-bold my-3">{{ com.title }}</h6>
+                                    <h6 class="blue-text font-weight-bold my-3">
+                                        {% if com.user %}
+                                            {{ com.user.academic_institution }}
+                                        {% else %}
+                                            {{ com.academic_institution }}
+                                        {% endif %}
+                                    </h6>
                                     <p class="font-weight-normal">
                                         <i class="fas fa-quote-left pr-2"></i>
                                         {{ com.comment }}
@@ -126,19 +143,25 @@
                         {% else %}
                             <div class="col-md-4 clearfix d-none d-md-block">
                                 <div class="testimonial">
-{#                                    <div class="avatar mx-auto">#}
-{#                                        <img src="{% if user.avatar %}{{ user.avatar.url }}#}
-{#                                        {% else %}{% static 'img/noimage.png' %}{% endif %}"#}
-{#                                             class="rounded-circle img-fluid">#}
-{#                                    </div>#}
+                                    {#                                    <div class="avatar mx-auto">#}
+                                    {#                                        <img src="{% if user.avatar %}{{ user.avatar.url }}#}
+                                    {#                                        {% else %}{% static 'img/noimage.png' %}{% endif %}"#}
+                                    {#                                             class="rounded-circle img-fluid">#}
+                                    {#                                    </div>#}
                                     <h4 class="font-weight-bold mt-4">
-                                        {% if com.user.get_full_name %}
+                                        {% if com.user %}
                                             {{ com.user.get_full_name }}
                                         {% else %}
-                                            {{ com.user.email }}
+                                            {{ com.full_name }}
                                         {% endif %}
                                     </h4>
-                                    <h6 class="blue-text font-weight-bold my-3">{{ com.title }}</h6>
+                                    <h6 class="blue-text font-weight-bold my-3">
+                                        {% if com.user %}
+                                            {{ com.user.academic_institution }}
+                                        {% else %}
+                                            {{ com.academic_institution }}
+                                        {% endif %}
+                                    </h6>
                                     <p class="font-weight-normal">
                                         <i class="fas fa-quote-left pr-2"></i>
                                         {{ com.comment }}

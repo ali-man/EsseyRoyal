@@ -12,7 +12,11 @@
     <tbody>
     {% for order in in_review %}
         <tr>
-            <td><a href="">{{ order.customer.get_full_name }}</a></td>
+            <td>
+                <a href="{% url 'manager:users-customer' order.customer.id %}" class="text-primary">
+                    {{ order.customer.get_full_name }}
+                </a>
+            </td>
             <td><a href="{% url 'manager:order-preview' order.id %}" class="text-primary">{{ order.title }}</a></td>
             <td>{{ order.number_page }}</td>
             <td>${{ order.total_cost|floatformat }}</td>

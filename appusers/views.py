@@ -71,7 +71,7 @@ def login_user(request):
     if user is not None:
         login(request, user)
         messages.success(request, 'You are successfully logged in.')
-        return redirect('/dashboard/')
+        return redirect('/rct/')
     else:
         messages.error(request, 'wrong login or password')
         return redirect('/')

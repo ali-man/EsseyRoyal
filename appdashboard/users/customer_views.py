@@ -20,8 +20,15 @@ def to_deadline(d, t):
 
 
 def index(request):
+    user = User.objects.get(email=request.user)
+    group = [g.name for g in user.groups.all()][0]
 
-    return render(request, 'dashboard-v2/c/index.html', locals())
+    if group == 'Customer':
+        return redirect('/c/orders/')
+    else:
+        return redirect('/')
+    
+    # return render(request, 'dashboard-v2/c/index.html', locals())
 
 
 def orders(request):
@@ -66,6 +73,9 @@ def orders(request):
                         files_order.order = order
                         files_order.file = f
                         files_order.save()
+                else:
+                    order.status = 0
+                    order.save()
                 messages.success(request, 'Your order is loaded')
                 return redirect('/dashboard/')
             else:

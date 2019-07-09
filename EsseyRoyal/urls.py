@@ -3,18 +3,41 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.contrib.sitemaps.views import sitemap
+from django.shortcuts import redirect
 from django.urls import path, include
 
 from appaaa.cron import search_deadline
 from appaaa.sitemaps import ArticleSitemap, StaticViewSitemap
 from appaaa.views import HomePageViews, feedback, calculate_home, order_feedback, add_comment, add_word
 from apporders.ajax import chat_message_accept
+from appusers.models import User
 from appusers.views import register, login_user, ChatViews
 
 sitemaps = {
     'articles': ArticleSitemap,
     'static': StaticViewSitemap
 }
+
+
+def redirect_dashboard(request):
+    if request.user.is_authenticated:
+        print(True)
+        user = User.objects.get(email=request.user)
+        group = [g for g in user.groups.all()]
+        print(group)
+        if len(group) != 0:
+            group_name = group[0].name
+            if group_name == 'Customer':
+                return redirect('/c/orders/')
+            if group_name == 'Writer':
+                return redirect('/w/orders/')
+            if group_name == 'Manager':
+                return redirect('/m/orders/')
+        else:
+            return redirect('/a/')
+    else:
+        return redirect('/')
+
 
 admin.site.site_header = 'Панель управления'
 urlpatterns = [
@@ -32,6 +55,7 @@ urlpatterns = [
     path('order/', include('apporders.urls'), name='apporders'),
 
     path('dashboard/', include('appdashboard.urls'), name='appdashboard'),
+    path('rct/', redirect_dashboard),
 
     path('ajax/chat-message-accept/', chat_message_accept),
     path('ajax/calculate/', calculate_home),
@@ -45,7 +69,7 @@ urlpatterns = [
     # path('ajax/chat-send/', chat_ajax_send),
     # path('ajax/chat-person/', chat_ajax_user),
     # path('chat-ajax/', include('appchat.urls')),
-    path('chat/<int:pk>/', ChatViews.as_view(), name='chat'),
+    # path('chat/<int:pk>/', ChatViews.as_view(), name='chat'),
 
     path('c/', include('appdashboard.c', namespace='customer')),
     path('m/', include('appdashboard.m', namespace='manager')),

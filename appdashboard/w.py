@@ -14,4 +14,5 @@ urlpatterns = [
     path('courses/<int:pk>/', view.detail, name='course-detail'),
     path('courses/', view.courses, name='courses'),
     path('settings/', view.settings, name='settings'),
+    path('chat/<int:pk>/', view.ChatViews.as_view(), name='chat'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

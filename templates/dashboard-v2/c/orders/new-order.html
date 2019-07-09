@@ -2,7 +2,7 @@
     <table class="table">
         {% for field in new_order %}
             <tr>
-                <td width="120">{{ field.label }}</td>
+                <td width="128">{{ field.label }}</td>
                 <td>{{ field }}</td>
             </tr>
             {% if field.errors %}
@@ -13,12 +13,8 @@
             {% endif %}
         {% endfor %}
         <tr>
-            <td>Per page:</td>
-            <td id="per_page"></td>
-        </tr>
-        <tr>
-            <td>Total cost:</td>
-            <td id="total_cost"></td>
+            <td width="128">Per page: <small id="per_page"></small></td>
+            <td>Total cost: <small id="total_cost"></small></td>
         </tr>
         <tr>
             <td><label for="id_attached-files">Attached files</label></td>

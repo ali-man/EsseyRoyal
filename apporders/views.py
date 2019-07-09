@@ -163,10 +163,10 @@ def writer_order_detail(request, pk):
                 file_additional.additionally_order = additionally_order
                 file_additional.file = f
                 file_additional.save()
-            customer_send_mail('New files', order.title, order.customer.email, F'order/progress/{order.id}/')
-            manager_send_mail('New files', order.writer, order.title, F'dashboard/m/order/{order.id}/')
+            customer_send_mail('New files', order.title, order.customer.email, F'c/orders/inprocess/{order.id}/')
+            manager_send_mail('New files', order.writer, order.title, F'm/orders/inprocess/{order.id}/')
             messages.success(request, 'Files uploaded successfully')
-            return redirect(F'/dashboard/w/order/detail-{pk}/')
+            return redirect(F'w/orders/inprocess/{order.id}/')
 
         if 'message' in request.POST and request.POST['message'] != '':
             chat = Chat()
@@ -176,12 +176,12 @@ def writer_order_detail(request, pk):
             chat.status = False
             chat.save()
 
-            manager_send_mail('New message from chat', order.writer, order.title, F'dashboard/m/order/{order.id}/')
+            manager_send_mail('New message from chat', order.writer, order.title, F'm/orders/inprocess/{order.id}/')
             messages.success(request, 'Your message has been sent.')
-            return redirect(F'/dashboard/w/order/detail-{pk}/')
+            return redirect(F'w/orders/inprocess/{order.id}/')
         else:
             messages.success(request, 'Message cannot be empty')
-            return redirect(F'/dashboard/w/order/detail-{pk}/')
+            return redirect(F'w/orders/inprocess/{order.id}/')
 
 
 def customer_order_in_completed(request, pk):
@@ -210,7 +210,7 @@ def customer_order_in_progress(request, pk):
             chat.message = request.POST['message']
             chat.status = False
             chat.save()
-            manager_send_mail('New message from chat', order.customer, order.title, F'dashboard/m/order/{order.id}/')
+            manager_send_mail('New message from chat', order.customer, order.title, F'm/orders/inprocess/{order.id}/')
             messages.success(request, 'Your message has been sent.')
             return redirect(F'/order/progress/{pk}/')
         else:

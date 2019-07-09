@@ -3,7 +3,7 @@
 <div class="white z-depth-1 px-3 pt-3 pb-0">
     <form id="formdata" data-chat-id="{{ chat.id }}" enctype="multipart/form-data">{% csrf_token %}
         <div class="form-group basic-textarea">
-                <textarea class="form-control pl-2 my-0" name="message" rows="3"
+                <textarea id="chat_message_box" class="form-control pl-2 my-0" name="message" rows="3"
                           placeholder="Type your message here..."></textarea>
         </div>
 
@@ -11,7 +11,7 @@
             <div class="file-field">
                 <div class="btn btn-cyan btn-sm float-left">
                     <span>Upload file</span>
-                    <input type="file" name="files[]" id="fileupload" multiple data-url="{% url 'chat' chat.id %}">
+                    <input type="file" name="files[]" id="fileupload" multiple data-url="{% url 'writer:chat' chat.id %}">
                 </div>
             </div>
         </form>
@@ -26,7 +26,7 @@
     <br>
     <ul class="list-unstyled friend-list">
         {% for file in files_from_chat %}
-            <li class="p-2">
+            <li class="py-2">
                 <a href="{{ file.file.url }}" class="d-flex justify-content-between">
                     <img src="
                     {% if file.owner.avatar %}
@@ -37,7 +37,7 @@
                     " alt="avatar" width="40" height="40"
                          class="avatar rounded-circle d-flex align-self-center mr-2 z-depth-1">
                     <div class="text-small">
-                        <strong>{{ file.filename }}</strong>
+                        <strong class="file-name">{{ file.filename }}</strong>
                         <p class="last-message text-muted">
                             {% if file.owner.get_full_name %}
                                 {{ file.owner.get_full_name }}

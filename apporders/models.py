@@ -127,20 +127,22 @@ class Order(models.Model):
         self.per_page = price
         self.total_cost = price * self.number_page
 
+        status = self.status
+
         super().save(*args, **kwargs)
 
-        manager_link_order = F'dashboard/m/order/{self.id}/'
-        writer_link_order = F'dashboard/w/order/{self.id}/'
-        customer_link_order = F'order/progress/{self.id}/'
-        if self.status == 0:
-            manager_send_mail('New order', self.customer, self.title, manager_link_order)
-            writer_send_mail('New order', self.title, writer_link_order)
-        elif self.status == 1:
-            customer_send_mail('Take task', self.title, self.customer.email, customer_link_order)
-            manager_send_mail('Take order', self.writer, self.title, manager_link_order)
-        elif self.status == 2:
-            writer_send_mail('Completed order', self.title, '')
-            manager_send_mail('Completed order', self.writer, self.title, manager_link_order)
+        if status != self.status:
+            if self.status == 0:
+                manager_send_mail('New order', self.customer, self.title, F'm/orders/preview/{self.id}/')
+                writer_send_mail('New order', self.title, F'w/orders/preview/{self.id}/')
+            elif self.status == 1:
+                customer_send_mail('Take task', self.title, self.customer.email, F'c/orders/preview/{self.id}/')
+                manager_send_mail('Take order', self.writer, self.title, F'm/orders/inprocess/{self.id}/')
+            elif self.status == 2:
+                writer_send_mail('Completed order', self.title, F'w/orders/completed/{self.id}/')
+                manager_send_mail('Completed order', self.writer, self.title, F'm/orders/completed/{self.id}/')
+            elif self.status == 3:
+                manager_send_mail('Order of moderation', self.customer, self.title, F'm/orders/preview/{self.id}/')
 
     def __str__(self):
         return self.title

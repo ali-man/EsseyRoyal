@@ -77,7 +77,7 @@ def feedback(request):
         feedback.operation_system = F'{ug.os.family} {ug.os.version_string}'
 
         feedback.save()
-        manager_send_mail('New feedback from site', name, subject, 'dashboard/others/')
+        manager_send_mail('New feedback from site', name, subject, '')
         messages.success(request, 'Your message has been sent.')
         return redirect('/')
     else:
@@ -127,8 +127,8 @@ def order_feedback(request):
     feedback_order.save()
     messages.success(request, 'Thanks for your feedback')
 
-    manager_send_mail('Rating order', order.customer, order.title, 'dashboard/m/order/{}/'.format(order_id))
-    writer_send_mail('Rating order', order.title, 'dashboard/w/order/completed-{}/'.format(order_id))
+    manager_send_mail('Rating order', order.customer, order.title, F'm/orders/completed/{order.id}/')
+    writer_send_mail('Rating order', order.title, F'w/orders/completed/{order.id}/')
 
     data = {'ok': F'/c/orders/completed/{order_id}/'}
     return redirect(F'/c/orders/completed/{order_id}/')

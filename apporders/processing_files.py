@@ -35,7 +35,7 @@ class Processing:
     def moderation_order(self, words, order_id):
         order = Order.objects.get(id=order_id)
         if len(words) > 0:
-            manager_send_mail('title mail', order.customer, order.title, F'dashboard/m/order/{order.id}/')
+            manager_send_mail('title mail', order.customer, order.title, F'm/orders/preview/{order.id}/')
         else:
             order.status = 1
             order.save()

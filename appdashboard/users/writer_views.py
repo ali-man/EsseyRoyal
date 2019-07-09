@@ -1,9 +1,12 @@
 import datetime
+import json
 
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
 from django.db.models import Q
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic.base import View
 
 from appcourses.models import Course, Task
 from appdashboard.views import access_to_manager_and_admin
@@ -11,7 +14,7 @@ from appmail.views import manager_send_mail, customer_send_mail
 from apporders.models import Order, AdditionallyOrder, Chat, FilesAdditionallyOrder
 from apporders.validators import validate_file_views
 from appusers.forms import UserCustomerForm
-from appusers.models import User
+from appusers.models import User, ChatUser, MessageChatUser, FileChatUser
 
 
 def to_deadline(d, t):
@@ -103,7 +106,7 @@ def order_in_process(request, pk):
                 file_additional.file = f
                 file_additional.save()
             customer_send_mail('New files', order.title, order.customer.email, F'/c/orders/inprocess/{order.id}/')
-            manager_send_mail('New files', order.writer, order.title, F'dashboard/m/order/{order.id}/')
+            manager_send_mail('New files', order.writer, order.title, F'm/orders/preview/{order.id}/')
             messages.success(request, 'Files uploaded successfully')
             return redirect(F'/w/orders/inprocess/{pk}/')
 
@@ -179,3 +182,111 @@ def detail(request, pk):
     course = Course.objects.get(id=pk)
 
     return render(request, 'dashboard-v2/w/courses/course/detail.html', locals())
+
+
+class ChatViews(View):
+
+    @staticmethod
+    def get(request, pk):
+
+        if request.user.is_anonymous:
+            print('ASD')
+            messages.error(request, 'Access is limited')
+            return redirect('/')
+
+        chat = ChatUser.objects.get(id=pk)
+        messages_from_chat = MessageChatUser.objects.filter(chat=chat).order_by('-id')
+        files_from_chat = FileChatUser.objects.filter(chat=chat).order_by('-id')
+
+        if request.is_ajax():
+            print(request.GET)
+            r_mfc = request.GET.get('messagesFromChat', None)
+            r_ffc = request.GET.get('filesFromChat', None)
+
+            # Вывод сообщений из чата
+            if r_mfc is not None:
+                messages_chat = MessageChatUser.objects.filter(chat=chat)
+                obj_messages = []
+                for message in messages_chat:
+                    created_datetime = '{}:{} {}.{}.{}'.format(
+                        message.created_time.hour, message.created_time.minute,
+                        message.created_date.day, message.created_date.month, message.created_date.year
+                    )
+                    updated_datetime = '{}:{} {}.{}.{}'.format(
+                        message.updated_time.hour, message.updated_time.minute,
+                        message.updated_date.day, message.updated_date.month, message.updated_date.year
+                    )
+                    _dict = {
+                        'avatar': message.owner.avatar.url if message.owner.avatar else '/static/img/noimage.png',
+                        'owner': message.owner.get_full_name() if message.owner.get_full_name else message.owner.email,
+                        'message': message.message,
+                        'created_datetime': created_datetime,
+                        'updated_datetime': updated_datetime,
+                    }
+                    obj_messages.append(_dict)
+
+                data = json.dumps(obj_messages)
+                return HttpResponse(data, content_type="application/json")
+
+            # Вывод файлов из чата
+            if r_ffc is not None:
+                files_chat = FileChatUser.objects.filter(chat=chat)
+                obj_files = []
+                for file in files_chat:
+                    created_datetime = '{}:{} {}.{}.{}'.format(
+                        file.created_time.hour, file.created_time.minute,
+                        file.created_date.day, file.created_date.month, file.created_date.year
+                    )
+                    _dict = {
+                        'avatar': file.owner.avatar.url if file.owner.avatar else '/static/img/noimage.png',
+                        'owner': file.owner.get_full_name() if file.owner.get_full_name else file.owner.email,
+                        'name': file.filename(),
+                        'link': F'{file.file}',
+                        'created_datetime': created_datetime,
+                    }
+                    obj_files.append(_dict)
+
+                data = json.dumps(obj_files)
+                return HttpResponse(data, content_type="application/json")
+
+        user = User.objects.get(email=request.user)
+        if access_to_manager_and_admin(request.user) or chat.user == user:
+            context = {
+                'chat': chat,
+                'messages_from_chat': messages_from_chat,
+                'files_from_chat': files_from_chat
+            }
+            return render(request, 'dashboard-v2/w/chat/main.html', context=context)
+        else:
+            return redirect(F'/chat/{request.user.chatuser.id}/')
+
+    @staticmethod
+    def post(request, pk):
+        if request.is_ajax():
+            message = request.POST['message']
+            files = request.FILES.getlist('files[]')
+            chat = ChatUser.objects.get(id=pk)
+            user = User.objects.get(email=request.user)
+
+            if len(files) != 0:
+                for f in files:
+                    print(f)
+                    file = FileChatUser()
+                    file.chat = chat
+                    file.owner = user
+                    file.file = f
+                    file.save()
+
+            if message != '':
+                message_chat = MessageChatUser()
+                message_chat.owner = user
+                message_chat.chat = chat
+                message_chat.message = message
+                message_chat.save()
+
+                return JsonResponse({'ok': 'asd'})
+
+            return JsonResponse({'error': 'Not message'})
+
+        else:
+            messages.error(request, 'This is not ajax request')

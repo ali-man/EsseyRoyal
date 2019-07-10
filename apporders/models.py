@@ -22,9 +22,6 @@ from apporders.validators import validate_file_extension
 from appusers.models import User
 
 
-# TODO: Написать дату принятия заказа Writer-ом
-
-
 class FilterWord(models.Model):
     word = models.CharField(verbose_name='Word', max_length=30, unique=True)
 
@@ -130,6 +127,12 @@ class Order(models.Model):
         status = self.status
 
         super().save(*args, **kwargs)
+
+        if len(self.description) != 0:
+            threading.Thread(target=checking_description(self.id)).start()
+        else:
+            if len(self.filesorder_set.all()) == 0:
+                self.status = 0
 
         if status != self.status:
             if self.status == 0:
@@ -243,10 +246,8 @@ class Processing:
     def moderation_order(self, words, order_id):
         order = Order.objects.get(id=order_id)
 
-        # TODO: Фильтр слов по полю Description
-
         if len(words) > 0:
-            manager_send_mail('title mail', order.customer, F'{order.title} {words}', F'dashboard/m/order/{order.id}/')
+            manager_send_mail('title mail', order.customer, F'{order.title} {words}', F'm/orders/preview/{order.id}/')
         else:
             order.status = 0
             order.save()
@@ -328,3 +329,11 @@ def checking_files(f, obj_id):
 
     else:
         pass
+
+
+def checking_description(order_id):
+    order = Order.objects.get(id=order_id)
+    sw = SearchWord()
+    filter_words = sw.search_word(order.description)
+    pc = Processing()
+    pc.moderation_order(filter_words, order_id)

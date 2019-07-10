@@ -30,10 +30,7 @@ def orders(request):
     user = User.objects.get(email=request.user)
 
     if request.method == 'GET':
-        if access_to_manager_and_admin(user):
-            # TODO: Необходимо получить инфу о customer
-            _orders = Order.objects.all()
-        elif request.user.groups.all()[0].name == 'Writer':
+        if request.user.groups.all()[0].name == 'Writer':
             _orders = Order.objects.all()
         else:
             return redirect('/')

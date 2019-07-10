@@ -35,10 +35,7 @@ def orders(request):
     user = User.objects.get(email=request.user)
 
     if request.method == 'GET':
-        if access_to_manager_and_admin(user):
-            # TODO: Необходимо получить инфу о customer
-            my_orders = Order.objects.filter(customer=user)
-        elif request.user.groups.all()[0].name == 'Customer':
+        if request.user.groups.all()[0].name == 'Customer':
             my_orders = Order.objects.filter(customer=user)
         else:
             return redirect('/')
@@ -73,9 +70,6 @@ def orders(request):
                         files_order.order = order
                         files_order.file = f
                         files_order.save()
-                else:
-                    order.status = 0
-                    order.save()
                 messages.success(request, 'Your order is loaded')
                 return redirect('/dashboard/')
             else:

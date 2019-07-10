@@ -1,21 +1,30 @@
 <form method="post" enctype="multipart/form-data">{% csrf_token %}
     <table class="table">
         {% for field in new_order %}
-            <tr>
-                <td width="128">{{ field.label }}</td>
-                <td>{{ field }}</td>
-            </tr>
-            {% if field.errors %}
-                <tr>
-                    <td></td>
-                    <td>{{ field.errors }}</td>
+            {% if forloop.last %}
+                <tr class="tr-last">
+                    <td width="150">{{ field.label }}</td>
+                    <td>{{ field }}</td>
                 </tr>
+                {% if field.errors %}
+                    <tr>
+                        <td></td>
+                        <td>{{ field.errors }}</td>
+                    </tr>
+                {% endif %}
+            {% else %}
+                <tr>
+                    <td width="150">{{ field.label }}</td>
+                    <td>{{ field }}</td>
+                </tr>
+                {% if field.errors %}
+                    <tr>
+                        <td></td>
+                        <td>{{ field.errors }}</td>
+                    </tr>
+                {% endif %}
             {% endif %}
         {% endfor %}
-        <tr>
-            <td width="128">Per page: <small id="per_page"></small></td>
-            <td>Total cost: <small id="total_cost"></small></td>
-        </tr>
         <tr>
             <td><label for="id_attached-files">Attached files</label></td>
             <td>

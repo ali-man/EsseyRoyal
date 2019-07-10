@@ -143,6 +143,7 @@ def add_comment(request):
         user = User.objects.get(email=request.user)
         comment_obj = Comment()
         comment_obj.user = user
+        comment_obj.academic_institution = request.POST['academicInstitution']
         comment_obj.comment = request.POST['comment']
         comment_obj.save()
         messages.success(request, 'Thanks for your feedback')

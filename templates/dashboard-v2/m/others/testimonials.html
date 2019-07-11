@@ -20,6 +20,7 @@
         <table id="dtBasicExample" class="table table-striped table-bordered" cellspacing="0" width="100%">
             <thead>
             <tr>
+                <th class="th-sm">Checked</th>
                 <th class="th-sm">Names</th>
                 <th class="th-sm">Institutions</th>
                 <th class="th-sm">Comments</th>
@@ -28,6 +29,12 @@
             <tbody>
             {% for testimonial in tms %}
                 <tr>
+                    <td>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="asd" {% if testimonial.checked %}checked{% endif %}>
+                            <label class="form-check-label" for="asd"></label>
+                        </div>
+                    </td>
                     {% if testimonial.user %}
                         <td>{{ testimonial.user.get_full_name }}</td>
                         <td>{{ testimonial.user.academic_institution }}</td>
@@ -60,7 +67,7 @@
         });
         $('.dataTables_length').addClass('bs-select');
 
-        function funcAjax(action, fullName, academicInstitution, comment, newComment) {
+        function funcAjax(action, fullName, academicInstitution, comment, checked, newComment) {
             $.ajax({
                 method: 'POST',
                 data: {
@@ -69,6 +76,7 @@
                     fullName: fullName,
                     academicInstitution: academicInstitution,
                     comment: comment,
+                    checked: checked,
                     newComment: newComment,
                 },
                 dataType: 'json',
@@ -89,20 +97,24 @@
             let fullName = $('#addFullname').val();
             let academicInstitution = $('#addAcademicInstitution').val();
             let comment = $('#addComment').val();
-            funcAjax('add', fullName, academicInstitution, comment, '');
+            let checked = false;
+            if ($('#editChecked').is(':checked')) checked = true;
+            funcAjax('add', fullName, academicInstitution, checked, comment, '');
         });
         editForm.click(function () {
             let tr = $('.tr-color-selected');
-            let comment = $(tr).children('td')[2].innerText;
+            let comment = $(tr).children('td')[3].innerText;
             let fullName = $('#editFullname').val();
             let academicInstitution = $('#editAcademicInstitution').val();
+            let checked = false;
+            if ($('#editChecked').is(':checked')) checked = true;
             let newComment = $('#editComment').val();
-            funcAjax('edit', fullName, academicInstitution, comment, newComment);
+            funcAjax('edit', fullName, academicInstitution, comment, checked, newComment);
         });
         deleteForm.click(function () {
             let tr = $('.tr-color-selected');
             let comment = $(tr).children('td')[2].innerText;
-            funcAjax('delete', '', '', comment, '');
+            funcAjax('delete', '', '', comment, '', '');
         });
     </script>
 {% endblock %}

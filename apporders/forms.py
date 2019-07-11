@@ -7,35 +7,11 @@ from apporders.models import FormatOrder, TypeOrder, Order, PriceDeadline
 
 
 class OrderForm(forms.ModelForm):
-    date_deadline = forms.DateField(
-        required=True, input_formats=['%d-%m-%Y'], label='Deadline',
-        widget=forms.DateInput(
-            attrs={
-                'type': 'text',
-                'class': 'browser-default custom-select',
-                'id': 'date_deadline',
-                'placeholder': 'Choose date',
-                'autocomplete': 'off'
-            }
-        )
-    )
-    time_deadline = forms.TimeField(
-        required=True, label='Deadline Time',
-        widget=forms.TimeInput(
-            attrs={
-                'type': 'text',
-                'class': 'browser-default custom-select',
-                'id': 'time_deadline',
-                'placeholder': 'Choose time',
-                'autocomplete': 'off'
-            }
-        )
-    )
+
     class Meta:
         model = Order
-        exclude = ['status', 'per_page', 'total_cost', 'writer', 'customer', 'deadline']
+        fields = ['title', 'format_order', 'description']
         widgets = {
-            'type_order': forms.Select(attrs={'class': 'browser-default custom-select'}),
             'format_order': forms.Select(attrs={'class': 'browser-default custom-select'}),
             'description': CKEditorWidget(),
         }

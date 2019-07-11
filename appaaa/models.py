@@ -8,6 +8,7 @@ class Comment(models.Model):
     full_name = models.CharField(verbose_name='Fullname', max_length=50, blank=True)
     academic_institution = models.CharField(verbose_name='Academic Institution', max_length=100, blank=True)
     comment = models.TextField(verbose_name='Comment')
+    checked = models.BooleanField(verbose_name='Checked', default=False)
 
     class Meta:
         verbose_name = 'Comment'

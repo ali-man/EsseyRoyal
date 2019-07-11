@@ -88,6 +88,40 @@ def order_preview(request, pk):
     return render(request, 'dashboard-v2/c/orders/detail/preview.html', locals())
 
 
+def order_edit(request, pk):
+    user = User.objects.get(email=request.user)
+    order = Order.objects.get(id=pk, customer=user)
+    form = OrderForm(instance=order)
+
+    if request.method == 'POST':
+        if request.user.groups.all()[0].name == 'Customer':
+            form = OrderForm(request.POST, instance=order)
+            attached_files = request.FILES.getlist('attached-files')
+            if form.is_valid():
+                order.title = form.cleaned_data['title']
+                order.format_order = form.cleaned_data['format_order']
+                order.description = form.cleaned_data['description']
+                order.save()
+                if len(attached_files) != 0:
+                    for f in attached_files:
+                        if validate_file_views(f) == 'error':
+                            messages.error(request, 'Invalid format loaded')
+                            return redirect('/dashboard/')
+                        files_order = FilesOrder()
+                        files_order.order = order
+                        files_order.file = f
+                        files_order.save()
+                messages.success(request, 'Your order is update')
+                return redirect('/c/orders/')
+            else:
+                messages.success(request, 'The fields are incorrectly filled')
+                return redirect('/c/orders/edit/{}/'.format(pk))
+        else:
+            return redirect('/')
+
+    return render(request, 'dashboard-v2/c/orders/detail/edit.html', locals())
+
+
 class UpdateOrderViews(UpdateView):
     model = Order
     form_class = OrderForm
@@ -110,13 +144,6 @@ class UpdateOrderViews(UpdateView):
                     files_order.save()
         messages.success(request, 'Your order has been updated.')
         return redirect('/c/orders/')
-
-
-def order_edit(request, pk):
-    order = Order.objects.get(id=pk)
-    form = OrderForm()
-
-    return render(request, 'dashboard-v2/c/orders/detail/edit.html', locals())
 
 
 def order_in_process(request, pk):

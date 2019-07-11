@@ -4,7 +4,9 @@
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/order.css' %}">
     <style>
-        .table td {border: none;}
+        .table td {
+            border: none;
+        }
     </style>
 {% endblock %}
 
@@ -35,7 +37,7 @@
             <div class="col-12">
                 <div class="border mb-2">
                     <table class="table">
-{#                    TODO: Разделить поле Deadline с возможностью выбора даты и времени#}
+                        {#                    TODO: Разделить поле Deadline с возможностью выбора даты и времени#}
                         {% for field in form %}
                             <tr>
                                 <td width="150">{{ field.label }}:</td>
@@ -72,5 +74,16 @@
 {% endblock %}
 
 {% block scripts %}
-
+    <script>
+        $('#date_deadline').datetimepicker({
+            format: 'd-m-Y',
+            {#value: new Date(new Date().setDate(new Date().getDate() + 2)),#}
+            timepicker: false
+        });
+        $('#time_deadline').datetimepicker({
+            format: "H:i",
+            {#value: "00:00",#}
+            datepicker: false
+        });
+    </script>
 {% endblock %}

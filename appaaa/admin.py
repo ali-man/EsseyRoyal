@@ -14,8 +14,16 @@ class FlatPageAdmin(FlatPageAdmin):
         models.TextField: {'widget': CKEditorWidget}
     }
 
+
 # Re-register FlatPageAdmin
+
+class AdminComment(admin.ModelAdmin):
+    list_display = ['comment', 'checked']
+    list_display_links = ['comment']
+    list_editable = ['checked']
+
+
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)
 admin.site.register(Feedback)
-admin.site.register(Comment)
+admin.site.register(Comment, AdminComment)

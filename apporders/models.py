@@ -229,7 +229,8 @@ class Chat(models.Model):
 class SearchWord:
 
     def search_word(self, line_sting):
-        with open(settings.STATIC_ROOT + '/words.json', 'r') as read_file:
+        path = settings.STATICFILES_DIRS[0] if LOCAL else settings.STATIC_ROOT
+        with open(path + '/words.json', 'r') as read_file:
             WORDS = json.load(read_file)
         texts = []
         for word in WORDS:

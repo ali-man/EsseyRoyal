@@ -20,8 +20,9 @@ class HomePageViews(View):
     @staticmethod
     def get(request):
         type_order = TypeOrder.objects.all()
-        comments_1 = Comment.objects.all()[:3]
-        comments_2 = Comment.objects.all()[3:6]
+        comments = Comment.objects.filter(checked=True).order_by('-id')
+        comments_1 = comments[:3]
+        comments_2 = comments[3:6]
         return render(request, 'home.html', locals())
 
 
@@ -143,11 +144,11 @@ def add_comment(request):
         user = User.objects.get(email=request.user)
         comment_obj = Comment()
         comment_obj.user = user
-        comment_obj.academic_institution = request.POST['academicInstitution']
+        # comment_obj.academic_institution = request.POST['academicInstitution']
         comment_obj.comment = request.POST['comment']
         comment_obj.save()
         messages.success(request, 'Thanks for your feedback')
-        return redirect('/')
+        return redirect('/c/orders/')
 
 
 def add_word(request):

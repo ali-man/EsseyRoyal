@@ -272,10 +272,12 @@ def filter_words(request):
 
 
 def testimonials(request):
-    tms = Comment.objects.all()
+    tms = Comment.objects.all().order_by('-id')
 
     if request.method == 'POST':
         if request.is_ajax():
+            checked = True if request.POST['checked'] == 'true' else False
+
             if request.POST['action'] == 'add':
                 c = Comment()
                 if request.POST['fullName'] != '':
@@ -283,6 +285,7 @@ def testimonials(request):
                 if request.POST['academicInstitution'] != '':
                     c.academic_institution = request.POST['academicInstitution']
                 c.comment = request.POST['comment']
+                c.checked = checked
                 c.save()
 
             comment = request.POST['comment']
@@ -291,6 +294,7 @@ def testimonials(request):
                 c.full_name = request.POST['fullName']
                 c.academic_institution = request.POST['academicInstitution']
                 c.comment = request.POST['newComment']
+                c.checked = checked
                 c.save()
 
             if request.POST['action'] == 'delete':

@@ -1,0 +1,16 @@
+<ul class="list-group list-group-flush">
+    {% if writer.avatar %}
+        <li class="list-group-item">
+            <img src="{{ writer.avatar.url }}" alt="" width="75">
+        </li>
+    {% endif %}
+    <li class="list-group-item"><b>First name:</b> {{ writer.first_name }}</li>
+    <li class="list-group-item"><b>Last name:</b> {{ writer.last_name }}</li>
+    <li class="list-group-item"><b>Email:</b> {{ writer.email }}</li>
+{#    <li class="list-group-item"><b>Corporate email:</b> {{ writer.corporate_email }}</li>#}
+    <li class="list-group-item"><b>Phone:</b> {{ writer.phone }}</li>
+    <li class="list-group-item"><b>Academic institution:</b> {{ writer.academic_institution }}</li>
+    <li class="list-group-item"><b>Degree:</b> {{ writer.degree }}</li>
+    <li class="list-group-item"><b>Date joined:</b> {{ writer.date_joined }}</li>
+    <li class="list-group-item"><b>Balance:</b> ${{ writer.balance|floatformat }}</li>
+</ul>

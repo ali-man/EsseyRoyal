@@ -1,0 +1,85 @@
+{% extends 'dashboard-v2/index.html' %}
+
+{% block balance %}
+
+{% endblock %}
+
+{% block menu %}
+    <li class="list-group-item p-0">
+        <a href="{% url 'administrator:orders' %}">
+            <div class="md-v-line"></div>
+            <i class="far fa-list-alt" style="margin-right: 36px; margin-left: 20px;"></i>
+            Orders
+        </a>
+    </li>
+    <li class="list-group-item p-0">
+        <a href="{% url 'administrator:courses' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-clipboard-list" style="margin-right: 40px; margin-left: 20px;"></i>
+            Courses
+        </a>
+    </li>
+    <li class="list-group-item p-0">
+        <a href="{% url 'administrator:users' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-users" style="margin-right: 34px; margin-left: 20px;"></i>
+            Users
+        </a>
+    </li>
+    <li class="list-group-item p-0">
+        <a href="{% url 'administrator:type-order' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-question-circle" style="margin-right: 38px; margin-left: 20px;"></i>
+            Type of order
+        </a>
+    </li>
+    <li class="list-group-item p-0">
+        <a href="{% url 'administrator:format-order' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-info-circle" style="margin-right: 38px; margin-left: 20px;"></i>
+            Format of order
+        </a>
+    </li>
+    <li class="list-group-item p-0">
+        <a href="{% url 'administrator:deadline' %}">
+            <div class="md-v-line"></div>
+            <i class="far fa-calendar-check" style="margin-right: 38px; margin-left: 20px;"></i>
+            Deadline
+        </a>
+    </li>
+    <li class="list-group-item p-0">
+        <a href="{% url 'administrator:filter-words' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-filter" style="margin-right: 36px; margin-left: 20px;"></i>
+            Filter words
+        </a>
+    </li>
+    <li class="list-group-item p-0">
+        <a href="{% url 'administrator:testimonials' %}">
+            <div class="md-v-line"></div>
+            <i class="far fa-comment-alt" style="margin-right: 34px; margin-left: 20px;"></i>
+            Testimonials
+        </a>
+    </li>
+    <li class="list-group-item p-0">
+        <a href="{% url 'administrator:add-article' %}">
+            <div class="md-v-line"></div>
+            <i class="far fa-newspaper" style="margin-right: 34px; margin-left: 20px;"></i>
+            Add article
+        </a>
+    </li>
+    <li class="list-group-item p-0">
+        <a href="{% url 'administrator:settings' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-user-cog" style="margin-right: 32px; margin-left: 20px;"></i>
+            Settings
+        </a>
+    </li>
+    <li class="list-group-item p-0">
+        <a href="{% url 'logout' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-sign-out-alt" style="margin-right: 36px; margin-left: 20px;"></i>
+            Log out
+        </a>
+    </li>
+{% endblock %}

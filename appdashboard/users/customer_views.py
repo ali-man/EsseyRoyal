@@ -56,7 +56,7 @@ def orders(request):
                 order.customer = user
                 order.title = form.cleaned_data['title']
                 order.type_order = form.cleaned_data['type_order']
-                order.number_page = form.cleaned_data['number_page']
+                order.number_page = int(form.cleaned_data['number_page'])
                 order.format_order = form.cleaned_data['format_order']
                 order.deadline = deadline
                 order.description = form.cleaned_data['description']
@@ -71,10 +71,10 @@ def orders(request):
                         files_order.file = f
                         files_order.save()
                 messages.success(request, 'Your order is loaded')
-                return redirect('/dashboard/')
+                return redirect('/c/orders/')
             else:
                 messages.success(request, 'The fields are incorrectly filled')
-                return redirect('/dashboard/')
+                return redirect('/c/orders/')
         else:
             return redirect('/')
 

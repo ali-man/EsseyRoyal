@@ -8,7 +8,12 @@ class UserAdmin(admin.ModelAdmin):
     list_display_links = ['email']
 
 
-admin.site.register(ChatUser)
+class ChatUserAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user']
+    list_display_links = ['user']
+
+
+admin.site.register(ChatUser, ChatUserAdmin)
 admin.site.register(FileChatUser)
 admin.site.register(MessageChatUser)
 admin.site.register(User, UserAdmin)

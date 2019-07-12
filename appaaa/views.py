@@ -105,7 +105,6 @@ def calculate_home(request):
     deadlines_price = PriceDeadline.objects.filter(hours__lte=hours)
     last_index = len(deadlines_price) - 1  # Последний индекс из queryset
     price = deadlines_price[last_index].price + type_order.price_client  # Цена type of order
-    print(pages)
     per_page = price
     total_cost = price * pages
     data = {
@@ -129,7 +128,7 @@ def order_feedback(request):
     messages.success(request, 'Thanks for your feedback')
 
     manager_send_mail('Rating order', order.customer, order.title, F'm/orders/completed/{order.id}/')
-    writer_send_mail('Rating order', order.title, F'w/orders/completed/{order.id}/')
+    writer_send_mail('Rating order', order.title, F'w/orders/completed/{order.id}/', order.writer.email)
 
     data = {'ok': F'/c/orders/completed/{order_id}/'}
     return redirect(F'/c/orders/completed/{order_id}/')

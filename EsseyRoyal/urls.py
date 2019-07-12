@@ -21,7 +21,6 @@ sitemaps = {
 
 def redirect_dashboard(request):
     if request.user.is_authenticated:
-        print(True)
         user = User.objects.get(email=request.user)
         group = [g for g in user.groups.all()]
         print(group)
@@ -72,6 +71,7 @@ urlpatterns = [
     # path('chat/<int:pk>/', ChatViews.as_view(), name='chat'),
 
     path('c/', include('appdashboard.c', namespace='customer')),
-    path('m/', include('appdashboard.m', namespace='manager')),
     path('w/', include('appdashboard.w', namespace='writer')),
+    path('m/', include('appdashboard.m', namespace='manager')),
+    path('a/', include('appdashboard.a', namespace='administrator')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

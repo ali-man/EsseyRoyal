@@ -1,0 +1,26 @@
+{% load courses_filter %}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Tasks Pending</th>
+        <th scope="col">Completed tasks</th>
+        <th scope="col">Total cost</th>
+        <th scope="col">Created datetime</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for task in in_review %}
+        <tr>
+            <td scope="row"><a href="">{{ task.title }}</a></td>
+            <td>{{ task }}</td>
+            <td>
+                {{ task }}
+            </td>
+            <td>${{ task.price_for_customer|floatformat }}</td>
+            <td>{{ task.created_datetime|date:"H:m d M" }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

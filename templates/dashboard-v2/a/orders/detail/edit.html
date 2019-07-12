@@ -1,13 +1,8 @@
-{% extends 'dashboard-v2/c/index.html' %}
+{% extends 'dashboard-v2/a/index.html' %}
 {% load static %}
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/order.css' %}">
-    <style>
-        .table td {
-            border: none;
-        }
-    </style>
 {% endblock %}
 
 {% block title %}
@@ -35,11 +30,11 @@
     <form method="post" enctype="multipart/form-data">{% csrf_token %}
         <div class="row">
             <div class="col-12">
-                <div class="border mb-2">
+                <div class="card mb-2">
                     <table class="table">
                         {% for field in form %}
                             <tr>
-                                <td width="150">{{ field.label }}:</td>
+                                <td width="120">{{ field.label }}</td>
                                 <td>{{ field }}</td>
                             </tr>
                             {% if field.errors %}
@@ -50,7 +45,7 @@
                             {% endif %}
                         {% endfor %}
                         <tr>
-                            <td><label for="id_attached-files">Attached files:</label></td>
+                            <td><label for="id_attached-files">Attached files</label></td>
                             <td>
                                 <input type="file" name="attached-files" id="id_attached-files" multiple>
                                 <small>.xls .docx .pdf .xlsx</small>
@@ -62,8 +57,10 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <div class="card-body py-2 pr-0">
-                    <button type="submit" class="btn bg-btn float-right">Save</button>
+                <div class="card mb-2">
+                    <div class="card-body py-2 pr-2">
+                        <button type="submit" class="btn bg-btn float-right">Save</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -73,16 +70,5 @@
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        $('#date_deadline').datetimepicker({
-            format: 'd-m-Y',
-            {#value: new Date(new Date().setDate(new Date().getDate() + 2)),#}
-            timepicker: false
-        });
-        $('#time_deadline').datetimepicker({
-            format: "H:i",
-            {#value: "00:00",#}
-            datepicker: false
-        });
-    </script>
+
 {% endblock %}

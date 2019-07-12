@@ -69,9 +69,9 @@ class ChatUser(models.Model):
         return '%s' % self.user
 
 
-@receiver(post_save, sender=User)
-def create_or_update_user_profile(sender, instance, created, **kwargs):
-    ChatUser.objects.get_or_create(user=instance)
+# @receiver(post_save, sender=User)
+# def create_or_update_user_profile(sender, instance, created, **kwargs):
+#     ChatUser.objects.get_or_create(user=instance)
 
 
 class FileChatUser(models.Model):

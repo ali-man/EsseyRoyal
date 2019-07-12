@@ -1,0 +1,30 @@
+{% load courses_filter %}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Tasks Pending</th>
+        <th scope="col">Completed tasks</th>
+        <th scope="col">Total cost</th>
+        <th scope="col">Created datetime</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for course in all_courses %}
+        <tr>
+            <td scope="row"><a href="{% url 'customer:course-detail' course.id %}">{{ course.title }}</a></td>
+            <td>{{ course|tasks_pending }}/{{ course.task_set.count }}</td>
+            <td>
+                <div class="progress md-progress" style="height: 20px">
+                    <div class="progress-bar" role="progressbar" style="width: {{ course|completed_tasks_percent }}%; height: 20px" aria-valuenow="25"
+                         aria-valuemin="0" aria-valuemax="100">{{ course|completed_tasks_count }}/{{ course.task_set.count }}
+                    </div>
+                </div>
+            </td>
+            <td>${{ course.price|floatformat }}</td>
+            <td>{{ course.created_datetime|date:"H:m d M" }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

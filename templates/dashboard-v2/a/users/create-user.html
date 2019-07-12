@@ -1,0 +1,7 @@
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table class="table">
+        {{ new_user }}
+    </table>
+    <input type="submit" class="btn bg-btn" value="Create">
+</form>

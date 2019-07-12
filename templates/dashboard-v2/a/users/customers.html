@@ -1,0 +1,27 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">First name</th>
+        <th scope="col">Last name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Orders</th>
+        <th scope="col">Balance</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for customer in customers %}
+        <tr>
+            <td>{{ customer.first_name }}</td>
+            <td>{{ customer.last_name }}</td>
+            <td>
+                <a href="{% url 'administrator:users-customer' customer.id %}" class="text-primary">
+                    {{ customer.email }}
+                </a>
+            </td>
+            <td>Orders length</td>
+            <td>$320</td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>

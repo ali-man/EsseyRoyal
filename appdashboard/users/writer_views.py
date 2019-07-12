@@ -97,7 +97,7 @@ def order_in_process(request, pk):
             for f in req_files:
                 if validate_file_views(f) == 'error':
                     messages.error(request, 'Invalid format loaded')
-                    return redirect('/dashboard/')
+                    return redirect(F'/w/orders/inprocess/{pk}/')
                 file_additional = FilesAdditionallyOrder()
                 file_additional.additionally_order = additionally_order
                 file_additional.file = f

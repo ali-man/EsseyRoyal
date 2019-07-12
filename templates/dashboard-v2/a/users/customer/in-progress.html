@@ -1,0 +1,35 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Per page</th>
+        <th scope="col">Pages</th>
+        <th scope="col">Total cost</th>
+        <th scope="col">Deadline</th>
+        <th scope="col">Writer</th>
+        <th scope="col">Date of adoption</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for order in in_progress %}
+        <tr>
+            <td>
+                <a href="{% url 'administrator:order-inprocess' order.id %}" class="text-primary">
+                    {{ order.title }}
+                </a>
+            </td>
+            <td>${{ order.per_page|floatformat }}</td>
+            <td>{{ order.number_page }}</td>
+            <td>${{ order.total_cost|floatformat }}</td>
+            <td>{{ order.deadline|date:"H:m d M" }}</td>
+            <td>
+                <a href="{% url 'administrator:users-writer' order.writer.id %}" class="text-primary">
+                    {{ order.writer.get_full_name }}
+                </a>
+            </td>
+            <td>{{ order.additionallyorder.created_datetime|date:"H:m d M" }}</td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>

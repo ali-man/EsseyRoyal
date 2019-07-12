@@ -1,0 +1,82 @@
+{% extends 'dashboard-v2/a/index.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/customer.css' %}">
+{% endblock %}
+
+{% block section %}
+
+    <h4 class="text-center h4-responsive py-4 mb-3" style="background-color: #f5f5f5">{{ order.title }}</h4>
+
+    <div class="mb-2">
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col">
+                    <h4 class="font-weight-bold amber-lighter-hover mb-3">Detail info</h4>
+                    <table class="table" style="margin-bottom: 0;">
+                        <tbody>
+                        <tr>
+                            <th>Type of order:</th>
+                            <td>{{ order.type_order }}</td>
+                        </tr>
+                        <tr>
+                            <th>Format of order:</th>
+                            <td>{{ order.format_order }}</td>
+                        </tr>
+                        <tr>
+                            <th>Deadline:</th>
+                            <td>{{ order.deadline }}</td>
+                        </tr>
+                        <tr>
+                            <th>Per page:</th>
+                            <td>${{ order.type_order.price_writer|floatformat }}</td>
+                        </tr>
+                        <tr>
+                            <th>Number pages:</th>
+                            <td>{{ order.number_page }}</td>
+                        </tr>
+                        <tr>
+                            <th>Total cost:</th>
+                            <td>${{ order.total_cost_writer|floatformat }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    {% if order.description %}
+                        <h4 class="font-weight-bold amber-lighter-hover mt-3 mb-3">Description: </h4>
+                        <div class="description">
+                            <div class="description-text">
+                                {% autoescape off %}{{ order.description }}{% endautoescape %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% if order.filesorder_set.all %}
+                    <div class="col-4" style="background-color: #f5f5f5">
+                        <h4 class="font-weight-bold amber-lighter-hover mt-3 mb-3">Files: </h4>
+                        <ul class="files">
+                            {% for file in order.filesorder_set.all %}
+                                <li>
+                                    <a href="{{ file.file.url }}">{{ file.filename|truncatechars:25 }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+    </div>
+
+    {% if order.status == 3 %}
+        <div class="card-body py-2 pr-2">
+            <form method="post">
+                {% csrf_token %}
+                <button class="btn bg-btn float-right">Allow</button>
+            </form>
+        </div>
+    {% endif %}
+{% endblock %}

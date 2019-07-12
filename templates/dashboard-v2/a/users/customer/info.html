@@ -1,0 +1,15 @@
+<ul class="list-group list-group-flush">
+    {% if customer.avatar %}
+        <li class="list-group-item">
+            <img src="{{ customer.avatar.url }}" alt="" width="75">
+        </li>
+    {% endif %}
+    <li class="list-group-item"><b>First name:</b> {{ customer.first_name }}</li>
+    <li class="list-group-item"><b>Last name:</b> {{ customer.last_name }}</li>
+    <li class="list-group-item"><b>Email:</b> {{ customer.email }}</li>
+    <li class="list-group-item"><b>Phone:</b> {{ customer.phone }}</li>
+    <li class="list-group-item"><b>Academic institution:</b> {{ customer.academic_institution }}</li>
+    <li class="list-group-item"><b>Degree:</b> {{ customer.degree }}</li>
+    <li class="list-group-item"><b>Date joined:</b> {{ customer.date_joined }}</li>
+    <li class="list-group-item"><b>Balance:</b> ${{ customer.balance|floatformat }}</li>
+</ul>

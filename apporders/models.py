@@ -128,24 +128,31 @@ class Order(models.Model):
 
         super().save(*args, **kwargs)
 
-        if len(self.description) != 0:
-            threading.Thread(target=checking_description(self.id)).start()
-        else:
-            if len(self.filesorder_set.all()) == 0:
-                self.status = 0
+        # if self.status != 0:
+        #     if len(self.description) != 0:
+        #         print('1')
+        #         sw = SearchWord()
+        #         filter_words = sw.search_word(self.description)
+        #         pc = Processing()
+        #         pc.moderation_order(filter_words, self.id)
+        #         print('2')
+        #         # threading.Thread(target=checking_description(self.id)).start()
+        #     else:
+        #         if len(self.filesorder_set.all()) == 0:
+        #             self.status = 0
 
-        if status != self.status:
-            if self.status == 0:
-                manager_send_mail('New order', self.customer, self.title, F'm/orders/preview/{self.id}/')
-                writer_send_mail('New order', self.title, F'w/orders/preview/{self.id}/')
-            elif self.status == 1:
-                customer_send_mail('Take task', self.title, self.customer.email, F'c/orders/preview/{self.id}/')
-                manager_send_mail('Take order', self.writer, self.title, F'm/orders/inprocess/{self.id}/')
-            elif self.status == 2:
-                writer_send_mail('Completed order', self.title, F'w/orders/completed/{self.id}/')
-                manager_send_mail('Completed order', self.writer, self.title, F'm/orders/completed/{self.id}/')
-            elif self.status == 3:
-                manager_send_mail('Order of moderation', self.customer, self.title, F'm/orders/preview/{self.id}/')
+        # if status != self.status:
+        if self.status == 0:
+            # manager_send_mail('New order', self.customer, self.title, F'm/orders/preview/{self.id}/')
+            writer_send_mail('New order', self.title, F'w/orders/preview/{self.id}/')
+        elif self.status == 1:
+            customer_send_mail('Take task', self.title, self.customer.email, F'c/orders/preview/{self.id}/')
+            manager_send_mail('Take order', self.writer, self.title, F'm/orders/inprocess/{self.id}/')
+        elif self.status == 2:
+            writer_send_mail('Completed order', self.title, F'w/orders/completed/{self.id}/', self.writer.email)
+            manager_send_mail('Completed order', self.writer, self.title, F'm/orders/completed/{self.id}/')
+        elif self.status == 3:
+            manager_send_mail('Order of moderation', self.customer, self.title, F'm/orders/preview/{self.id}/')
 
     def __str__(self):
         return self.title
@@ -160,9 +167,12 @@ class FilesOrder(models.Model):
     def filename(self):
         return os.path.basename(self.file.name)
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        threading.Thread(target=checking_files(self.file, self.order.id)).start()
+    # def save(self, *args, **kwargs):
+    #     print('f1')
+    #     super().save(*args, **kwargs)
+    #     print('f2')
+    #     threading.Thread(target=checking_files(self.file, self.order.id)).start()
+    #     print('f3')
 
     def __str__(self):
         return '%s' % self.id
@@ -332,9 +342,9 @@ def checking_files(f, obj_id):
         pass
 
 
-def checking_description(order_id):
-    order = Order.objects.get(id=order_id)
-    sw = SearchWord()
-    filter_words = sw.search_word(order.description)
-    pc = Processing()
-    pc.moderation_order(filter_words, order_id)
+# def checking_description(order_id):
+#     order = Order.objects.get(id=order_id)
+#     sw = SearchWord()
+#     filter_words = sw.search_word(order.description)
+#     pc = Processing()
+#     pc.moderation_order(filter_words, order_id)

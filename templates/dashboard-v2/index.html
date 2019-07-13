@@ -58,7 +58,6 @@
                             {% endif %}
                             {% for group in user.groups.all %}
                                 {% if group.name == 'Writer' %}
-{#                                    TODO: Написать создание чата при регистрации Врайтера#}
                                     <a href="{% url 'writer:chat' user.chatuser.id %}"
                                        class="btn btn-white btn-sm" style="padding: 5px 20px;">
                                         Chat

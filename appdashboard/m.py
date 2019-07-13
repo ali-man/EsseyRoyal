@@ -23,4 +23,5 @@ urlpatterns = [
     path('filter-words/', view.filter_words, name='filter-words'),
     path('testimonials/', view.testimonials, name='testimonials'),
     path('add-article/', view.add_article, name='add-article'),
+    path('chat/<int:pk>/', view.writer_chat, name='writer-chat'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

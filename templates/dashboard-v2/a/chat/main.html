@@ -1,0 +1,212 @@
+{% extends 'dashboard-v2/a/index.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/customer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nanoscroller.css' %}">
+    <link rel="stylesheet" href="{% static 'css/libs/chat.min.css' %}">
+    <style>
+        strong.file-name {
+            width: 125px;
+            padding-right: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+        }
+
+        p.text-smaller {
+            font-size: 12px;
+        }
+
+        .my-message {
+            background-color: #f6faff !important;
+        }
+
+        .nano {
+            font-family: Arial, sans-serif;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .nano-1 {
+            background-color: #eef3fb;
+            height: 490px;
+        }
+
+        .nano-2 {
+            height: 200px;
+        }
+
+        .nano-1 .nano-content {
+            padding: 10px 25px 10px 10px;
+        }
+
+        .nano .nano-content p {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .nano .nano-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .nano .nano-pane {
+            background-color: #dce4f1;
+        }
+
+        .nano .nano-pane .nano-slider {
+            background-color: #496ea0;
+        }
+
+    </style>
+{% endblock %}
+
+{% block title %}
+    Dashboard - Chat
+{% endblock %}
+
+{% block menu %}
+    <li class="list-group-item p-0">
+        <a href="#" id="menu_toggle">
+            <div class="md-v-line"></div>
+            <i class="fas fa-bars" style="margin-right: 36px; margin-left: 14px;"></i>
+            Menu
+        </a>
+    </li>
+    <li class="list-group-item p-0 menu_toggle" style="display: none">
+        <a href="{% url 'manager:orders' %}">
+            <div class="md-v-line"></div>
+            <i class="far fa-list-alt" style="margin-right: 36px; margin-left: 20px;"></i>
+            Orders
+        </a>
+    </li>
+    <li class="list-group-item p-0 menu_toggle" style="display: none">
+        <a href="{% url 'manager:courses' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-clipboard-list" style="margin-right: 40px; margin-left: 20px;"></i>
+            Courses
+        </a>
+    </li>
+    <li class="list-group-item p-0 menu_toggle" style="display: none">
+        <a href="{% url 'manager:users' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-users" style="margin-right: 34px; margin-left: 20px;"></i>
+            Users
+        </a>
+    </li>
+    <li class="list-group-item p-0 menu_toggle" style="display: none">
+        <a href="{% url 'manager:type-order' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-question-circle" style="margin-right: 38px; margin-left: 20px;"></i>
+            Type of order
+        </a>
+    </li>
+    <li class="list-group-item p-0 menu_toggle" style="display: none">
+        <a href="{% url 'manager:format-order' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-info-circle" style="margin-right: 38px; margin-left: 20px;"></i>
+            Format of order
+        </a>
+    </li>
+    <li class="list-group-item p-0 menu_toggle" style="display: none">
+        <a href="{% url 'manager:deadline' %}">
+            <div class="md-v-line"></div>
+            <i class="far fa-calendar-check" style="margin-right: 38px; margin-left: 20px;"></i>
+            Deadline
+        </a>
+    </li>
+    <li class="list-group-item p-0 menu_toggle" style="display: none">
+        <a href="{% url 'manager:filter-words' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-filter" style="margin-right: 36px; margin-left: 20px;"></i>
+            Filter words
+        </a>
+    </li>
+    <li class="list-group-item p-0 menu_toggle" style="display: none">
+        <a href="{% url 'manager:testimonials' %}">
+            <div class="md-v-line"></div>
+            <i class="far fa-comment-alt" style="margin-right: 34px; margin-left: 20px;"></i>
+            Testimonials
+        </a>
+    </li>
+    <li class="list-group-item p-0 menu_toggle" style="display: none">
+        <a href="{% url 'manager:add-article' %}">
+            <div class="md-v-line"></div>
+            <i class="far fa-newspaper" style="margin-right: 34px; margin-left: 20px;"></i>
+            Add article
+        </a>
+    </li>
+    <li class="list-group-item p-0 menu_toggle" style="display: none">
+        <a href="{% url 'manager:settings' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-user-cog" style="margin-right: 32px; margin-left: 20px;"></i>
+            Settings
+        </a>
+    </li>
+    <li class="list-group-item p-0 menu_toggle" style="display: none">
+        <a href="{% url 'logout' %}">
+            <div class="md-v-line"></div>
+            <i class="fas fa-sign-out-alt" style="margin-right: 36px; margin-left: 20px;"></i>
+            Log out
+        </a>
+    </li>
+{% endblock %}
+
+{% block pod-menu %}
+    {% include 'dashboard-v2/a/chat/members.html' %}
+{% endblock %}
+
+{% block section %}
+
+    {% include 'dashboard-v2/a/chat/messages.html' %}
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/chats.js' %}"></script>
+    <script src="{% static 'js/jquery.nanoscroller.min.js' %}"></script>
+    <script src="{% static 'js/fu/jquery.ui.widget.js' %}"></script>
+    <script src="{% static 'js/fu/jquery.iframe-transport.js' %}"></script>
+    <script src="{% static 'js/fu/jquery.fileupload.js' %}"></script>
+    <script>
+        $(function () {
+            $(".nano-1").nanoScroller({
+                alwaysVisible: true
+            });
+            $(".nano-2").nanoScroller({
+                alwaysVisible: false
+            });
+
+            $('#fileupload').fileupload({
+                dataType: 'json',
+                done: function (e, data) {
+                    $.each(data.originalFiles, function (index, file) {
+
+                        {#$('.fileupload-text').text('upload completed ' + file.name);#}
+
+                    });
+                }
+            });
+
+            $('#menu_toggle').click(function () {
+                $('.menu_toggle').toggle();
+            });
+        });
+
+        function sendChatAjax() {
+
+            let data = $('#formdata').serialize();
+            let _file = $('#id_files').val();
+
+            $.ajax({
+                method: 'POST',
+                data: data + '&upload_files=' + _file,
+                dataType: 'json',
+                success: function (msg) {
+                    if (msg.ok) {
+                        $('#chat_message_box').val('');
+                    }
+                }
+            });
+        }
+    </script>
+{% endblock %}

@@ -3,6 +3,7 @@
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/customer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nanoscroller.css' %}">
     <link rel="stylesheet" href="{% static 'css/libs/chat.min.css' %}">
     <style>
         strong.file-name {
@@ -19,6 +20,42 @@
 
         .my-message {
             background-color: #f6faff !important;
+        }
+
+        .nano {
+            font-family: Arial, sans-serif;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .nano-1 {
+            background-color: #eef3fb;
+            height: 638px;
+        }
+
+        .nano-2 {
+            height: 200px;
+        }
+
+        .nano-1 .nano-content {
+            padding: 10px 25px 10px 10px;
+        }
+
+        .nano .nano-content p {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .nano .nano-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .nano .nano-pane {
+            background-color: #dce4f1;
+        }
+
+        .nano .nano-pane .nano-slider {
+            background-color: #496ea0;
         }
     </style>
 {% endblock %}
@@ -38,12 +75,20 @@
 {% endblock %}
 
 {% block scripts %}
-    {#    <script src="{% static 'js/chats.js' %}"></script>#}
+    <script src="{% static 'js/chats.js' %}"></script>
+    <script src="{% static 'js/jquery.nanoscroller.min.js' %}"></script>
     <script src="{% static 'js/fu/jquery.ui.widget.js' %}"></script>
     <script src="{% static 'js/fu/jquery.iframe-transport.js' %}"></script>
     <script src="{% static 'js/fu/jquery.fileupload.js' %}"></script>
     <script>
         $(function () {
+            $(".nano-1").nanoScroller({
+                alwaysVisible: true
+            });
+            $(".nano-2").nanoScroller({
+                alwaysVisible: false
+            });
+
             $('#fileupload').fileupload({
                 dataType: 'json',
                 done: function (e, data) {

@@ -187,16 +187,14 @@ class ChatViews(View):
     def get(request, pk):
 
         if request.user.is_anonymous:
-            print('ASD')
             messages.error(request, 'Access is limited')
             return redirect('/')
-
-        chat = ChatUser.objects.get(id=pk)
+        user = User.objects.get(email=request.user)
+        chat = ChatUser.objects.get(id=pk, user=user)
         messages_from_chat = MessageChatUser.objects.filter(chat=chat).order_by('-id')
         files_from_chat = FileChatUser.objects.filter(chat=chat).order_by('-id')
 
         if request.is_ajax():
-            print(request.GET)
             r_mfc = request.GET.get('messagesFromChat', None)
             r_ffc = request.GET.get('filesFromChat', None)
 
@@ -246,7 +244,6 @@ class ChatViews(View):
                 data = json.dumps(obj_files)
                 return HttpResponse(data, content_type="application/json")
 
-        user = User.objects.get(email=request.user)
         if access_to_manager_and_admin(request.user) or chat.user == user:
             context = {
                 'chat': chat,
@@ -255,7 +252,7 @@ class ChatViews(View):
             }
             return render(request, 'dashboard-v2/w/chat/main.html', context=context)
         else:
-            return redirect(F'/chat/{request.user.chatuser.id}/')
+            return redirect(F'/w/chat/{request.user.chatuser.id}/')
 
     @staticmethod
     def post(request, pk):

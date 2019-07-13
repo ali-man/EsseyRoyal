@@ -40,6 +40,7 @@ function resultFilesFromChat(data) {
 function resultMessagesFromChat(data) {
     $('ul.chat li').remove();
     let requestUser = $('#request_user').val();
+    console.log(data);
     for (let i = 0; i < data.length; i++) {
         if (requestUser === data[i].owner) {
             $('ul.chat').prepend(
@@ -68,7 +69,7 @@ function resultMessagesFromChat(data) {
                     <img src="${data[i].avatar}" class="avatar rounded-circle mr-2 ml-lg-3 ml-0 z-depth-1" style="width: 50px; height: 50px;">
                     <div class="chat-body white p-3 ml-2 z-depth-1" style="width: 100%">
                         <div class="header">
-                            <strong class="primary-font"></strong>
+                            <strong class="primary-font">${data[i].owner}</strong>
                             <small class="pull-right text-muted"><i class="far fa-clock"></i>
                                 ${data[i].created_datetime}
                             </small>

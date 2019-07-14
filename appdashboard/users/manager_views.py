@@ -297,7 +297,6 @@ def testimonials(request):
                 c.comment = request.POST['newComment']
                 c.checked = checked
                 c.save()
-
             if request.POST['action'] == 'delete':
                 c.delete()
 

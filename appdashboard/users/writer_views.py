@@ -8,7 +8,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.base import View
 
-from appcourses.models import Course, Task
+from appcourses.models import Course, Task, TaskFileCompleted
 from appdashboard.views import access_to_manager_and_admin
 from appmail.views import manager_send_mail, customer_send_mail
 from apporders.models import Order, AdditionallyOrder, Chat, FilesAdditionallyOrder
@@ -131,7 +131,7 @@ def order_completed(request, pk):
 
 def courses(request):
     user = User.objects.get(email=request.user)
-    tasks = Task.objects.exclude(Q(price_status=1) & Q(to_writer=False))
+    tasks = Task.objects.filter(Q(price_status=2) & Q(to_writer=True))
     in_review = tasks.filter(status=0)
     in_process = tasks.filter(status=1)
     completed = tasks.filter(status=2)
@@ -175,10 +175,45 @@ def settings(request):
     return render(request, 'dashboard-v2/w/settings/tabs.html', locals())
 
 
-def detail(request, pk):
-    course = Course.objects.get(id=pk)
+def task_inprocess(request, pk):
+    user = User.objects.get(email=request.user)
+    task = Task.objects.get(id=pk, price_status=2, status=1, writer=user)
 
-    return render(request, 'dashboard-v2/w/courses/course/detail.html', locals())
+    if request.method == 'POST':
+        if 'files' in request.FILES:
+            req_files = request.FILES.getlist('files')
+            for f in req_files:
+                if validate_file_views(f) == 'error':
+                    messages.error(request, 'Invalid format loaded')
+                    return redirect('/w/courses/task/inprocess/{}/'.format(pk))
+                task_file_completed = TaskFileCompleted()
+                task_file_completed.task = task
+                task_file_completed.file = f
+                task_file_completed.save()
+            customer_send_mail('New files', task.title, task.course.customer.email, F'c/courses/task/inprocess/{task.id}/')
+            manager_send_mail('New files', task.writer, task.title, F'm/courses/task/inprocess/{task.id}/')
+            messages.success(request, 'Files uploaded successfully')
+            return redirect(F'/w/courses/task/inprocess/{task.id}/')
+
+    return render(request, 'dashboard-v2/w/courses/course/task-inprocess.html', locals())
+
+
+def task_detail(request, pk):
+    user = User.objects.get(email=request.user)
+    task = Task.objects.get(id=pk, price_status=2, status=0)
+
+    if request.method == 'POST':
+        r = request.POST
+        take = r.get('take', None)
+
+        if take is not None:
+            task = Task.objects.get(id=int(take))
+            task.writer = user
+            task.status = 1
+            task.save()
+            # TODO: Написать уведомление на почту менеджеру и кастомеру о принятии заказа
+
+    return render(request, 'dashboard-v2/w/courses/course/task-detail.html', locals())
 
 
 class ChatViews(View):

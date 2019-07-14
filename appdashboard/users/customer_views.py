@@ -231,7 +231,23 @@ def settings(request):
     return render(request, 'dashboard-v2/c/settings/tabs.html', locals())
 
 
-def detail(request, pk):
+def course_detail(request, pk):
     course = Course.objects.get(id=pk)
 
-    return render(request, 'dashboard-v2/c/courses/course/detail.html', locals())
+    if request.method == 'POST':
+        r = request.POST
+        he_take = r.get('he_take', None)
+        agree = r.get('agree', None)
+
+        if he_take is not None:
+            task = Task.objects.get(id=int(he_take))
+            task.delete()
+            # TODO: Написать уведомление на почту менеджеру об отказе от таска
+
+        if agree is not None:
+            task = Task.objects.get(id=int(agree))
+            task.price_status = 2
+            task.save()
+            # TODO: Написать уведомление на почту менеджеру о согласие на таск, а так же, уведомление врайтерам о новом таске
+
+    return render(request, 'dashboard-v2/c/courses/course/course-detail.html', locals())

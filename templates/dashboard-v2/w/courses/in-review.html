@@ -4,7 +4,6 @@
     <thead>
     <tr>
         <th scope="col">Title</th>
-        <th scope="col">Tasks Pending</th>
         <th scope="col">Total cost</th>
         <th scope="col">Due date</th>
     </tr>
@@ -12,10 +11,9 @@
     <tbody>
     {% for task in in_review %}
         <tr>
-            <td scope="row"><a href="{% url 'customer:course-detail' task.id %}">{{ task.title }}</a></td>
-            <td>{{ task.count }}</td>
-            <td>${{ course.price_for_writer|floatformat }}</td>
-            <td>{{ course.due_date|date:"H:m d M" }}</td>
+            <td><a href="{% url 'writer:task-detail' task.id %}" class="text-primary">{{ task.title }}</a></td>
+            <td>${{ task.price_for_writer|floatformat }}</td>
+            <td>{{ task.due_date|date:"H:m d M" }}</td>
         </tr>
     {% endfor %}
     </tbody>

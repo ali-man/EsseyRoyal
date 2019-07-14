@@ -8,12 +8,12 @@
     </tr>
     </thead>
     <tbody>
-    {% for order in completed %}
+    {% for task_completed in completed %}
         <tr>
-            <td scope="row">{{ order.title }}</td>
-            <td>{{ order.number_page }}</td>
-            <td>${{ order.total_cost|floatformat }}</td>
-            <td>{{ order.deadline|date:"H:m d M" }}</td>
+            <td><a href="{% url 'writer:task-completed' task_completed.id %}" class="text-primary">{{ task_completed.title }}</a></td>
+            <td>{{ task_completed.pages }}</td>
+            <td>${{ task_completed.price_for_writer|floatformat }}</td>
+            <td>{{ task_completed.due_date|date:"H:m d M" }}</td>
         </tr>
     {% endfor %}
 

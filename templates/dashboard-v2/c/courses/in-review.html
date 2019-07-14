@@ -13,7 +13,7 @@
     <tbody>
     {% for course in my_course %}
         <tr>
-            <td scope="row"><a href="{% url 'customer:course-detail' course.id %}">{{ course.title }}</a></td>
+            <td scope="row"><a href="{% url 'customer:course-detail' course.id %}" class="text-primary">{{ course.title }}</a></td>
             <td>{{ course|tasks_pending }}</td>
             <td>
                 <div class="progress md-progress" style="height: 20px">

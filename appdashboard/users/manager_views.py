@@ -2,6 +2,7 @@ import datetime
 import decimal
 import json
 
+from django.utils.timezone import make_aware
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
 from django.db.models import Q
@@ -10,11 +11,22 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from appaaa.models import Comment
 from appblog.forms import ArticleForm
-from appcourses.models import Course, Task
+from appcourses.forms import TaskForm
+from appcourses.models import Course, Task, TaskFile
 from appdashboard.views import access_to_manager_and_admin
 from apporders.models import Order, AdditionallyOrder, Chat, TypeOrder, FormatOrder, PriceDeadline, FilterWord
 from appusers.forms import UserForm
 from appusers.models import User, ChatUser, MessageChatUser, FileChatUser
+
+
+def to_datetime(_datetime):
+    # 2019-06-30T12:12
+    dt = _datetime.split('T')  # ['2019-06-30', '12:12']
+    d = [int(d) for d in dt[0].split('-')]  # [2019, 06, 30]
+    t = [int(t) for t in dt[1].split(':')]  # [12, 12]
+    format_date = datetime.datetime(d[0], d[1], d[2], t[0], t[1])
+    aware_datetime = make_aware(format_date)
+    return aware_datetime
 
 
 def to_deadline(d, t):
@@ -119,10 +131,45 @@ def settings(request):
     return render(request, 'dashboard-v2/m/settings/tabs.html', locals())
 
 
-def detail(request, pk):
+def course_detail(request, pk):
     course = Course.objects.get(id=pk)
 
-    return render(request, 'dashboard-v2/m/courses/course/detail.html', locals())
+    if request.method == 'POST':
+        if 'send_customer' in request.POST:
+            task = Task.objects.get(id=int(request.POST['send_customer']))
+            task.price_status = 1
+            task.save()
+            # TODO: Отправить уведомление заказчику о новых тасках
+        else:
+            form = TaskForm(request.POST)
+            attached_files = request.FILES.getlist('attached-files')
+            dt = to_datetime(request.POST['due_date'])
+            if form.is_valid():
+                cd = form.cleaned_data
+                task = Task()
+                task.course = course
+                task.title = cd['title']
+                task.due_date = dt
+                task.question = cd['question']
+                task.pages = cd['pages']
+                task.description = cd['description']
+                task.price_for_customer = cd['price_for_customer']
+                if cd['to_writer']:
+                    task.to_writer = cd['to_writer']
+                    task.price_for_writer = cd['price_for_writer']
+                task.save()
+                if len(attached_files) != 0:
+                    for f in attached_files:
+                        file = TaskFile()
+                        file.task = task
+                        file.file = f
+                        file.save()
+                messages.success(request, 'Added new task')
+                return redirect('/m/courses/detail/{}/'.format(pk))
+            else:
+                messages.error(request, 'The fields are incorrectly filled')
+
+    return render(request, 'dashboard-v2/m/courses/course/course-detail.html', locals())
 
 
 def users(request):

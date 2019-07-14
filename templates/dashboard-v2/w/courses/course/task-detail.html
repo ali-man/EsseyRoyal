@@ -1,0 +1,63 @@
+{% extends 'dashboard-v2/w/index.html' %}
+
+{% block section %}
+
+    <ul class="list-group">
+        <li class="list-group-item">
+            <div class="md-v-line"></div>
+            <i class="fas fa-text-height mr-5"></i>
+            <strong>Title:</strong> {{ task.title }}
+        </li>
+        {% if task.question %}
+            <li class="list-group-item">
+                <div class="md-v-line"></div>
+                <i class="far fa-question-circle mr-5"></i><strong
+                    class="ml-1">Question:</strong> {{ task.question }}
+            </li>
+        {% endif %}
+        <li class="list-group-item">
+            <div class="md-v-line"></div>
+            <i class="far fa-file-alt mr-5"></i>
+            <strong>Pages:</strong> {{ task.pages }}
+        </li>
+        {% if task.description %}
+            <li class="list-group-item">
+                <div class="md-v-line"></div>
+                <i class="fas fa-info-circle mr-5"></i>
+                <strong>Description:</strong> {{ task.description }}
+            </li>
+        {% endif %}
+        <li class="list-group-item">
+            <div class="md-v-line"></div>
+            <i class="far fa-calendar-check mr-5"></i>
+            <strong>Due date:</strong> {{ task.due_date }}
+        </li>
+        <li class="list-group-item">
+            <div class="md-v-line"></div>
+            <i class="fas fa-dollar-sign mr-5"></i><strong
+                class="ml-2">Price for writer:</strong> ${{ task.price_for_writer|floatformat }}
+        </li>
+        {% if task.price_status == 2 %}
+            <li class="list-group-item">
+                <div class="md-v-line"></div>
+                <i class="fas fa-satellite-dish mr-5"></i>
+                <strong class="ml-2">Status:</strong> {{ task.status }}
+            </li>
+        {% endif %}
+        <li class="list-group-item">
+            <div class="md-v-line"></div>
+            <i class="far fa-calendar-alt mr-5"></i>
+            <strong class="ml-2">Created date time:</strong>
+            {{ task.created_datetime }}
+        </li>
+    </ul>
+    {% if task.price_status == 2 %}
+        {% if task.status == 0 %}
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn bg-btn" name="take" value="{{ task.id }}">Take</button>
+            </form>
+        {% endif %}
+    {% endif %}
+
+{% endblock %}

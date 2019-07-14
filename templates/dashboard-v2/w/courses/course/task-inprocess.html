@@ -1,0 +1,100 @@
+{% extends 'dashboard-v2/w/index.html' %}
+
+{% block title %}
+    Dashboard - Task {{ task.title }}
+{% endblock %}
+
+{% block section %}
+
+    <ul class="list-group mb-3">
+        <li class="list-group-item">
+            <div class="md-v-line"></div>
+            <i class="fas fa-text-height mr-5"></i>
+            <strong>Title:</strong> {{ task.title }}
+        </li>
+        {% if task.question %}
+            <li class="list-group-item">
+                <div class="md-v-line"></div>
+                <i class="far fa-question-circle mr-5"></i><strong
+                    class="ml-1">Question:</strong> {{ task.question }}
+            </li>
+        {% endif %}
+        <li class="list-group-item">
+            <div class="md-v-line"></div>
+            <i class="far fa-file-alt mr-5"></i>
+            <strong>Pages:</strong> {{ task.pages }}
+        </li>
+        {% if task.description %}
+            <li class="list-group-item">
+                <div class="md-v-line"></div>
+                <i class="fas fa-info-circle mr-5"></i>
+                <strong>Description:</strong> {{ task.description }}
+            </li>
+        {% endif %}
+        <li class="list-group-item">
+            <div class="md-v-line"></div>
+            <i class="far fa-calendar-check mr-5"></i>
+            <strong>Due date:</strong> {{ task.due_date }}
+        </li>
+        <li class="list-group-item">
+            <div class="md-v-line"></div>
+            <i class="fas fa-dollar-sign mr-5"></i><strong
+                class="ml-2">Price for writer:</strong> ${{ task.price_for_writer|floatformat }}
+        </li>
+        {% if task.price_status == 2 %}
+            <li class="list-group-item">
+                <div class="md-v-line"></div>
+                <i class="fas fa-satellite-dish mr-5"></i>
+                <strong class="ml-2">Status:</strong> {{ task.status }}
+            </li>
+        {% endif %}
+        <li class="list-group-item">
+            <div class="md-v-line"></div>
+            <i class="far fa-calendar-alt mr-5"></i>
+            <strong class="ml-2">Created date time:</strong>
+            {{ task.created_datetime }}
+        </li>
+    </ul>
+    {% if task.price_status == 2 %}
+        {% if task.status == 0 %}
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn bg-btn" name="take" value="{{ task.id }}">Take</button>
+            </form>
+        {% endif %}
+    {% endif %}
+
+    <div class="border mb-2">
+        <div class="card-body">
+            <h4 class="font-weight-bold amber-lighter-hover mb-3">Task completed files</h4>
+            <ul class="additionally-order-files">
+                {% for task_compl in task.taskfilecompleted_set.all %}
+                    <li>
+                        <a href="{{ task_compl.file.url }}">
+                            {{ task_compl.filename }}
+                            <small class="text-black-50">{{ task_compl.created_datetime }}</small>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            {% if order.status != 2 %}
+                <form method="post" enctype="multipart/form-data" class="md-form">
+                    {% csrf_token %}
+                    <div class="file-field">
+                        <div class="btn btn-primary btn-sm float-left">
+                            <span>Choose file</span>
+                            <input type="file" name="files" multiple>
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text" placeholder="Upload your file">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn bg-btn" style="float:right;">Upload</button>
+                    <br>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

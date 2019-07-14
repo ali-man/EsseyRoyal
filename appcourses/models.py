@@ -92,6 +92,7 @@ class Task(models.Model):
     class Meta:
         verbose_name = 'Task'
         verbose_name_plural = 'Tasks'
+        ordering = ['-id']
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
@@ -110,6 +111,25 @@ class TaskFile(models.Model):
     class Meta:
         verbose_name = 'Task File'
         verbose_name_plural = 'Task Files'
+
+    def filename(self):
+        return os.path.basename(self.file.name)
+
+    def __str__(self):
+        return '%s' % self.id
+
+
+class TaskFileCompleted(models.Model):
+    task = models.ForeignKey(Task, verbose_name='Task', on_delete=models.CASCADE)
+    file = models.FileField(verbose_name='File', upload_to='courses/completed/%Y/%m/%d/', null=True, blank=True)
+    created_datetime = models.DateTimeField(verbose_name='Created datetime', auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Task File Completed'
+        verbose_name_plural = 'Task Files Completed'
+
+    def filename(self):
+        return os.path.basename(self.file.name)
 
     def __str__(self):
         return '%s' % self.id

@@ -1,0 +1,69 @@
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="modal-body">
+        <table class="table">
+
+            <div class="md-form">
+                <input type="text" id="id_title" name="title" class="form-control">
+                <label for="id_title">Title</label>
+            </div>
+
+            <div class="md-form">
+                <input type="number" id="id_pages" name="pages" class="form-control">
+                <label for="id_pages">Pages</label>
+            </div>
+
+            <div class="md-form">
+                <input type="datetime-local" id="id_due_date" name="due_date" class="form-control">
+            </div>
+
+            <div class="md-form">
+                <input type="number" id="id_price_for_customer" name="price_for_customer" class="form-control">
+                <label for="id_price_for_customer">Price for customer</label>
+            </div>
+
+            <div class="form-check" style="padding-left: 0.5rem;">
+                <input type="checkbox" class="form-check-input" id="id_to_writer" name="to_writer">
+                <label class="form-check-label" for="id_to_writer">To writers ?</label>
+            </div>
+
+            <div class="md-form">
+                <input type="number" id="id_price_for_writer" name="price_for_writer" class="form-control">
+                <label for="id_price_for_writer">Price for writer</label>
+            </div>
+
+{#            <select class="mdb-select md-form" id="id_writer" name="writer">#}
+{#                <option value="" disabled selected>Choose a writer</option>#}
+{#                {% for writer in writers %}#}
+{#                    <option value="{{ writer.id }}">{{ writer.get_full_name }}</option>#}
+{#                {% endfor %}#}
+{#            </select>#}
+
+            <div class="md-form">
+                <textarea id="id_question" name="question" class="md-textarea form-control" rows="3"></textarea>
+                <label for="id_question">Question</label>
+            </div>
+
+            <div class="md-form">
+                <textarea id="id_descrtiption" name="descrtiption" class="md-textarea form-control" rows="3"></textarea>
+                <label for="id_descrtiption">Description</label>
+            </div>
+
+            <tr>
+                <td><label for="id_attached-files">Attached files</label></td>
+                <td>
+                    <input type="file" name="attached-files" id="id_attached-files" multiple>
+                    <small>.xls .docx .pdf .xlsx</small>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+        </button>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</form>

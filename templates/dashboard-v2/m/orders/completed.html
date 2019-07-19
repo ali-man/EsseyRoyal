@@ -3,9 +3,9 @@
     <tr>
         <th scope="col">Customer</th>
         <th scope="col">Title</th>
-        <th scope="col">Pages</th>
+        <th scope="col" class="d-none d-lg-table-cell">Pages</th>
         <th scope="col">Total cost</th>
-        <th scope="col">Deadline</th>
+        <th scope="col" class="d-none d-lg-table-cell">Deadline</th>
         <th scope="col">Writer</th>
         <th scope="col">Expiry date</th>
         <th scope="col">Rating</th>
@@ -22,9 +22,9 @@
             <td>
                 <a href="{% url 'manager:order-completed' order.id %}" class="text-primary">{{ order.title }}</a>
             </td>
-            <td>{{ order.number_page }}</td>
+            <td class="d-none d-lg-table-cell">{{ order.number_page }}</td>
             <td>${{ order.total_cost|floatformat }}</td>
-            <td>{{ order.deadline|date:"H:m d M" }}</td>
+            <td class="d-none d-lg-table-cell">{{ order.deadline|date:"H:m d M" }}</td>
             <td>
                 <a href="{% url 'manager:users-writer' order.writer.id %}" class="text-primary">
                     {{ order.writer.get_full_name }}

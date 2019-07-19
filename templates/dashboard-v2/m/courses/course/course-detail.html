@@ -79,37 +79,39 @@
                 {% if task.question %}
                     <li class="list-group-item">
                         <div class="md-v-line"></div>
-                        <i class="fas fa-signature mr-4 pr-3"></i><strong
+                        <i class="far fa-question-circle mr-5"></i><strong
                             class="ml-1">Question:</strong> {{ task.question }}
                     </li>
                 {% endif %}
                 <li class="list-group-item">
                     <div class="md-v-line"></div>
-                    <i class="fas fa-at mr-5"></i>
+                    <i class="far fa-file-alt mr-5"></i>
                     <strong>Pages:</strong> {{ task.pages }}
                 </li>
                 {% if task.description %}
                     <li class="list-group-item">
                         <div class="md-v-line"></div>
-                        <i class="fas fa-phone mr-5"></i>
+                        <i class="fas fa-info-circle mr-5"></i>
                         <strong>Description:</strong> {{ task.description }}
                     </li>
                 {% endif %}
                 <li class="list-group-item">
                     <div class="md-v-line"></div>
-                    <i class="fas fa-university mr-5"></i>
+                    <i class="far fa-calendar-check mr-5"></i>
                     <strong>Due date:</strong> {{ task.due_date }}
                 </li>
                 <li class="list-group-item">
                     <div class="md-v-line"></div>
-                    <i class="fas fa-level-up-alt mr-5"></i><strong
-                        class="ml-2">Price for writer:</strong> ${{ task.price_for_writer }}
+                    <i class="fas fa-dollar-sign mr-5"></i><strong>
+                    Price for customer:</strong> ${{ task.price_for_customer|floatformat }}
                 </li>
-                <li class="list-group-item">
-                    <div class="md-v-line"></div>
-                    <i class="fas fa-at mr-5"></i><strong>
-                    Price for customer:</strong> ${{ task.price_for_customer }}
-                </li>
+                {% if task.price_for_writer %}
+                    <li class="list-group-item">
+                        <div class="md-v-line"></div>
+                        <i class="fas fa-dollar-sign mr-5"></i><strong
+                            class="ml-2">Price for writer:</strong> ${{ task.price_for_writer|floatformat }}
+                    </li>
+                {% endif %}
                 {% if task.writer is not None %}
                     <li class="list-group-item">
                         <div class="md-v-line"></div>
@@ -121,16 +123,28 @@
                 {% if task.price_status == 2 %}
                     <li class="list-group-item">
                         <div class="md-v-line"></div>
-                        <i class="fas fa-dollar-sign mr-5"></i>
+                        <i class="fas fa-satellite-dish mr-5"></i>
                         <strong class="ml-2">Status:</strong> {{ task.status }}
                     </li>
                 {% endif %}
                 <li class="list-group-item">
                     <div class="md-v-line"></div>
-                    <i class="fas fa-dollar-sign mr-5"></i>
+                    <i class="far fa-calendar-alt mr-5"></i>
                     <strong class="ml-2">Created date time:</strong>
                     {{ task.created_datetime }}
                 </li>
+                {% if task.taskfile_set.count %}
+                    <li class="list-group-item">
+                        <div class="md-v-line"></div>
+                        <i class="fas fa-file-download mr-5"></i>
+                        <strong>Files:</strong>
+                        <ul>
+                            {% for file in task.taskfile_set.all %}
+                                <li><a href="{{ file.file }}">{{ file.filename }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endif %}
             </ul>
 
             {% if task.price_status == 0 %}

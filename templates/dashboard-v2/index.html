@@ -76,7 +76,7 @@
                     <div class="col">
                         <h3 class="h3-responsive">{{ user.get_full_name }}</h3>
                         {% for group in user.groups.all %}
-                            <div class="badge badge-primary text-wrap" style="width: 6rem;">
+                            <div class="badge bg-block text-wrap" style="width: 6rem;">
                                 {{ group.name }}
                             </div>
                         {% endfor %}

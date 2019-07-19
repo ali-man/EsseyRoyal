@@ -54,6 +54,18 @@
             <strong class="ml-2">Created date time:</strong>
             {{ task.created_datetime }}
         </li>
+        {% if task.taskfile_set.count %}
+            <li class="list-group-item">
+                <div class="md-v-line"></div>
+                <i class="fas fa-file-download mr-5"></i>
+                <strong>Files:</strong>
+                <ul>
+                    {% for file in task.taskfile_set.all %}
+                        <li><a href="{{ file.file }}">{{ file.filename }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endif %}
     </ul>
     {% if task.price_status == 2 %}
         {% if task.status == 0 %}

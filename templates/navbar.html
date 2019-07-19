@@ -56,18 +56,18 @@
                     {% if user.is_authenticated %}
                         {% for group in user.groups.all %}
                             {% if group.name == 'Customer' %}
-                                <a class="dropdown-item" href="{% url 'customer:index' %}">Dashboard v2</a>
+                                <a class="dropdown-item" href="{% url 'customer:orders' %}">Dashboard</a>
                             {% elif group.name == 'Writer' %}
-                                <a class="dropdown-item" href="{% url 'writer:index' %}">Dashboard v2</a>
+                                <a class="dropdown-item" href="{% url 'writer:orders' %}">Dashboard</a>
                             {% elif group.name == 'Manager' %}
-                                <a class="dropdown-item" href="{% url 'manager:index' %}">Dashboard v2</a>
-                            {% else %}
-{#                                <a class="dropdown-item" href="{% url 'administrator:index' %}">Dashboard v2</a>#}
+                                <a class="dropdown-item" href="{% url 'manager:orders' %}">Dashboard</a>
                             {% endif %}
                         {% endfor %}
-
-                        <a class="dropdown-item" href="{% url 'appdashboard:dashboard' %}">Dashboard</a>
-                        <a class="dropdown-item" href="{% url 'appdashboard:customer-course-index' %}">Course</a>
+                        {% if user.is_superuser %}
+                            <a class="dropdown-item" href="{% url 'administrator:orders' %}">Dashboard</a>
+                        {% endif %}
+{#                        <a class="dropdown-item" href="{% url 'appdashboard:dashboard' %}">Dashboard</a>#}
+{#                        <a class="dropdown-item" href="{% url 'appdashboard:customer-course-index' %}">Course</a>#}
                         <a class="dropdown-item" href="{% url 'logout' %}">Log out</a>
                     {% else %}
                         <a class="dropdown-item" data-toggle="modal" data-target="#modalLRForm" href="#">

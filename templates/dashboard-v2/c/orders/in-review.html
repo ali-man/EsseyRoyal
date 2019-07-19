@@ -2,7 +2,7 @@
     <thead>
     <tr>
         <th scope="col">Title</th>
-        <th scope="col">Pages</th>
+        <th scope="col" class="d-none d-sm-table-cell">Pages</th>
         <th scope="col">Total cost</th>
         <th scope="col">Deadline</th>
         <th scope="col">Status</th>
@@ -16,7 +16,7 @@
                     {{ order.title }}
                 </a>
             </td>
-            <td>{{ order.number_page }}</td>
+            <td class="d-none d-sm-table-cell">{{ order.number_page }}</td>
             <td>${{ order.total_cost|floatformat }}</td>
             <td>{{ order.deadline|date:"H:m d M" }}</td>
             <td>

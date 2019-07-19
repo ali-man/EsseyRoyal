@@ -5,7 +5,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import UpdateView
 
-from appcourses.models import Course, Task
+from appcourses.models import Course, Task, CourseFile
 from appdashboard.views import access_to_manager_and_admin
 from appmail.views import manager_send_mail, writer_send_mail
 from apporders.forms import OrderAddForm, OrderForm
@@ -190,7 +190,23 @@ def courses(request):
     tasks = Task.objects.exclude(status=0)
     in_process = tasks.filter(status=1)
     completed = tasks.filter(status=2)
-    # new_order = OrderAddForm()
+
+    if request.method == 'POST':
+        title = request.POST['title']
+        attached_files = request.FILES.getlist('attached-files')
+        course = Course()
+        course.customer = user
+        course.title = title
+        course.save()
+        if len(attached_files) != 0:
+            for f in attached_files:
+                course_file = CourseFile()
+                course_file.course = course
+                course_file.file = f
+                course_file.save()
+        messages.success(request, 'Your order is loaded')
+        manager_send_mail('New course', course.customer, course.title, F'/m/courses/detail/{course.id}/')
+        return redirect('/c/courses/')
 
     return render(request, 'dashboard-v2/c/courses/tabs.html', locals())
 
@@ -241,13 +257,15 @@ def course_detail(request, pk):
 
         if he_take is not None:
             task = Task.objects.get(id=int(he_take))
+            manager_send_mail(F'He take of task: {task.title}', course.customer, course.title, F'/m/courses/detail/{course.id}/')
             task.delete()
-            # TODO: Написать уведомление на почту менеджеру об отказе от таска
 
         if agree is not None:
             task = Task.objects.get(id=int(agree))
             task.price_status = 2
             task.save()
-            # TODO: Написать уведомление на почту менеджеру о согласие на таск, а так же, уведомление врайтерам о новом таске
+            manager_send_mail(F'Agree of task: {task.title}', course.customer, course.title, F'/m/courses/detail/{course.id}/')
+            if task.to_writer:
+                writer_send_mail('New task', task.title, F'/w/courses/task/{task.id}/')
 
     return render(request, 'dashboard-v2/c/courses/course/course-detail.html', locals())

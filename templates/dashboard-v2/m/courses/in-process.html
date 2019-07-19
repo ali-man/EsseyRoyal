@@ -6,7 +6,7 @@
         <th scope="col">Writer</th>
         <th scope="col">Pages</th>
         <th scope="col">Price</th>
-        <th scope="col">Deadline</th>
+        <th scope="col" class="d-none d-md-table-cell">Deadline</th>
     </tr>
     </thead>
     <tbody>
@@ -23,7 +23,7 @@
             </td>
             <td>{{ task.pages }}</td>
             <td>${{ task.price_for_customer|floatformat }}</td>
-            <td>{{ task.due_date|date:"H:m d M" }}</td>
+            <td class="d-none d-md-table-cell">{{ task.due_date|date:"H:m d M" }}</td>
         </tr>
     {% endfor %}
 

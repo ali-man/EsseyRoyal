@@ -1,6 +1,6 @@
 from django import forms
 
-from appcourses.models import Task
+from appcourses.models import Task, Course
 
 
 class TaskForm(forms.ModelForm):

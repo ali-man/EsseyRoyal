@@ -14,6 +14,7 @@ from appblog.forms import ArticleForm
 from appcourses.forms import TaskForm
 from appcourses.models import Course, Task, TaskFile
 from appdashboard.views import access_to_manager_and_admin
+from appmail.views import manager_send_mail, writer_send_mail, customer_send_mail
 from apporders.models import Order, AdditionallyOrder, Chat, TypeOrder, FormatOrder, PriceDeadline, FilterWord
 from appusers.forms import UserForm
 from appusers.models import User, ChatUser, MessageChatUser, FileChatUser
@@ -139,7 +140,7 @@ def course_detail(request, pk):
             task = Task.objects.get(id=int(request.POST['send_customer']))
             task.price_status = 1
             task.save()
-            # TODO: Отправить уведомление заказчику о новых тасках
+            customer_send_mail('New task in course', task.course.title, task.course.customer.email, F'/c/courses/detail/{task.course.id}/')
         else:
             form = TaskForm(request.POST)
             attached_files = request.FILES.getlist('attached-files')

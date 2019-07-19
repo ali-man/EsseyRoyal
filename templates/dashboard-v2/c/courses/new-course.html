@@ -1,21 +1,13 @@
 <form method="post" enctype="multipart/form-data">{% csrf_token %}
     <table class="table">
-        {% for field in new_order %}
-            <tr>
-                <td width="120">{{ field.label }}</td>
-                <td>{{ field }}</td>
-            </tr>
-            {% if field.errors %}
-                <tr>
-                    <td></td>
-                    <td>{{ field.errors }}</td>
-                </tr>
-            {% endif %}
-        {% endfor %}
+        <tr>
+            <td><label for="id_title">Title</label></td>
+            <td><input type="text" name="title" id="id_title" required class="form-control"></td>
+        </tr>
         <tr>
             <td><label for="id_attached-files">Attached files</label></td>
             <td>
-                <input type="file" name="attached-files" id="id_attached-files" multiple>
+                <input type="file" name="attached-files" id="id_attached-files" required multiple>
                 <small>.xls .docx .pdf .xlsx</small>
             </td>
         </tr>

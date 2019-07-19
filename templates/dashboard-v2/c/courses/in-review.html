@@ -7,7 +7,7 @@
         <th scope="col">Tasks Pending</th>
         <th scope="col">Completed tasks</th>
         <th scope="col">Total cost</th>
-        <th scope="col">Created datetime</th>
+        <th scope="col" class="d-none d-sm-table-cell">Created datetime</th>
     </tr>
     </thead>
     <tbody>
@@ -23,7 +23,7 @@
                 </div>
             </td>
             <td>${{ course.price|floatformat }}</td>
-            <td>{{ course.created_datetime|date:"H:m d M" }}</td>
+            <td class="d-none d-sm-table-cell">{{ course.created_datetime|date:"H:m d M" }}</td>
         </tr>
     {% endfor %}
     </tbody>

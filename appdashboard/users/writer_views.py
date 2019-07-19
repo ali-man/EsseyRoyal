@@ -211,7 +211,8 @@ def task_detail(request, pk):
             task.writer = user
             task.status = 1
             task.save()
-            # TODO: Написать уведомление на почту менеджеру и кастомеру о принятии заказа
+            customer_send_mail('Take of task', task.title, task.course.customer.email, F'/c/courses/detail/{task.course.id}/')
+            manager_send_mail('Take of task', task.writer, task.title, F'/m/courses/detail/{task.course.id}')
 
     return render(request, 'dashboard-v2/w/courses/course/task-detail.html', locals())
 

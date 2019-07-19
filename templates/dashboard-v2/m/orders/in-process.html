@@ -1,19 +1,19 @@
 <table class="table">
     <thead>
     <tr>
-        <th scope="col">Customer</th>
+        <th scope="col" class="d-none d-md-table-cell">Customer</th>
         <th scope="col">Title</th>
-        <th scope="col">Pages</th>
+        <th scope="col" class="d-none d-lg-table-cell">Pages</th>
         <th scope="col">Total cost</th>
         <th scope="col">Deadline</th>
         <th scope="col">Writer</th>
-        <th scope="col">Date of adoption</th>
+        <th scope="col" class="d-none d-md-table-cell">Date of adoption</th>
     </tr>
     </thead>
     <tbody>
     {% for order in in_process %}
         <tr>
-            <td>
+            <td class="d-none d-md-table-cell">
                 <a href="{% url 'manager:users-customer' order.customer.id %}" class="text-primary">
                     {{ order.customer.get_full_name }}
                 </a>
@@ -21,7 +21,7 @@
             <td>
                 <a href="{% url 'manager:order-inprocess' order.id %}" class="text-primary">{{ order.title }}</a>
             </td>
-            <td>{{ order.number_page }}</td>
+            <td class="d-none d-lg-table-cell">{{ order.number_page }}</td>
             <td>${{ order.total_cost|floatformat }}</td>
             <td>{{ order.deadline|date:"H:m d M" }}</td>
             <td>
@@ -29,7 +29,7 @@
                     {{ order.writer.get_full_name }}
                 </a>
             </td>
-            <td>{{ order.additionallyorder.created_datetime|date:"H:m d M" }}</td>
+            <td class="d-none d-md-table-cell">{{ order.additionallyorder.created_datetime|date:"H:m d M" }}</td>
         </tr>
     {% endfor %}
 

@@ -1,7 +1,9 @@
 import datetime
 
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import UpdateView
 
@@ -14,119 +16,118 @@ from apporders.validators import validate_file_views
 from appusers.forms import UserCustomerForm
 from appusers.models import User
 
+check_is_customer = user_passes_test(lambda user: user.groups.all()[0].name == 'Customer' if user.is_authenticated else False)
+
 
 def to_deadline(d, t):
     return datetime.datetime(d.year, d.month, d.day, t.hour, t.minute)
 
 
+@check_is_customer
 def index(request):
-    user = User.objects.get(email=request.user)
-    group = [g.name for g in user.groups.all()][0]
-
-    if group == 'Customer':
-        return redirect('/c/orders/')
-    else:
-        return redirect('/')
-    
-    # return render(request, 'dashboard-v2/c/index.html', locals())
+    return redirect('/c/orders/')
 
 
+@check_is_customer
 def orders(request):
-    user = User.objects.get(email=request.user)
-
     if request.method == 'GET':
-        if request.user.groups.all()[0].name == 'Customer':
-            my_orders = Order.objects.filter(customer=user)
-        else:
-            return redirect('/')
+        my_orders = Order.objects.filter(customer=request.user)
         in_review = my_orders.filter(status__in=[0, 3])
         in_process = my_orders.filter(status=1)
         completed = my_orders.filter(status=2).order_by('-completed_datetime')
         new_order = OrderAddForm()
+        context = {
+            'in_review': in_review,
+            'in_process': in_process,
+            'completed': completed,
+            'new_order': new_order,
+        }
+
+        return render(request, 'dashboard-v2/c/orders/tabs.html', context=context)
 
     if request.method == 'POST':
-        if request.user.groups.all()[0].name == 'Customer':
-            form = OrderAddForm(request.POST)
-            attached_files = request.FILES.getlist('attached-files')
-            if form.is_valid():
-                date = form.cleaned_data['date_deadline']
-                time = form.cleaned_data['time_deadline']
-                deadline = to_deadline(date, time)
-                order = Order()
-                order.customer = user
-                order.title = form.cleaned_data['title']
-                order.type_order = form.cleaned_data['type_order']
-                order.number_page = int(form.cleaned_data['number_page'])
-                order.format_order = form.cleaned_data['format_order']
-                order.deadline = deadline
-                order.description = form.cleaned_data['description']
-                order.save()
-                if len(attached_files) != 0:
-                    for f in attached_files:
-                        if validate_file_views(f) == 'error':
-                            messages.error(request, 'Invalid format loaded')
-                            return redirect('/dashboard/')
+        form = OrderAddForm(request.POST)
+        attached_files = request.FILES.getlist('attached-files')
+        if form.is_valid():
+            date = form.cleaned_data['date_deadline']
+            time = form.cleaned_data['time_deadline']
+            deadline = to_deadline(date, time)
+            order = Order()
+            order.customer = user
+            order.title = form.cleaned_data['title']
+            order.type_order = form.cleaned_data['type_order']
+            order.number_page = int(form.cleaned_data['number_page'])
+            order.format_order = form.cleaned_data['format_order']
+            order.deadline = deadline
+            order.description = form.cleaned_data['description']
+            order.save()
+            if len(attached_files) != 0:
+                for f in attached_files:
+                    if validate_file_views(f) == 'error':
+                        messages.error(request, F'{f.name} - Invalid format file')
+                    else:
                         files_order = FilesOrder()
                         files_order.order = order
                         files_order.file = f
                         files_order.save()
-                messages.success(request, 'Your order is loaded')
-                return redirect('/c/orders/')
-            else:
-                messages.success(request, 'The fields are incorrectly filled')
-                return redirect('/c/orders/')
+            messages.success(request, 'Your order is loaded')
+            return redirect(F'/c/orders/preview/{order.id}/')
         else:
-            return redirect('/')
+            messages.success(request, 'The fields are incorrectly filled')
+            return redirect(F'/c/orders/')
 
-    return render(request, 'dashboard-v2/c/orders/tabs.html', locals())
 
-
+@check_is_customer
 def order_preview(request, pk):
-    user = User.objects.get(email=request.user)
-    order = get_object_or_404(Order, id=pk, status__in=[0,3], customer=user)
-
-    return render(request, 'dashboard-v2/c/orders/detail/preview.html', locals())
+    order = get_object_or_404(Order, id=pk, status__in=[0,3], customer=request.user)
+    return render(request, 'dashboard-v2/c/orders/detail/preview.html', context={'order': order})
 
 
+@check_is_customer
 def order_edit(request, pk):
-    user = User.objects.get(email=request.user)
-    order = Order.objects.get(id=pk, customer=user)
-    form = OrderForm(instance=order)
+    try:
+        order = Order.objects.get(id=pk, customer=request.user)
+        form = OrderForm(instance=order)
+    except Order.DoesNotExist:
+        messages.success(request, 'Access limited')
+        return redirect('/')
 
     if request.method == 'POST':
-        if request.user.groups.all()[0].name == 'Customer':
-            form = OrderForm(request.POST, instance=order)
-            attached_files = request.FILES.getlist('attached-files')
-            if form.is_valid():
-                order.title = form.cleaned_data['title']
-                order.format_order = form.cleaned_data['format_order']
-                order.description = form.cleaned_data['description']
-                order.save()
-                if len(attached_files) != 0:
-                    for f in attached_files:
-                        if validate_file_views(f) == 'error':
-                            messages.error(request, 'Invalid format loaded')
-                            return redirect('/dashboard/')
+        form = OrderForm(request.POST, instance=order)
+        attached_files = request.FILES.getlist('attached-files')
+        if form.is_valid():
+            order.title = form.cleaned_data['title']
+            order.format_order = form.cleaned_data['format_order']
+            order.description = form.cleaned_data['description']
+            order.save()
+            if len(attached_files) != 0:
+                for f in attached_files:
+                    if validate_file_views(f) == 'error':
+                        messages.error(request, F'{f.name} - Invalid format loaded')
+                    else:
                         files_order = FilesOrder()
                         files_order.order = order
                         files_order.file = f
                         files_order.save()
-                messages.success(request, 'Your order is update')
-                return redirect('/c/orders/')
-            else:
-                messages.success(request, 'The fields are incorrectly filled')
-                return redirect('/c/orders/edit/{}/'.format(pk))
+            messages.success(request, 'Your order is update')
+            return redirect(F'/c/orders/preview/{order.id}/')
         else:
-            return redirect('/')
+            messages.success(request, 'The fields are incorrectly filled')
+            return redirect(F'/c/orders/edit/{pk}/')
 
-    return render(request, 'dashboard-v2/c/orders/detail/edit.html', locals())
+    return render(request, 'dashboard-v2/c/orders/detail/edit.html', context={'form': form, 'order': order})
 
 
-class UpdateOrderViews(UpdateView):
+class UpdateOrderViews(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Order
     form_class = OrderForm
     template_name = 'dashboard-v2/c/orders/detail/edit.html'
     success_url = '/c/orders/'
+
+    def test_func(self):
+        print(self.request.user)
+        obj = self.get_object()
+        return obj.customer == self.request.user
 
     def post(self, request, *args, **kwargs):
         super(UpdateOrderViews, self).post(request, *args, **kwargs)
@@ -136,16 +137,17 @@ class UpdateOrderViews(UpdateView):
             if len(attached_files) != 0:
                 for f in attached_files:
                     if validate_file_views(f) == 'error':
-                        messages.error(request, 'Invalid format loaded')
-                        return redirect('/c/orders/')
-                    files_order = FilesOrder()
-                    files_order.order = order
-                    files_order.file = f
-                    files_order.save()
+                        messages.error(request, F'{f.name} - Invalid format file')
+                    else:
+                        files_order = FilesOrder()
+                        files_order.order = order
+                        files_order.file = f
+                        files_order.save()
         messages.success(request, 'Your order has been updated.')
-        return redirect('/c/orders/')
+        return redirect(F'/c/orders/preview/{order.id}/')
 
 
+@check_is_customer
 def order_in_process(request, pk):
     user = User.objects.get(email=request.user)
     if request.method == 'GET':
@@ -177,19 +179,26 @@ def order_in_process(request, pk):
             return redirect(F'/c/orders/inprocess/{pk}/')
 
 
+@check_is_customer
 def order_completed(request, pk):
     user = User.objects.get(email=request.user)
     order = get_object_or_404(Order, id=pk, status=2, customer=user)
-    return render(request, 'dashboard-v2/c/orders/detail/completed.html', locals())
+    return render(request, 'dashboard-v2/c/orders/detail/completed.html', context={'order': order})
 
 
+@check_is_customer
 def courses(request):
     user = User.objects.get(email=request.user)
     my_course = Course.objects.filter(customer=user)
-    # in_review = my_course.filter(status__in=[0, 3])
-    tasks = Task.objects.exclude(status=0)
+    tasks = Task.objects.exclude(status=0, course__customer=user)
     in_process = tasks.filter(status=1)
     completed = tasks.filter(status=2)
+    context = {
+        'my_course': my_course,
+        'tasks': tasks,
+        'in_process': in_process,
+        'completed': completed,
+    }
 
     if request.method == 'POST':
         title = request.POST['title']
@@ -208,9 +217,10 @@ def courses(request):
         manager_send_mail('New course', course.customer, course.title, F'/m/courses/detail/{course.id}/')
         return redirect('/c/courses/')
 
-    return render(request, 'dashboard-v2/c/courses/tabs.html', locals())
+    return render(request, 'dashboard-v2/c/courses/tabs.html', context=context)
 
 
+@check_is_customer
 def settings(request):
     user = User.objects.get(email=request.user)
     user_form = UserCustomerForm(instance=user)
@@ -244,9 +254,13 @@ def settings(request):
                 messages.error(request, 'Invalid fields')
                 return redirect('/c/settings/')
 
-    return render(request, 'dashboard-v2/c/settings/tabs.html', locals())
+    return render(request, 'dashboard-v2/c/settings/tabs.html', context={
+        'user_form': user_form,
+        'change_password': change_password
+    })
 
 
+@check_is_customer
 def course_detail(request, pk):
     course = Course.objects.get(id=pk)
 
@@ -254,6 +268,7 @@ def course_detail(request, pk):
         r = request.POST
         he_take = r.get('he_take', None)
         agree = r.get('agree', None)
+        completed = r.get('completed', None)
 
         if he_take is not None:
             task = Task.objects.get(id=int(he_take))
@@ -267,5 +282,12 @@ def course_detail(request, pk):
             manager_send_mail(F'Agree of task: {task.title}', course.customer, course.title, F'/m/courses/detail/{course.id}/')
             if task.to_writer:
                 writer_send_mail('New task', task.title, F'/w/courses/task/{task.id}/')
+        if completed is not None:
+            task = Task.objects.get(id=int(completed))
+            task.status = 2
+            task.save()
+            manager_send_mail(F'Completed task: {task.title}', course.customer, course.title, F'/m/courses/detail/{course.id}/')
+            if task.to_writer:
+                writer_send_mail('Completed task', task.title, F'/w/courses/task/completed/{task.id}/')
 
-    return render(request, 'dashboard-v2/c/courses/course/course-detail.html', locals())
+    return render(request, 'dashboard-v2/c/courses/course/course-detail.html', context={'course': course})

@@ -28,7 +28,6 @@ def rest_of_time(order):
 
 
 def mailing(order, hours):
-    print('send mail')
     writer_rest_of_time_send_mail(
         F'Less than {hours} hours left',
         order.title,
@@ -40,18 +39,14 @@ def mailing(order, hours):
         order.title,
         order.id,
     )
-    print('yes send mail')
 
 
 def search_deadline(request):
-    print('search deadline')
     orders = Order.objects.filter(status=1)
 
     for order in orders:
-        print('from for')
         hours = rest_of_time(order)
         if hours <= 24:
-            print('hours')
             mailing(order, 24)
 
-    return render(request, 'cron.html', locals())
+    return render(request, 'cron.html', context={'orders': orders})

@@ -2,6 +2,7 @@ import datetime
 import decimal
 import json
 
+from django.contrib.auth.decorators import user_passes_test
 from django.utils.timezone import make_aware
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
@@ -14,10 +15,12 @@ from appblog.forms import ArticleForm
 from appcourses.forms import TaskForm
 from appcourses.models import Course, Task, TaskFile
 from appdashboard.views import access_to_manager_and_admin
-from appmail.views import manager_send_mail, writer_send_mail, customer_send_mail
-from apporders.models import Order, AdditionallyOrder, Chat, TypeOrder, FormatOrder, PriceDeadline, FilterWord
+from appmail.views import customer_send_mail
+from apporders.models import Order, Chat, TypeOrder, FormatOrder, PriceDeadline, FilterWord
 from appusers.forms import UserForm
 from appusers.models import User, ChatUser, MessageChatUser, FileChatUser
+
+check_is_manager = user_passes_test(lambda user: user.groups.all()[0].name == 'Manager' if user.is_authenticated else False)
 
 
 def to_datetime(_datetime):
@@ -34,25 +37,28 @@ def to_deadline(d, t):
     return datetime.datetime(d.year, d.month, d.day, t.hour, t.minute)
 
 
+@check_is_manager
 def index(request):
-    return render(request, 'dashboard-v2/m/index.html', locals())
+    return redirect('/m/orders/')
 
 
+@check_is_manager
 def orders(request):
     _orders = Order.objects.all()
     in_review = _orders.filter(status__in=[0, 3])
     in_process = _orders.filter(status=1)
     completed = _orders.filter(status=2).order_by('-completed_datetime')
+    context = {
+        'in_review': in_review,
+        'in_process': in_process,
+        'completed': completed,
+    }
+    return render(request, 'dashboard-v2/m/orders/tabs.html', context=context)
 
-    return render(request, 'dashboard-v2/m/orders/tabs.html', locals())
 
-
+@check_is_manager
 def order_preview(request, pk):
     if request.method == 'GET':
-        if not access_to_manager_and_admin(request.user):
-            messages.error(request, 'Access closed')
-            return redirect('/')
-
         order = get_object_or_404(Order, id=pk, status__in=[0, 3])
 
     if request.method == 'POST':
@@ -61,9 +67,10 @@ def order_preview(request, pk):
             order.status = 0
             order.save()
 
-    return render(request, 'dashboard-v2/m/orders/detail/preview.html', locals())
+    return render(request, 'dashboard-v2/m/orders/detail/preview.html', context={'order': order})
 
 
+@check_is_manager
 def order_in_process(request, pk):
     order = get_object_or_404(Order, id=pk, status=1)
 
@@ -77,14 +84,13 @@ def order_in_process(request, pk):
     return render(request, 'dashboard-v2/m/orders/detail/in-process.html', context={'order': order})
 
 
+@check_is_manager
 def order_completed(request, pk):
-    if not access_to_manager_and_admin(request.user):
-        messages.error(request, 'Access closed')
-        return redirect('/')
     order = get_object_or_404(Order, id=pk, status=2)
-    return render(request, 'dashboard-v2/m/orders/detail/completed.html', locals())
+    return render(request, 'dashboard-v2/m/orders/detail/completed.html', context={'order': order})
 
 
+@check_is_manager
 def courses(request):
     user = User.objects.get(email=request.user)
     all_courses = Course.objects.filter(Q(manager=None) | Q(manager=user))
@@ -92,10 +98,16 @@ def courses(request):
     in_review = tasks.filter(status=0)
     in_process = tasks.filter(status=1)
     completed = tasks.filter(status=2)
+    context = {
+        'all_courses': all_courses,
+        'in_review': in_review,
+        'in_process': in_process,
+        'completed': completed,
+    }
+    return render(request, 'dashboard-v2/m/courses/tabs.html', context=context)
 
-    return render(request, 'dashboard-v2/m/courses/tabs.html', locals())
 
-
+@check_is_manager
 def settings(request):
     user = User.objects.get(email=request.user)
     user_form = UserForm(instance=user)
@@ -128,10 +140,14 @@ def settings(request):
             else:
                 messages.error(request, 'Invalid fields')
                 return redirect('/m/settings/')
+    context = {
+        'user_form': user_form,
+        'change_password': change_password
+    }
+    return render(request, 'dashboard-v2/m/settings/tabs.html', context=context)
 
-    return render(request, 'dashboard-v2/m/settings/tabs.html', locals())
 
-
+@check_is_manager
 def course_detail(request, pk):
     course = Course.objects.get(id=pk)
 
@@ -170,34 +186,55 @@ def course_detail(request, pk):
             else:
                 messages.error(request, 'The fields are incorrectly filled')
 
-    return render(request, 'dashboard-v2/m/courses/course/course-detail.html', locals())
+    return render(request, 'dashboard-v2/m/courses/course/course-detail.html', context={'course': course})
 
 
+@check_is_manager
 def users(request):
     _users = User.objects.all()
     customers = _users.filter(groups__name='Customer')
     writers = _users.filter(groups__name='Writer')
+    context= {
+        'customers': customers,
+        'writers': writers,
+        '_users': _users,
+    }
+    return render(request, 'dashboard-v2/m/users/tabs.html', context=context)
 
-    return render(request, 'dashboard-v2/m/users/tabs.html', locals())
 
-
+@check_is_manager
 def users_customer(request, pk):
     customer = User.objects.get(id=pk)
     orders = Order.objects.filter(customer=customer)
     in_review = orders.filter(status__in=[0, 3])
     in_progress = orders.filter(status=1)
     completed = orders.filter(status=2)
-    return render(request, 'dashboard-v2/m/users/customer/tabs.html', locals())
+    context = {
+        'customer': customer,
+        'orders': orders,
+        'in_review': in_review,
+        'in_progress': in_progress,
+        'completed': completed
+    }
+    return render(request, 'dashboard-v2/m/users/customer/tabs.html', context=context)
 
 
+@check_is_manager
 def users_writer(request, pk):
     writer = User.objects.get(id=pk)
     orders = Order.objects.filter(writer=writer)
     in_progress = orders.filter(status=1)
     completed = orders.filter(status=2)
-    return render(request, 'dashboard-v2/m/users/writer/tabs.html', locals())
+    context = {
+        'writer': writer,
+        'orders': orders,
+        'in_progress': in_progress,
+        'completed': completed,
+    }
+    return render(request, 'dashboard-v2/m/users/writer/tabs.html', context=context)
 
 
+@check_is_manager
 def type_order(request):
     types_order = TypeOrder.objects.all()
 
@@ -227,9 +264,10 @@ def type_order(request):
             messages.error(request, 'Неверный запрос')
             return redirect('/')
 
-    return render(request, 'dashboard-v2/m/selects/type-order.html', locals())
+    return render(request, 'dashboard-v2/m/selects/type-order.html', context={'types_order': types_order})
 
 
+@check_is_manager
 def format_order(request):
     formats_order = FormatOrder.objects.all()
 
@@ -255,9 +293,10 @@ def format_order(request):
             messages.error(request, 'Invalid request')
             return redirect('/')
 
-    return render(request, 'dashboard-v2/m/selects/format-order.html', locals())
+    return render(request, 'dashboard-v2/m/selects/format-order.html', context={'formats_order': formats_order})
 
 
+@check_is_manager
 def deadline(request):
     deadlines = PriceDeadline.objects.all()
 
@@ -289,9 +328,10 @@ def deadline(request):
             messages.error(request, 'Invalid request')
             return redirect('/')
 
-    return render(request, 'dashboard-v2/m/selects/deadline.html', locals())
+    return render(request, 'dashboard-v2/m/selects/deadline.html', context={'deadlines': deadlines})
 
 
+@check_is_manager
 def filter_words(request):
     fws = FilterWord.objects.all()
 
@@ -317,9 +357,10 @@ def filter_words(request):
             messages.error(request, 'Invalid request')
             return redirect('/')
 
-    return render(request, 'dashboard-v2/m/others/filter-words.html', locals())
+    return render(request, 'dashboard-v2/m/others/filter-words.html', context={'fws': fws})
 
 
+@check_is_manager
 def testimonials(request):
     tms = Comment.objects.all().order_by('-id')
 
@@ -350,9 +391,10 @@ def testimonials(request):
 
             return JsonResponse({'ok': 'yes'})
 
-    return render(request, 'dashboard-v2/m/others/testimonials.html', locals())
+    return render(request, 'dashboard-v2/m/others/testimonials.html', context={'tms': tms})
 
 
+@check_is_manager
 def add_article(request):
     form = ArticleForm()
 
@@ -366,9 +408,10 @@ def add_article(request):
             form = ArticleForm(request.POST, request.FILES)
             messages.error(request, 'Invalid fields')
 
-    return render(request, 'dashboard-v2/m/others/add-article.html', locals())
+    return render(request, 'dashboard-v2/m/others/add-article.html', context={'form': form})
 
 
+@check_is_manager
 def writer_chat(request, pk):
     if request.method == 'GET':
         chat = ChatUser.objects.get(id=pk)

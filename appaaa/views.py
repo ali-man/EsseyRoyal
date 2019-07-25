@@ -1,5 +1,4 @@
 import datetime
-import threading
 
 from django_user_agents.utils import get_user_agent
 
@@ -10,8 +9,7 @@ from django.views.generic.base import View
 from django.contrib.gis.geoip2 import GeoIP2
 
 from appaaa.models import Feedback, Comment
-from appblog.models import Article
-from appmail.views import manager_send_mail, writer_send_mail
+from appmail.views import manager_send_mail, writer_send_mail, manager_send_mail_of_feedback
 from apporders.models import TypeOrder, PriceDeadline, Order, FeedbackOrder, FilterWord
 from appusers.models import User
 
@@ -23,12 +21,13 @@ class HomePageViews(View):
         comments = Comment.objects.filter(checked=True).order_by('-id')
         comments_1 = comments[:3]
         comments_2 = comments[3:6]
-        return render(request, 'home.html', locals())
-
-
-def comment(request):
-    if request.method == 'POST':
-        return redirect('/')
+        context = {
+            'type_order': type_order,
+            'comments': comments,
+            'comments_1': comments_1,
+            'comments_2': comments_2,
+        }
+        return render(request, 'home.html', context=context)
 
 
 def feedback(request):
@@ -50,35 +49,33 @@ def feedback(request):
 
         ug = get_user_agent(request)
 
-        feedback = Feedback()
-        feedback.name = name
-        feedback.email = email
-        feedback.subject = subject
-        feedback.message = message
-
-        feedback.ip = ip
-        feedback.country = geo['country_name']
-        feedback.city = geo['city']
-        feedback.time_zone = geo['time_zone']
+        fb = {
+            'name': name,
+            'email': email,
+            'subject': subject,
+            'message': message,
+            'ip': ip,
+            'country': geo['country_name'],
+            'city': geo['city'],
+            'time_zone': geo['time_zone'],
+            'device': '',
+            'browser': F'{ug.browser.family} {ug.browser.version_string}',
+            'os': F'{ug.os.family} {ug.os.version_string}'
+        }
 
         if ug.is_mobile:
-            feedback.device = 'Mobile'
+            fb['device'] = 'Mobile'
         elif ug.is_tablet:
-            feedback.device = 'Tablet'
+            fb['device'] = 'Tablet'
         elif ug.is_touch_capable:
-            feedback.device = 'Touch capable'
+            fb['device'] = 'Touch capable'
         elif ug.is_pc:
-            feedback.device = 'PC'
+            fb['device'] = 'PC'
         elif ug.is_bot:
-            feedback.device = 'Bot'
+            fb['device'] = 'Bot'
         else:
-            feedback.device = 'Unknown'
-
-        feedback.browser = F'{ug.browser.family} {ug.browser.version_string}'
-        feedback.operation_system = F'{ug.os.family} {ug.os.version_string}'
-
-        feedback.save()
-        manager_send_mail('New feedback from site', name, subject, '')
+            fb['device'] = 'Unknown'
+        manager_send_mail_of_feedback(fb)
         messages.success(request, 'Your message has been sent.')
         return redirect('/')
     else:
@@ -132,10 +129,9 @@ def order_feedback(request):
 
     data = {'ok': F'/c/orders/completed/{order_id}/'}
     return redirect(F'/c/orders/completed/{order_id}/')
-    # return JsonResponse(data)
 
 
-def add_comment(request):
+def add_testimonial(request):
     if request.method == 'GET':
         messages.error(request, 'Access is limited')
         return redirect('/')
@@ -143,7 +139,6 @@ def add_comment(request):
         user = User.objects.get(email=request.user)
         comment_obj = Comment()
         comment_obj.user = user
-        # comment_obj.academic_institution = request.POST['academicInstitution']
         comment_obj.comment = request.POST['comment']
         comment_obj.save()
         messages.success(request, 'Thanks for your feedback')

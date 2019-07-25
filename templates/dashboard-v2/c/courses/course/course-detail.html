@@ -1,23 +1,7 @@
 {% extends 'dashboard-v2/c/index.html' %}
+{% load courses_filter %}
 
 {% block css %}
-    <style>
-        {#.md-form {#}
-        {#    margin-left: 0.5rem;#}
-        {#    margin-right: 0.5rem;#}
-        {
-        #}#}
-        {##}
-        {#ul.course li {#}
-        {#    border: none;#}
-        {
-        #}#}
-        {##}
-        {#ul.task {#}
-        {#    box-shadow: 0 3px 3px 0 #c3c3c3;#}
-        {
-        #}#}
-    </style>
 {% endblock %}
 
 {% block title %}
@@ -25,7 +9,6 @@
 {% endblock %}
 
 {% block section %}
-    {#    <span class="badge badge-primary">Tasks Pending {{ course.task_set.count }}</span>#}
     <h4>{{ course.title }}</h4>
     <ul class="list-group mb-5 mr-5 course">
         <li class="list-group-item">
@@ -69,37 +52,36 @@
                     </li>
                     <li class="list-group-item">
                         <div class="md-v-line"></div>
-                        <i class="far fa-file-alt mr-5"></i>
-                        <strong>Pages:</strong> {{ task.pages }}
+                        <i class="fas fa-dollar-sign mr-5"></i><strong>
+                        Price:</strong> ${{ task.price_for_customer }}
                     </li>
                     <li class="list-group-item">
                         <div class="md-v-line"></div>
-                        <i class="fas fa-info-circle mr-5"></i>
-                        <strong>Description:</strong> {{ task.description }}
+                        <i class="far fa-file-alt mr-5"></i>
+                        <strong>Pages:</strong> {{ task.pages }}
                     </li>
                     <li class="list-group-item">
                         <div class="md-v-line"></div>
                         <i class="far fa-calendar-check mr-5"></i>
                         <strong>Due date:</strong> {{ task.due_date }}
                     </li>
-                    <li class="list-group-item">
-                        <div class="md-v-line"></div>
-                        <i class="fas fa-dollar-sign mr-5"></i><strong>
-                        Price:</strong> ${{ task.price_for_customer }}
-                    </li>
                     {% if task.price_status == 2 %}
                         <li class="list-group-item">
                             <div class="md-v-line"></div>
-                            <i class="far fa-calendar-alt mr-5"></i>
-                            <strong class="ml-2">Status:</strong> {{ task.status }}
+                            <i class="far fa-calendar-alt mr-4 pr-3"></i>
+                            <strong class="ml-2">Status:</strong> {{ task.status|task_status }}
                         </li>
                     {% endif %}
+                    <li class="list-group-item">
+                        <div class="md-v-line"></div>
+                        <i class="fas fa-info-circle mr-5"></i>
+                        <strong>Description:</strong> {{ task.description }}
+                    </li>
                     {% if task.taskfile_set.count %}
                         <li class="list-group-item">
-                            <div class="md-v-line"></div>
-                            <i class="fas fa-file-download mr-5"></i>
+                            <i class="fas fa-file-download mr-1"></i>
                             <strong>Files:</strong>
-                            <ul>
+                            <ul class="additionally-order-files pl-3 ml-1">
                                 {% for file in task.taskfile_set.all %}
                                     <li><a href="{{ file.file }}">{{ file.filename }}</a></li>
                                 {% endfor %}
@@ -120,17 +102,30 @@
                             </button>
                         </form>
                     </div>
-                    {#                {% elif task.price_status == 2 %}#}
-                    {#                    {% if task.status == 0 %}#}
-                    {#                        <div class="ml-5">#}
-                    {#                            <form method="post">#}
-                    {#                                {% csrf_token %}#}
-                    {#                                <button type="submit" class="btn bg-btn" name="he_take"#}
-                    {#                                        value="{{ task.id }}">He take#}
-                    {#                                </button>#}
-                    {#                            </form>#}
-                    {#                        </div>#}
-                    {#                    {% endif %}#}
+                {% elif task.price_status == 2 and task.status != 0 %}
+                    {% if task.taskfile_set.count != 0 %}
+                        <div class="card-body border" style="background-color: #f5faff;">
+                            <h4 class="font-weight-bold mb-3" style="color: #20599d;">Task completed files</h4>
+                            <ul class="additionally-order-files">
+                                {% for tf in task.taskfile_set.all %}
+                                    <li>
+                                        <a href="{{ tf.file.url }}">
+                                            {{ tf.filename }}
+                                            <small class="text-black-50">{{ tf.created_datetime }}</small>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            {% if task.status == 1 %}
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn bg-btn" name="completed"
+                                            value="{{ task.id }}">Completed
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    {% endif %}
                 {% endif %}
             </div>
         {% endif %}

@@ -1,9 +1,9 @@
-<div class="card wow fadeInRight" data-wow-delay="0.3s">
+<div class="card wow fadeInRight" data-wow-delay="0.3s" style="border-radius: unset;">
     <div class="card-body z-depth-2">
         <div class="text-center">
-            <h3 class="dark-grey-text">
-                <strong style="color: #46585d;">Calculate your order</strong>
-            </h3>
+            <h5 class="dark-grey-text">
+                <strong style="color: #46585d;font-weight: 400;text-transform: uppercase;">Calculate your order</strong>
+            </h5>
             <hr>
         </div>
         <div class="form-row mb-4">
@@ -87,7 +87,7 @@
         </div>
         <div class="text-center mt-3">
             <div class="d-flex justify-content-around align-items-center">
-{#                <button class="btn bg-block" id="calculate_count">Count</button>#}
+                {#                <button class="btn bg-block" id="calculate_count">Count</button>#}
                 <div style="color: #46585d;">
                     <strong>Per page</strong><br> <strong id="per_page"></strong>
                 </div>
@@ -98,7 +98,18 @@
             </div>
             <hr>
             {% if user.is_authenticated %}
-                <a href="{% url 'appdashboard:dashboard' %}" class="btn bg-block">Request to order</a>
+                {% for group in user.groups.all %}
+                    {% if group.name == 'Customer' %}
+                        <a class="btn bg-block" href="{% url 'customer:orders' %}">Request to order</a>
+                    {% elif group.name == 'Writer' %}
+                        <a class="btn bg-block" href="{% url 'writer:orders' %}">Request to order</a>
+                    {% elif group.name == 'Manager' %}
+                        <a class="btn bg-block" href="{% url 'manager:orders' %}">Request to order</a>
+                    {% endif %}
+                {% endfor %}
+                {% if user.is_superuser %}
+                    <a class="btn bg-block" href="{% url 'administrator:orders' %}">Request to order</a>
+                {% endif %}
             {% else %}
                 <a href="#" data-toggle="modal" data-target="#modalLRForm" class="btn bg-btn">Login</a>
             {% endif %}

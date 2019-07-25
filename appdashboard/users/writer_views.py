@@ -2,6 +2,7 @@ import datetime
 import json
 
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.forms import PasswordChangeForm
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
@@ -16,31 +17,36 @@ from apporders.validators import validate_file_views
 from appusers.forms import UserCustomerForm
 from appusers.models import User, ChatUser, MessageChatUser, FileChatUser
 
+check_is_writer = user_passes_test(lambda user: user.groups.all()[0].name == 'Writer' if user.is_authenticated else False)
+
 
 def to_deadline(d, t):
     return datetime.datetime(d.year, d.month, d.day, t.hour, t.minute)
 
 
+@check_is_writer
 def index(request):
+    return redirect('/w/orders/')
 
-    return render(request, 'dashboard-v2/w/index.html', locals())
 
-
+@check_is_writer
 def orders(request):
     user = User.objects.get(email=request.user)
 
     if request.method == 'GET':
-        if request.user.groups.all()[0].name == 'Writer':
-            _orders = Order.objects.all()
-        else:
-            return redirect('/')
+        _orders = Order.objects.all()
         in_review = _orders.filter(status=0)
-        in_process = _orders.filter(status=1)
-        completed = _orders.filter(status=2).order_by('-completed_datetime')
+        in_process = _orders.filter(status=1, writer=request.user)
+        completed = _orders.filter(status=2, writer=request.user).order_by('-completed_datetime')
+        context = {
+            'in_review': in_review,
+            'in_process': in_process,
+            'completed': completed,
+        }
+    return render(request, 'dashboard-v2/w/orders/tabs.html', context=context)
 
-    return render(request, 'dashboard-v2/w/orders/tabs.html', locals())
 
-
+@check_is_writer
 def order_preview(request, pk):
     order = get_object_or_404(Order, id=pk, status=0)
     if request.method == 'POST':
@@ -61,9 +67,10 @@ def order_preview(request, pk):
         else:
             messages.warning(request, 'The order has already been accepted by another writer.')
 
-    return render(request, 'dashboard-v2/w/orders/detail/preview.html', locals())
+    return render(request, 'dashboard-v2/w/orders/detail/preview.html', context={'order': order})
 
 
+@check_is_writer
 def order_in_process(request, pk):
     user = User.objects.get(email=request.user)
     if request.method == 'GET':
@@ -123,22 +130,28 @@ def order_in_process(request, pk):
             return redirect(F'/w/orders/inprocess/{pk}/')
 
 
+@check_is_writer
 def order_completed(request, pk):
-    user = User.objects.get(email=request.user)
-    order = get_object_or_404(Order, id=pk, status=2, writer=user)
-    return render(request, 'dashboard-v2/w/orders/detail/completed.html', locals())
+    order = get_object_or_404(Order, id=pk, status=2, writer=request.user)
+    return render(request, 'dashboard-v2/w/orders/detail/completed.html', context={'order': order})
 
 
+@check_is_writer
 def courses(request):
     user = User.objects.get(email=request.user)
     tasks = Task.objects.filter(Q(price_status=2) & Q(to_writer=True))
     in_review = tasks.filter(status=0)
-    in_process = tasks.filter(status=1)
-    completed = tasks.filter(status=2)
+    in_process = tasks.filter(status=1, writer=user)
+    completed = tasks.filter(status=2, writer=user)
+    context = {
+        'in_review': in_review,
+        'in_process': in_process,
+        'completed': completed,
+    }
+    return render(request, 'dashboard-v2/w/courses/tabs.html', context=context)
 
-    return render(request, 'dashboard-v2/w/courses/tabs.html', locals())
 
-
+@check_is_writer
 def settings(request):
     user = User.objects.get(email=request.user)
     user_form = UserCustomerForm(instance=user)
@@ -171,13 +184,16 @@ def settings(request):
             else:
                 messages.error(request, 'Invalid fields')
                 return redirect('/w/settings/')
+    context = {
+        'user_form': user_form,
+        'change_password': change_password,
+    }
+    return render(request, 'dashboard-v2/w/settings/tabs.html', context=context)
 
-    return render(request, 'dashboard-v2/w/settings/tabs.html', locals())
 
-
+@check_is_writer
 def task_inprocess(request, pk):
-    user = User.objects.get(email=request.user)
-    task = Task.objects.get(id=pk, price_status=2, status=1, writer=user)
+    task = Task.objects.get(id=pk, price_status=2, status=1, writer=request.user)
 
     if request.method == 'POST':
         if 'files' in request.FILES:
@@ -195,12 +211,13 @@ def task_inprocess(request, pk):
             messages.success(request, 'Files uploaded successfully')
             return redirect(F'/w/courses/task/inprocess/{task.id}/')
 
-    return render(request, 'dashboard-v2/w/courses/course/task-inprocess.html', locals())
+    return render(request, 'dashboard-v2/w/courses/course/task-inprocess.html', context={'task': task})
 
 
+@check_is_writer
 def task_detail(request, pk):
     user = User.objects.get(email=request.user)
-    task = Task.objects.get(id=pk, price_status=2, status=0)
+    task = Task.objects.get(id=pk, price_status=2, status=0, writer=user)
 
     if request.method == 'POST':
         r = request.POST
@@ -214,17 +231,20 @@ def task_detail(request, pk):
             customer_send_mail('Take of task', task.title, task.course.customer.email, F'/c/courses/detail/{task.course.id}/')
             manager_send_mail('Take of task', task.writer, task.title, F'/m/courses/detail/{task.course.id}')
 
-    return render(request, 'dashboard-v2/w/courses/course/task-detail.html', locals())
+    return render(request, 'dashboard-v2/w/courses/course/task-detail.html', context={'task': task})
+
+
+@check_is_writer
+def task_completed(request, pk):
+    task = Task.objects.get(id=pk, writer=request.user, price_status=2, status=2)
+    return render(request, 'dashboard-v2/w/courses/course/task-completed.html', context={'task': task})
 
 
 class ChatViews(View):
 
     @staticmethod
+    @check_is_writer
     def get(request, pk):
-
-        if request.user.is_anonymous:
-            messages.error(request, 'Access is limited')
-            return redirect('/')
         user = User.objects.get(email=request.user)
         chat = ChatUser.objects.get(id=pk, user=user)
         messages_from_chat = MessageChatUser.objects.filter(chat=chat).order_by('-id')

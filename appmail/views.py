@@ -61,3 +61,22 @@ def writer_send_mail(title_mail, order_title, link_order, email=None):
             Link order: {}{}
         '''.format(order_title, settings.LINK_DOMAIN, link_order)
     send_mail(title_mail, data, 'EssayRoyal', writers, fail_silently=False)
+
+
+def manager_send_mail_of_feedback(info):
+    managers = for_get_mail_from_managers()
+    data = F'''
+            Name: {info['name']} 
+            Email: {info['email']}
+            Subject: {info['subject']}
+            Message: {info['message']}
+            IP: {info['ip']}
+            Country: {info['country']}
+            City: {info['city']}
+            Timezone: {info['time_zone']}
+            Device: {info['device']}
+            Browser: {info['browser']}
+            Operation system {info['os']}
+        '''
+
+    send_mail('New feedback', data, 'EssayRoyal', managers, fail_silently=False)

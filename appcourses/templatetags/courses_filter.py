@@ -22,3 +22,13 @@ def completed_tasks_percent(course):
 def tasks_pending(course):
     tasks = course.task_set.filter(price_status=1)
     return tasks.count()
+
+
+@register.filter(name='task_status')
+def task_status(num):
+    result = {
+        0: 'In search',
+        1: 'In progress',
+        2: 'Completed'
+    }
+    return result[num]

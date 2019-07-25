@@ -8,10 +8,10 @@ from django.urls import path, include
 
 from appaaa.cron import search_deadline
 from appaaa.sitemaps import ArticleSitemap, StaticViewSitemap
-from appaaa.views import HomePageViews, feedback, calculate_home, order_feedback, add_comment, add_word
+from appaaa.views import HomePageViews, feedback, calculate_home, order_feedback, add_testimonial, add_word
 from apporders.ajax import chat_message_accept
 from appusers.models import User
-from appusers.views import register, login_user, ChatViews
+from appusers.views import register, login_user
 
 sitemaps = {
     'articles': ArticleSitemap,
@@ -45,15 +45,10 @@ urlpatterns = [
     path('', HomePageViews.as_view(), name='home'),
     path('cron/search-deadline/', search_deadline),
     path('accounts/login/', login_user, name='login'),
-    path('add-comment/', add_comment, name='add-comment'),
+    path('add-comment/', add_testimonial, name='add-comment'),
     path('feedback/', feedback, name='feedback'),
     path('accounts/register/', register, name='register'),
     path('accounts/logout/', LogoutView.as_view(), name='logout'),
-
-    # CUSTOMER
-    path('order/', include('apporders.urls'), name='apporders'),
-
-    path('dashboard/', include('appdashboard.urls'), name='appdashboard'),
     path('rct/', redirect_dashboard),
 
     path('ajax/chat-message-accept/', chat_message_accept),
@@ -63,12 +58,6 @@ urlpatterns = [
     path('blog/', include('appblog.urls', namespace='appblog')),
     path('pages/', include('django.contrib.flatpages.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
-    # Chat for writers, managers and admin
-    # path('ajax/chat-ajax/', chat_ajax),
-    # path('ajax/chat-send/', chat_ajax_send),
-    # path('ajax/chat-person/', chat_ajax_user),
-    # path('chat-ajax/', include('appchat.urls')),
-    # path('chat/<int:pk>/', ChatViews.as_view(), name='chat'),
 
     path('c/', include('appdashboard.c', namespace='customer')),
     path('w/', include('appdashboard.w', namespace='writer')),

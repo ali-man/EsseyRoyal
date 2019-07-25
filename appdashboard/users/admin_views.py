@@ -3,6 +3,7 @@ import decimal
 import json
 
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import Group
 from django.db.models import Q
@@ -17,30 +18,35 @@ from apporders.models import Order, Chat, TypeOrder, FormatOrder, PriceDeadline,
 from appusers.forms import UserForm, CreateUserForm
 from appusers.models import User, ChatUser, FileChatUser, MessageChatUser
 
+check_super_admin = user_passes_test(lambda user: user.is_superuser, login_url='/')
+
 
 def to_deadline(d, t):
     return datetime.datetime(d.year, d.month, d.day, t.hour, t.minute)
 
 
+@check_super_admin
 def index(request):
-    return render(request, 'dashboard-v2/a/index.html', locals())
+    return redirect('/a/orders/')
 
 
+@check_super_admin
 def orders(request):
     _orders = Order.objects.all()
     in_review = _orders.filter(status__in=[0, 3])
     in_process = _orders.filter(status=1)
     completed = _orders.filter(status=2).order_by('-completed_datetime')
+    context = {
+        'in_review': in_review,
+        'in_process': in_process,
+        'completed': completed,
+    }
+    return render(request, 'dashboard-v2/a/orders/tabs.html', context=context)
 
-    return render(request, 'dashboard-v2/a/orders/tabs.html', locals())
 
-
+@check_super_admin
 def order_preview(request, pk):
     if request.method == 'GET':
-        if not access_to_manager_and_admin(request.user):
-            messages.error(request, 'Access closed')
-            return redirect('/')
-
         order = get_object_or_404(Order, id=pk, status__in=[0, 3])
 
     if request.method == 'POST':
@@ -49,9 +55,10 @@ def order_preview(request, pk):
             order.status = 0
             order.save()
 
-    return render(request, 'dashboard-v2/a/orders/detail/preview.html', locals())
+    return render(request, 'dashboard-v2/a/orders/detail/preview.html', context={'order': order})
 
 
+@check_super_admin
 def order_in_process(request, pk):
     order = get_object_or_404(Order, id=pk, status=1)
 
@@ -65,14 +72,13 @@ def order_in_process(request, pk):
     return render(request, 'dashboard-v2/a/orders/detail/in-process.html', context={'order': order})
 
 
+@check_super_admin
 def order_completed(request, pk):
-    if not access_to_manager_and_admin(request.user):
-        messages.error(request, 'Access closed')
-        return redirect('/')
     order = get_object_or_404(Order, id=pk, status=2)
-    return render(request, 'dashboard-v2/a/orders/detail/completed.html', locals())
+    return render(request, 'dashboard-v2/a/orders/detail/completed.html', context={'order': order})
 
 
+@check_super_admin
 def courses(request):
     user = User.objects.get(email=request.user)
     all_courses = Course.objects.filter(Q(manager=None) | Q(manager=user))
@@ -80,10 +86,16 @@ def courses(request):
     in_review = tasks.filter(status=0)
     in_process = tasks.filter(status=1)
     completed = tasks.filter(status=2)
+    context = {
+        'all_courses': all_courses,
+        'in_review': in_review,
+        'in_process': in_process,
+        'completed': completed,
+    }
+    return render(request, 'dashboard-v2/a/courses/tabs.html', context=context)
 
-    return render(request, 'dashboard-v2/a/courses/tabs.html', locals())
 
-
+@check_super_admin
 def settings(request):
     user = User.objects.get(email=request.user)
     user_form = UserForm(instance=user)
@@ -116,21 +128,32 @@ def settings(request):
             else:
                 messages.error(request, 'Invalid fields')
                 return redirect('/a/settings/')
+    context = {
+        'user_form': user_form,
+        'change_password': change_password,
+    }
+    return render(request, 'dashboard-v2/a/settings/tabs.html', context=context)
 
-    return render(request, 'dashboard-v2/a/settings/tabs.html', locals())
 
-
+@check_super_admin
 def detail(request, pk):
     course = Course.objects.get(id=pk)
 
-    return render(request, 'dashboard-v2/a/courses/course/detail.html', locals())
+    return render(request, 'dashboard-v2/a/courses/course/detail.html', context={'course': course})
 
 
+@check_super_admin
 def users(request):
     _users = User.objects.all()
     customers = _users.filter(groups__name='Customer')
     writers = _users.filter(groups__name='Writer')
     new_user = CreateUserForm()
+    context = {
+        '_users': _users,
+        'customers': customers,
+        'writers': writers,
+        'new_user': new_user,
+    }
 
     if request.method == 'POST':
         if '1' == request.POST['select_user']:
@@ -184,26 +207,42 @@ def users(request):
                 messages.error(request, 'Неверно заполнены поля (певести)')
                 return redirect('/a/users/')
 
-    return render(request, 'dashboard-v2/a/users/tabs.html', locals())
+    return render(request, 'dashboard-v2/a/users/tabs.html', context=context)
 
 
+@check_super_admin
 def users_customer(request, pk):
     customer = User.objects.get(id=pk)
     orders = Order.objects.filter(customer=customer)
     in_review = orders.filter(status__in=[0, 3])
     in_progress = orders.filter(status=1)
     completed = orders.filter(status=2)
-    return render(request, 'dashboard-v2/a/users/customer/tabs.html', locals())
+    context = {
+        'customer': customer,
+        'orders': orders,
+        'in_review': in_review,
+        'in_progress': in_progress,
+        'completed': completed,
+    }
+    return render(request, 'dashboard-v2/a/users/customer/tabs.html', context=context)
 
 
+@check_super_admin
 def users_writer(request, pk):
     writer = User.objects.get(id=pk)
     orders = Order.objects.filter(writer=writer)
     in_progress = orders.filter(status=1)
     completed = orders.filter(status=2)
-    return render(request, 'dashboard-v2/a/users/writer/tabs.html', locals())
+    context = {
+        'writer': writer,
+        'orders': orders,
+        'in_progress': in_progress,
+        'completed': completed,
+    }
+    return render(request, 'dashboard-v2/a/users/writer/tabs.html', context=context)
 
 
+@check_super_admin
 def type_order(request):
     types_order = TypeOrder.objects.all()
 
@@ -233,9 +272,10 @@ def type_order(request):
             messages.error(request, 'Неверный запрос')
             return redirect('/')
 
-    return render(request, 'dashboard-v2/a/selects/type-order.html', locals())
+    return render(request, 'dashboard-v2/a/selects/type-order.html', context={'types_order': types_order})
 
 
+@check_super_admin
 def format_order(request):
     formats_order = FormatOrder.objects.all()
 
@@ -261,9 +301,10 @@ def format_order(request):
             messages.error(request, 'Invalid request')
             return redirect('/')
 
-    return render(request, 'dashboard-v2/a/selects/format-order.html', locals())
+    return render(request, 'dashboard-v2/a/selects/format-order.html', context={'formats_order': formats_order})
 
 
+@check_super_admin
 def deadline(request):
     deadlines = PriceDeadline.objects.all()
 
@@ -295,9 +336,10 @@ def deadline(request):
             messages.error(request, 'Invalid request')
             return redirect('/')
 
-    return render(request, 'dashboard-v2/a/selects/deadline.html', locals())
+    return render(request, 'dashboard-v2/a/selects/deadline.html', context={'deadlines': deadlines})
 
 
+@check_super_admin
 def filter_words(request):
     fws = FilterWord.objects.all()
 
@@ -323,9 +365,10 @@ def filter_words(request):
             messages.error(request, 'Invalid request')
             return redirect('/')
 
-    return render(request, 'dashboard-v2/a/others/filter-words.html', locals())
+    return render(request, 'dashboard-v2/a/others/filter-words.html', context={'fws': fws})
 
 
+@check_super_admin
 def testimonials(request):
     tms = Comment.objects.all().order_by('-id')
 
@@ -357,9 +400,10 @@ def testimonials(request):
 
             return JsonResponse({'ok': 'yes'})
 
-    return render(request, 'dashboard-v2/a/others/testimonials.html', locals())
+    return render(request, 'dashboard-v2/a/others/testimonials.html', context={'tms': tms})
 
 
+@check_super_admin
 def add_article(request):
     form = ArticleForm()
 
@@ -373,9 +417,10 @@ def add_article(request):
             form = ArticleForm(request.POST, request.FILES)
             messages.error(request, 'Invalid fields')
 
-    return render(request, 'dashboard-v2/a/others/add-article.html', locals())
+    return render(request, 'dashboard-v2/a/others/add-article.html', context={'form': form})
 
 
+@check_super_admin
 def writer_chat(request, pk):
     if request.method == 'GET':
         chat = ChatUser.objects.get(id=pk)

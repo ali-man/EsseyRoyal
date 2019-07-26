@@ -53,7 +53,7 @@ def orders(request):
             time = form.cleaned_data['time_deadline']
             deadline = to_deadline(date, time)
             order = Order()
-            order.customer = user
+            order.customer = request.user
             order.title = form.cleaned_data['title']
             order.type_order = form.cleaned_data['type_order']
             order.number_page = int(form.cleaned_data['number_page'])
@@ -134,6 +134,9 @@ class UpdateOrderViews(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if 'attached-files' in request.FILES:
             attached_files = request.FILES.getlist('attached-files')
             order = Order.objects.get(id=kwargs['pk'])
+            if order.checking:
+                order.checking = False
+                order.save()
             if len(attached_files) != 0:
                 for f in attached_files:
                     if validate_file_views(f) == 'error':

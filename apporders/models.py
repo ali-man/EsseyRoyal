@@ -102,6 +102,7 @@ class Order(models.Model):
     writer = models.ForeignKey(User, verbose_name='Writer', related_name='order_writer', on_delete=models.CASCADE,
                                null=True, blank=True)
     completed_datetime = models.DateTimeField(verbose_name='Completed datetime', auto_now=True)
+    checking = models.BooleanField(verbose_name='Checking of order', default=False)
 
     class Meta:
         verbose_name = 'Order'
@@ -280,7 +281,7 @@ class Processing:
                 converter.close()
                 fake_file_handle.close()
 
-    def processing_pdf(self, _file, obj_id):
+    def processing_pdf(self, _file):
         """ Работа с pdf файлами
             Читает все страницы
         """
@@ -291,9 +292,9 @@ class Processing:
             except TypeError:
                 continue
 
-        self.moderation_order(filter_words, obj_id)
+        return filter_words
 
-    def processing_docx(self, _file, obj_id):
+    def processing_docx(self, _file):
         """ Работа с docx файлами
             Читает все страницы по строчкам, пустые строки пропускает
         """
@@ -302,10 +303,9 @@ class Processing:
         for line in doc.paragraphs:
             if len(line.text) != 0:
                 filter_words += list(self.sw.search_word(line.text))
+        return filter_words
 
-        self.moderation_order(filter_words, obj_id)
-
-    def processing_excel(self, f, obj_id):
+    def processing_excel(self, f):
         """
         Работа с 'xls', 'xlsx', 'excel' файлами
         Читает все страницы по строчкам, пустые строчки пропускает
@@ -322,21 +322,21 @@ class Processing:
                     if len(str(c_el)) > 0:
                         filter_words += list(self.sw.search_word(str(c_el)))
 
-        self.moderation_order(filter_words, obj_id)
+        return filter_words
 
 
-def checking_files(f, obj_id):
+def checking_files(f):
     pc = Processing()
     file_format = f.name.split('.')[-1]
 
     if file_format == 'docx':
-        pc.processing_docx(f, obj_id)
+        return pc.processing_docx(f)
 
     elif file_format == 'xls' or file_format == 'xlsx' or file_format == 'excel':
-        pc.processing_excel(f, obj_id)
+        return pc.processing_excel(f)
 
     elif file_format == 'pdf':
-        pc.processing_pdf(f, obj_id)
+        return pc.processing_pdf(f)
 
     else:
         pass

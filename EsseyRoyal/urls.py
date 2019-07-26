@@ -6,7 +6,7 @@ from django.contrib.sitemaps.views import sitemap
 from django.shortcuts import redirect
 from django.urls import path, include
 
-from appaaa.cron import search_deadline
+from appaaa.cron import search_deadline, check_order
 from appaaa.sitemaps import ArticleSitemap, StaticViewSitemap
 from appaaa.views import HomePageViews, feedback, calculate_home, order_feedback, add_testimonial, add_word
 from apporders.ajax import chat_message_accept
@@ -44,6 +44,7 @@ urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('', HomePageViews.as_view(), name='home'),
     path('cron/search-deadline/', search_deadline),
+    path('cron/check-orders/', check_order),
     path('accounts/login/', login_user, name='login'),
     path('add-comment/', add_testimonial, name='add-comment'),
     path('feedback/', feedback, name='feedback'),

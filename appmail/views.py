@@ -84,16 +84,34 @@ def manager_send_mail_of_feedback(info):
 
 def notification_to_writer(link, writer_mail):
     data = F'''
-            New messages in chat!
+            New Message on chat! Please, take a look!
             Link: {settings.LINK_DOMAIN}{link}
         '''
-    send_mail('New messages in chat', data, 'EssayRoyal', [writer_mail], fail_silently=False)
+    send_mail('New Message on chat! Please, take a look!', data, 'EssayRoyal', [writer_mail], fail_silently=False)
 
 
 def notification_to_managers(link):
     managers = for_get_mail_from_managers()
     data = F'''
-            New messages in chat!
+            New Message on chat! Please, take a look!
             Link: {settings.LINK_DOMAIN}{link}
         '''
-    send_mail('New messages in chat', data, 'EssayRoyal', managers, fail_silently=False)
+    send_mail('New Message on chat! Please, take a look!', data, 'EssayRoyal', managers, fail_silently=False)
+
+
+def banned_words_in_order(order_id):
+    managers = for_get_mail_from_managers()
+    data = F'''
+           Found forbidden words in order!
+           Link: {settings.LINK_DOMAIN}m/order/preview/{order_id}/
+       '''
+    send_mail('Found forbidden words in order!', data, 'EssayRoyal', managers, fail_silently=False)
+
+
+def changed_status_of_order(order_id):
+    managers = for_get_mail_from_managers()
+    data = F'''
+               Changed order status after verification!
+               Link: {settings.LINK_DOMAIN}m/order/preview/{order_id}/
+           '''
+    send_mail('Changed status of order!', data, 'EssayRoyal', managers, fail_silently=False)

@@ -1,19 +1,21 @@
 <table class="table">
     <thead>
     <tr>
-        <th scope="col">Title</th>
+        <th scope="col">Title Tasks</th>
+        <th scope="col">Title Course's</th>
         <th scope="col">Pages</th>
-        <th scope="col">Total cost</th>
-        <th scope="col">Deadline</th>
+        <th scope="col">Prices</th>
+        <th scope="col">Due dates</th>
     </tr>
     </thead>
     <tbody>
-    {% for order in completed %}
+    {% for task in completed %}
         <tr>
-            <td scope="row">{{ order.title }}</td>
-            <td>{{ order.number_page }}</td>
-            <td>${{ order.total_cost|floatformat }}</td>
-            <td>{{ order.deadline|date:"H:m d M" }}</td>
+            <td>{{ task.title }}</td>
+            <td><a href="{% url 'customer:course-detail' task.course.id %}" class="text-primary">{{ task.course.title }}</a></td>
+            <td>{{ task.pages }}</td>
+            <td>${{ task.price_for_customer|floatformat }}</td>
+            <td>{{ task.due_date|date:"H:m d M" }}</td>
         </tr>
     {% endfor %}
 

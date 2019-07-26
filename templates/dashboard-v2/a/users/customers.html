@@ -18,7 +18,7 @@
                     {{ customer.email }}
                 </a>
             </td>
-            <td>Orders length</td>
+            <td>{{ customer.order_customer.count }}</td>
             <td>$320</td>
         </tr>
     {% endfor %}

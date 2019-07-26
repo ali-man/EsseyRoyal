@@ -1,11 +1,20 @@
 $(document).ready(function () {
 
+    let btnSendNotificationMail = $('#sendNotificationMail');
+    btnSendNotificationMail.click(function () {
+        $.ajax({
+            data: {
+                sendNotificationMail: 'asddddd'
+            }
+        });
+    })
+
     setTimeout(function tick(i) {
         messagesFromChat();
         filesFromChat();
         // if (0 === i) return
         setTimeout(tick, 2000, i);
-    }, 1000, 0)
+    }, 1000, 0);
 
 });
 
@@ -40,7 +49,6 @@ function resultFilesFromChat(data) {
 function resultMessagesFromChat(data) {
     $('ul.chat li').remove();
     let requestUser = $('#request_user').val();
-    console.log(data);
     for (let i = 0; i < data.length; i++) {
         if (requestUser === data[i].owner) {
             $('ul.chat').prepend(

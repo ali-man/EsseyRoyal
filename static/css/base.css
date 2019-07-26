@@ -103,12 +103,12 @@ ul#tree ul li {
 }
 
 #toTop {
+    background-color: #f56723;
     width: 100px;
-    border: 1px solid #ccc;
     text-align: center;
     padding: 5px;
     position: fixed;
-    bottom: 10px;
+    bottom: 100px;
     right: 10px;
     cursor: pointer;
     display: none;

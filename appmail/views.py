@@ -80,3 +80,20 @@ def manager_send_mail_of_feedback(info):
         '''
 
     send_mail('New feedback', data, 'EssayRoyal', managers, fail_silently=False)
+
+
+def notification_to_writer(link, writer_mail):
+    data = F'''
+            New messages in chat!
+            Link: {settings.LINK_DOMAIN}{link}
+        '''
+    send_mail('New messages in chat', data, 'EssayRoyal', [writer_mail], fail_silently=False)
+
+
+def notification_to_managers(link):
+    managers = for_get_mail_from_managers()
+    data = F'''
+            New messages in chat!
+            Link: {settings.LINK_DOMAIN}{link}
+        '''
+    send_mail('New messages in chat', data, 'EssayRoyal', managers, fail_silently=False)

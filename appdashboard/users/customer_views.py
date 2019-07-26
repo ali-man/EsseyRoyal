@@ -195,7 +195,6 @@ def courses(request):
     completed = tasks.filter(status=2)
     context = {
         'my_course': my_course,
-        'tasks': tasks,
         'in_process': in_process,
         'completed': completed,
     }

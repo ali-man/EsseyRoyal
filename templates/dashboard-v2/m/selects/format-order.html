@@ -77,8 +77,6 @@
             let tr = $('.tr-color-selected');
             let title = $(tr).children('td')[0].innerText;
             let newTitle = $('#editTitle').val();
-            console.log(title);
-            console.log(newTitle);
             funcAjax('edit', title, newTitle);
         });
         deleteForm.click(function () {

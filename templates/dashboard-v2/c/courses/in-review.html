@@ -3,7 +3,7 @@
 <table class="table">
     <thead>
     <tr>
-        <th scope="col">Title</th>
+        <th scope="col">Title Course's</th>
         <th scope="col">Tasks Pending</th>
         <th scope="col">Completed tasks</th>
         <th scope="col">Total cost</th>
@@ -13,7 +13,7 @@
     <tbody>
     {% for course in my_course %}
         <tr>
-            <td scope="row"><a href="{% url 'customer:course-detail' course.id %}" class="text-primary">{{ course.title }}</a></td>
+            <td><a href="{% url 'customer:course-detail' course.id %}" class="text-primary">{{ course.title }}</a></td>
             <td>{{ course|tasks_pending }}</td>
             <td>
                 <div class="progress md-progress" style="height: 20px">

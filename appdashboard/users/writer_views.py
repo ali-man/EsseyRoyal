@@ -11,7 +11,7 @@ from django.views.generic.base import View
 
 from appcourses.models import Course, Task, TaskFileCompleted
 from appdashboard.views import access_to_manager_and_admin
-from appmail.views import manager_send_mail, customer_send_mail
+from appmail.views import manager_send_mail, customer_send_mail, notification_to_managers
 from apporders.models import Order, AdditionallyOrder, Chat, FilesAdditionallyOrder
 from apporders.validators import validate_file_views
 from appusers.forms import UserCustomerForm
@@ -249,6 +249,10 @@ class ChatViews(View):
         chat = ChatUser.objects.get(id=pk, user=user)
         messages_from_chat = MessageChatUser.objects.filter(chat=chat).order_by('-id')
         files_from_chat = FileChatUser.objects.filter(chat=chat).order_by('-id')
+        r_snm = request.GET.get('sendNotificationMail', None)
+
+        if r_snm is not None:
+            notification_to_managers(F'm/chat/{pk}/')
 
         if request.is_ajax():
             r_mfc = request.GET.get('messagesFromChat', None)
@@ -292,7 +296,7 @@ class ChatViews(View):
                         'avatar': file.owner.avatar.url if file.owner.avatar else '/static/img/noimage.png',
                         'owner': file.owner.get_full_name() if file.owner.get_full_name else file.owner.email,
                         'name': file.filename(),
-                        'link': F'{file.file}',
+                        'link': F'{file.file.url}',
                         'created_datetime': created_datetime,
                     }
                     obj_files.append(_dict)
@@ -304,7 +308,8 @@ class ChatViews(View):
             context = {
                 'chat': chat,
                 'messages_from_chat': messages_from_chat,
-                'files_from_chat': files_from_chat
+                'files_from_chat': files_from_chat,
+                'btn_notification': True
             }
             return render(request, 'dashboard-v2/w/chat/main.html', context=context)
         else:

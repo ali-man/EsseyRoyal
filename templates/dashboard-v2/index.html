@@ -80,6 +80,9 @@
                                 {{ group.name }}
                             </div>
                         {% endfor %}
+                        {% if btn_notification %}
+                            <button class="btn bg-btn float-right m-0" id="sendNotificationMail">Send notification to mail</button>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -103,5 +106,4 @@
 {% endblock %}
 
 {% block scripts %}
-
 {% endblock %}

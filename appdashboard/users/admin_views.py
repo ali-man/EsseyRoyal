@@ -14,6 +14,7 @@ from appaaa.models import Comment
 from appblog.forms import ArticleForm
 from appcourses.models import Course, Task
 from appdashboard.views import access_to_manager_and_admin
+from appmail.views import notification_to_writer
 from apporders.models import Order, Chat, TypeOrder, FormatOrder, PriceDeadline, FilterWord
 from appusers.forms import UserForm, CreateUserForm
 from appusers.models import User, ChatUser, FileChatUser, MessageChatUser
@@ -429,6 +430,11 @@ def writer_chat(request, pk):
         if request.is_ajax():
             r_mfc = request.GET.get('messagesFromChat', None)
             r_ffc = request.GET.get('filesFromChat', None)
+            r_snm = request.GET.get('sendNotificationMail', None)
+
+            if r_snm is not None:
+                writer_email = chat.user.email
+                notification_to_writer(F'w/chat/{pk}/', writer_email)
 
             # Вывод сообщений из чата
             if r_mfc is not None:
@@ -468,7 +474,7 @@ def writer_chat(request, pk):
                         'avatar': file.owner.avatar.url if file.owner.avatar else '/static/img/noimage.png',
                         'owner': file.owner.get_full_name() if file.owner.get_full_name else file.owner.email,
                         'name': file.filename(),
-                        'link': F'{file.file}',
+                        'link': F'{file.file.url}',
                         'created_datetime': created_datetime,
                     }
                     obj_files.append(_dict)
@@ -480,7 +486,8 @@ def writer_chat(request, pk):
             context = {
                 'chat': chat,
                 'messages_from_chat': messages_from_chat,
-                'files_from_chat': files_from_chat
+                'files_from_chat': files_from_chat,
+                'btn_notification': True
             }
             return render(request, 'dashboard-v2/a/chat/main.html', context=context)
         else:
